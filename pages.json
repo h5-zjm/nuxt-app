@@ -6,7 +6,7 @@
 		"path": "pages/Information/index",
 		"style": {
 			// "enablePullDownRefresh": true,
-			"navigationBarTitleText": "首页"
+			"navigationBarTitleText": "个人信息"
 		}
 	}, {
 		"path": "pages/makeAppointment/index",
@@ -72,6 +72,50 @@
 		"path": "pages/certificateConformity/index",
 		"style": {
 			"navigationBarTitleText": "食用农产品合格证"
+		}
+	}, {
+		"path": "pages/Information/informationShow_ferry",
+		"style": {
+			"navigationBarTitleText": "个人信息"
+		}
+	}, {
+		"path": "pages/Information/informationShow_procurer",
+		"style": {
+			"navigationBarTitleText": "个人信息"
+		}
+	}, {
+		"path": "pages/Information/informationShow_supplier",
+		"style": {
+			"navigationBarTitleText": "个人信息"
+		}
+	}, {
+		"path": "pages/Information/informationShow_buddy",
+		"style": {
+			"navigationBarTitleText": "个人信息"
+		}
+	}, {
+		"path": "pages/Information/Error",
+		"style": {
+			"navigationBarTitleText": "系统提示"
+		}
+	}, {
+		"path": "pages/Information/Success",
+		"style": {
+			"navigationBarTitleText": "系统提示"
+		}
+	}, {
+		"path": "pages/Information/VipCode",
+		"style": {
+			"navigationBarTitleText": "会员二维码",
+			"navigationBarBackgroundColor": "#37B3FF",
+			"navigationBarTextStyle": "white"
+		}
+	}, {
+		"path": "pages/Information/BuyerCode",
+		"style": {
+			"navigationBarTitleText": "会员二维码",
+			"navigationBarBackgroundColor": "#37B3FF",
+			"navigationBarTextStyle": "white"
 		}
 	}],
 	"globalStyle": {
