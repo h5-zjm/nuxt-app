@@ -9,66 +9,11 @@
 		</view>
 		<view class="qiun-charts">
 			<view class="times">
-				<view class="interTime">
-					进场时间
-				</view>
-				<view class="interTimes">
-					<u-input v-model="startTime" :type="type" :border="border" @click="showFirst" />
-					<u-picker mode="time" v-model="show" :params="params" @confirm="confirmStart"></u-picker>
-				</view>
-				<view class="interTime">
-					至
-				</view>
-				<view class="interTimes">
-					<u-input v-model="endTime" :type="type" :border="border" @click="showEnd = true" />
-					<u-picker mode="time" v-model="showEnd" :params="params" @confirm="confirmEnd"></u-picker>
-				</view>
+				新发地七日人车流量分析
 			</view>
-			<canvas canvas-id="canvasRing" id="canvasRing" class="charts" @touchstart="touchRing"></canvas>
+			<canvas canvas-id="canvasMix" id="canvasMix" class="charts" disable-scroll=true @touchstart="touchMix" @touchmove="moveMix" @touchend="touchEndMix"></canvas>
 		</view>
-		<view class="table">
-			<u-table>
-				<view class="theader">
-					<u-tr>
-						<u-th>序号</u-th>
-						<u-th>品类</u-th>
-						<u-th>进场车数</u-th>
-						<u-th>进场吨数</u-th>
-					</u-tr>
-				</view>
-
-				<view class="thbody">
-					<u-tr v-for="(item,index) in tableData" :key="index" @click="Clickbox(item,name)">
-						<u-td v-if="index!=0">{{index}}</u-td>
-						<u-td v-if="index==0">---</u-td>
-						<u-td>{{item.name}}</u-td>
-						<u-td>{{item.data}}</u-td>
-						<u-td>{{item.certificateNum}}</u-td>
-					</u-tr>
-				</view>
-			</u-table>
-		</view>
-<!-- 		交易量数据
-		<view class="qiun-charts">
-			<view class="times">
-				<view class="interTime">
-					交易时间
-				</view>
-				<view class="interTimes">
-					<u-input v-model="startTimeT" :type="type" :border="border" @click="show1 = true" />
-					<u-picker mode="time" v-model="show1" :params="params" @confirm="confirmStartT"></u-picker>
-				</view>
-				<view class="interTime">
-					至
-				</view>
-				<view class="interTimes">
-					<u-input v-model="endTimeT" :type="type" :border="border" @click="showEnd1 = true" />
-					<u-picker mode="time" v-model="showEnd1" :params="params" @confirm="confirmEndT"></u-picker>
-				</view>
-			</view>
-			<canvas canvas-id="canvasRing1" id="canvasRing1" class="charts" @touchstart="touchRing"></canvas>
-		</view>
-		<view class="table">
+<!-- 		<view class="table">
 			<u-table>
 				<view class="theader">
 					<u-tr>
@@ -102,7 +47,7 @@
 	export default {
 		data() {
 			return {
-				Chart_Active: 1,
+				Chart_Active: 3,
 				Chart_List: [{
 						title: '当前车数人数'
 					},
@@ -112,9 +57,9 @@
 					{
 						title: '交易量数据'
 					},
-					{
-						title: '进场数据'
-					},
+					// {
+					// 	title: '进场数据'
+					// },
 					// {
 					// 	title: '7日来货量、交易量分析'
 					// },
@@ -190,79 +135,89 @@
 					uni.navigateTo({
 					    url: '/pages/ChartPage/chartThree'
 					});
-				} else if (index === 3) {
-					uni.navigateTo({
-						url:'/pages/ChartPage/approachData'
-					})
-				}
+				} 
 			},
-			getRingServerData() {
-				console.log('饼图1')
+			getServerData(){
 				uni.request({
-					url: 'http://wechat.daizhangfang.net/statistics/incomingQuantity',
-					method: 'GET',
-					data: {
-						beginTime: this.startTime,
-						endTime: this.endTime
+					url: 'https://www.ucharts.cn/data.json',
+					data:{
 					},
-					success: (res) => {
-						console.log(res, 5555)
-						this.tableData = res.data.data.table
-						let Ring = {
-							series: [],
-							totalCarNumber:''
-						};
+					success: function(res) {
+						console.log(res.data.data)
+						let Mix={categories:[],series:[]};
 						//这里我后台返回的是数组，所以用等于，如果您后台返回的是单条数据，需要push进去
-						Ring.series = res.data.data.figure;
-						Ring.totalCarNumber = res.data.data.totalCarNumber;
-						console.log('1111', res.data.data.figure)
-						this.showRing("canvasRing", Ring);
+						Mix.categories=res.data.data.Mix.categories;
+						Mix.series=res.data.data.Mix.series;
+						_self.showMix("canvasMix",Mix);
 					},
 					fail: () => {
-						this.tips = "网络错误，小程序端请检查合法域名";
+						_self.tips="网络错误，小程序端请检查合法域名";
 					},
 				});
 			},
-			showRing(canvasId, chartData) {
-				canvaColumn = new uCharts({
-					$this: this,
+			showMix(canvasId,chartData){
+				canvaMix=new uCharts({
+					$this:_self,
 					canvasId: canvasId,
-					type: 'ring',
-					fontSize: 11,
-					legend: true,
-					title: {
-						name: '收益率',
-						color: '#7cb5ec',
-						fontSize: 14,
-						offsetY: 5,
-					},
-					subtitle: {
-						name: chartData.totalCarNumber+'%',
-						color: '#666666',
-						fontSize: 15,
-						offsetY: 5,
-					},
-					extra: {
-						pie: {
-							offsetAngle: -45,
-							ringWidth: 40,
-							labelWidth: 15
-						}
-					},
-					background: '#FFFFFF',
-					pixelRatio: 1,
+					type: 'mix',
+					fontSize:11,
+					legend:{show:true},
+					background:'#FFFFFF',
+					pixelRatio:_self.pixelRatio,
+					categories: chartData.categories,
 					series: chartData.series,
 					animation: true,
-					width: this.cWidth,
-					height: this.cHeight,
-					disablePieStroke: true,
+					enableScroll: true,//开启图表拖拽功能
+					xAxis: {
+						disableGrid:false,
+						type:'grid',
+						gridType:'dash',
+						itemCount:4,
+						scrollShow:true,
+						scrollAlign:'left',
+					},
+					yAxis: {
+						gridType:'dash',
+						splitNumber:5,
+						min:10,
+						max:180,
+						format:(val)=>{return val.toFixed(0)}
+					},
+					width: _self.cWidth*_self.pixelRatio,
+					height: _self.cHeight*_self.pixelRatio,
 					dataLabel: true,
+					dataPointShape: true,
+					extra: {
+						tooltip:{
+							bgColor:'#000000',
+							bgOpacity:0.7,
+							gridType:'dash',
+							dashLength:8,
+							gridColor:'#1890ff',
+							fontColor:'#FFFFFF',
+							horizentalLine:true,
+							xAxisLabel:true,
+							yAxisLabel:true,
+							labelBgColor:'#DFE8FF',
+							labelBgOpacity:0.95,
+							labelAlign:'left',
+							labelFontColor:'#666666'
+						}
+					},
 				});
 			},
-			touchRing(e) {
-				canvaRing.showToolTip(e, {
-					format: function(item) {
-						return item.name + ':' + item.data
+			touchMix(e){
+				canvaMix.scrollStart(e);
+			},
+			moveMix(e) {
+				canvaMix.scroll(e);
+			},
+			touchEndMix(e) {
+				canvaMix.scrollEnd(e);
+				//下面是toolTip事件，如果滚动后不需要显示，可不填写
+				canvaMix.showToolTip(e, {
+					format: function (item, category) {
+						return category + ' ' + item.name + ':' + item.data 
 					}
 				});
 			},
@@ -273,7 +228,7 @@
 			confirmEnd(e) {
 				// console.log(e)
 				this.endTime = e.year + '-' + e.month + '-' + e.day + ' ' + e.hour + ':' + e.minute
-				this.getRingServerData();
+				this.getServerData();
 			},
 			// 获取当前时间
 			getNow() {
@@ -291,7 +246,7 @@
 				this.startTimeT = year + '-' + month + '-' + day + ' ' + '00:00';
 				this.endTimeT = year + '-' + month + '-' + day + ' ' + hour + ':' + minute;
 				console.log('时间获取完成')
-				this.getRingServerData();
+				this.getServerData();
 			},
 			showFirst() {
 				console.log('第一个开始时间被点击')
@@ -355,17 +310,7 @@
 			margin-top: 16rpx;
 
 			.times {
-				margin-top: 20rpx;
-				height: 76rpx;
-				line-height: 76rpx;
-				padding: 0 30rpx;
-				display: flex;
-				justify-content: space-around;
-
-				.interTime {
-					height: 76rpx;
-					line-height: 76rpx;
-				}
+				text-align: center;
 			}
 		}
 

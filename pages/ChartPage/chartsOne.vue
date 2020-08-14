@@ -86,9 +86,9 @@
 					{
 						title: '交易量数据'
 					},
-					// {
-					// 	title: '进场数据'
-					// },
+					{
+						title: '进场数据'
+					},
 					// {
 					// 	title: '7日来货量、交易量分析'
 					// },
@@ -151,6 +151,10 @@
 					uni.navigateTo({
 						url: '/pages/ChartPage/chartThree'
 					});
+				} else if (index === 3) {
+					uni.navigateTo({
+						url:'/pages/ChartPage/approachData'
+					})
 				}
 			},
 			// 图表

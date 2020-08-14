@@ -73,7 +73,21 @@
 		"style": {
 			"navigationBarTitleText": "食用农产品合格证"
 		}
-	}],
+	}    ,{
+            "path" : "pages/ChartPage/approachData",
+            "style" : {
+				"navigationBarTitleText":"数据统计"
+			}
+        }
+        ,{
+            "path" : "pages/ChartPage/quantity",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/ChartPage/peopleCarData",
+            "style" : {}
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",
