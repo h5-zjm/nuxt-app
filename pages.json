@@ -86,11 +86,15 @@
         }
         ,{
             "path" : "pages/ChartPage/quantity",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText":"数据统计"
+			}
         }
         ,{
             "path" : "pages/ChartPage/peopleCarData",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText":"数据统计"
+			}
         }, {
 		"path": "pages/Information/informationShow_ferry",
 		"style": {

@@ -36,7 +36,7 @@
 							<u-form-item prop="name">
 								<view class="Con_box">
 									<text class="star">姓名</text>
-									<u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入姓名" />
+									<u-input v-model="form.name" input-align="right" style="flex: 1;" placeholder="请输入姓名" />
 								</view>
 							</u-form-item>
 							<u-form-item prop="phone">
@@ -48,13 +48,13 @@
 							<u-form-item prop="car" v-if="form.radio === 3">
 								<view class="Con_box">
 									<text class="star">车牌号</text>
-									<u-input v-model="form.car" style="flex: 1;text-align: right;" placeholder="请输入车牌号" />
+									<u-input v-model="form.car" input-align="right" style="flex: 1;" placeholder="请输入车牌号" />
 								</view>
 							</u-form-item>
 							<u-form-item prop="card">
 								<view class="Con_box">
 									<text class="star">身份证号</text>
-									<u-input v-model="form.card" style="flex: 1;text-align: right;" placeholder="请输入身份证号" />
+									<u-input v-model="form.card" input-align="right" style="flex: 1;" placeholder="请输入身份证号" />
 								</view>
 							</u-form-item>
 							<u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
@@ -165,7 +165,7 @@
 								<u-form-item prop="card">
 									<view class="Con_box">
 										<text class="star">主营业务</text>
-										<u-input v-model="form.card" style="flex: 1;text-align: right;" placeholder="请输入主营业务" />
+										<u-input v-model="form.card" input-align="right" style="flex: 1;" placeholder="请输入主营业务" />
 									</view>
 								</u-form-item>
 								<u-form-item label="公司地址" prop="sex">
@@ -274,7 +274,7 @@
 							<u-form-item prop="card">
 								<view class="Con_box">
 									<text class="star">主营业务</text>
-									<u-input v-model="form.card" style="flex: 1;text-align: right;" placeholder="请输入主营业务" />
+									<u-input v-model="form.card" input-align="right" style="flex: 1;" placeholder="请输入主营业务" />
 								</view>
 							</u-form-item>
 							<u-form-item prop="time">
