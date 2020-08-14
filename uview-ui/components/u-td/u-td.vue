@@ -19,6 +19,10 @@
 			width: {
 				type: [Number, String],
 				default: 'auto'
+			},
+			ShowBorder: {
+				type: Boolean,
+				default: false
 			}
 		},
 		inject: ['uTable'],
@@ -30,8 +34,10 @@
 				// style.fontSize = this.uTable.fontSize + 'rpx';
 				style.fontSize = 25 + 'rpx';
 				style.padding = this.uTable.padding;
-				style.borderBottom = `solid 1px ${this.uTable.borderColor}`;
-				style.borderRight = `solid 1px ${this.uTable.borderColor}`;
+				if(!this.ShowBorder){
+					style.borderBottom = `solid 1px ${this.uTable.borderColor}`;
+					style.borderRight = `solid 1px ${this.uTable.borderColor}`;
+				}
 				style.color = this.uTable.color;
 				return style;
 			}

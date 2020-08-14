@@ -1,6 +1,6 @@
 <template>
 	<view class="all">
-		<!-- <view class="title">
+		<view class="title">
 			状态：未进场
 		</view>
 		<view class="personInformation">
@@ -116,7 +116,7 @@
 			<view class="cancel">
 				<u-button @click="Location">取消预约</u-button>
 			</view>
-		</view> -->
+		</view>
 	</view>
 </template>
 

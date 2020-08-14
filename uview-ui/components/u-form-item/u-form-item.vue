@@ -144,7 +144,7 @@ export default {
 			default: false
 		},
 		noPadding: {
-			type: String,
+			type: Boolean,
 			default: false
 		}
 	},

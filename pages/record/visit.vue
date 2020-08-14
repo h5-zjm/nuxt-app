@@ -1,5 +1,5 @@
 <template>
-	<view id="record">
+	<view id="record_visit">
 		<view class="table_box">
 			<u-table>
 				<view class="theader">
@@ -37,7 +37,7 @@
 				console.log(index,'index')
 				console.log(item,'item')
 				uni.navigateTo({
-					url: '/pages/SellGoods/visit'
+					url: '/pages/SellGoods/index'
 				})
 			}
 		}
@@ -45,7 +45,7 @@
 </script>
 
 <style lang="scss">
-	#record {
+	#record_visit {
 		.Con_header {
 			display: flex;
 			justify-content: space-around;

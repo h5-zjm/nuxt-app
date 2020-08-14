@@ -9,7 +9,7 @@
 				您的信息尚未完善，请先完善个人信息
 			</view>
 			<view class="button">
-				<u-button type="primary">完善个人健康信息</u-button>
+				<u-button type="primary" @click="LocationInfo">完善个人健康信息</u-button>
 			</view>
 		</view>
 	</view>
@@ -21,6 +21,13 @@
 			return {
 				
 			};
+		},
+		methods: {
+			LocationInfo(){
+				uni.navigateTo({
+					url: '/pages/Information/index'
+				})
+			}
 		}
 	}
 </script>

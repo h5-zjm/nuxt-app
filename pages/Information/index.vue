@@ -24,7 +24,7 @@
 
 						<view class="tit" v-if="form.radio">必填信息</view>
 						<view class="uploaderBox" v-if="form.radio">
-							<u-upload :action="action" :file-list="fileList">
+							<u-upload :action="action" :max-count="1" :file-list="fileList">
 
 							</u-upload>
 							<view class="Conbox">
@@ -94,15 +94,19 @@
 											<u-checkbox-group>
 												<view class="box">
 													<text>荔枝</text>
-													<u-checkbox v-model="checked" :disabled="false"></u-checkbox>
+													<u-checkbox v-model="checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
 												</view>
 												<view class="box">
 													<text>香蕉</text>
-													<u-checkbox v-model="checked" :disabled="false"></u-checkbox>
+													<u-checkbox style="width: 38rpx;" v-model="checked" :disabled="false"></u-checkbox>
 												</view>
 												<view class="box">
 													<text>橙子</text>
-													<u-checkbox v-model="checked" :disabled="false"></u-checkbox>
+													<u-checkbox v-model="checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
+												</view>
+												<view class="box">
+													<text>橙子</text>
+													<u-checkbox v-model="checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
 												</view>
 											</u-checkbox-group>
 										</view>
@@ -151,7 +155,7 @@
 									<u-input v-model="form.sex" input-align="right" placeholder="请输入营业执照" />
 								</u-form-item>
 								<view class="uploaderBox">
-									<u-upload :action="action" :file-list="fileList">
+									<u-upload :action="action" :max-count="1" :file-list="fileList">
 
 									</u-upload>
 									<view class="Conbox">
@@ -183,6 +187,10 @@
 													</view>
 													<view class="box">
 														<text>香蕉</text>
+														<u-checkbox v-model="checked" :disabled="false"></u-checkbox>
+													</view>
+													<view class="box">
+														<text>橙子</text>
 														<u-checkbox v-model="checked" :disabled="false"></u-checkbox>
 													</view>
 													<view class="box">
@@ -256,7 +264,7 @@
 								<u-input v-model="form.sex" input-align="right" placeholder="请输入营业执照" />
 							</u-form-item>
 							<view class="uploaderBox">
-								<u-upload :action="action" :file-list="fileList">
+								<u-upload :action="action" :max-count="1" :file-list="fileList">
 
 								</u-upload>
 								<view class="Conbox">
@@ -287,15 +295,19 @@
 											<u-checkbox-group>
 												<view class="box">
 													<text>荔枝</text>
-													<u-checkbox v-model="checked" :disabled="false"></u-checkbox>
+													<u-checkbox v-model="checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
 												</view>
 												<view class="box">
 													<text>香蕉</text>
-													<u-checkbox v-model="checked" :disabled="false"></u-checkbox>
+													<u-checkbox style="width: 38rpx;" v-model="checked" :disabled="false"></u-checkbox>
 												</view>
 												<view class="box">
 													<text>橙子</text>
-													<u-checkbox v-model="checked" :disabled="false"></u-checkbox>
+													<u-checkbox v-model="checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
+												</view>
+												<view class="box">
+													<text>橙子</text>
+													<u-checkbox v-model="checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
 												</view>
 											</u-checkbox-group>
 										</view>
@@ -500,18 +512,8 @@
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
 						console.log('验证通过');
-						let url = '';
-						if(this.form.radio === 1) {
-							url = '/pages/Information/informationShow_supplier?radio=1'
-						} else if(this.form.radio === 2) {
-							url = '/pages/Information/informationShow_procurer?radio=2'
-						} else if(this.form.radio === 3) {
-							url = '/pages/Information/informationShow_ferry?radio=3'
-						} else if(this.form.radio === 4) {
-							url = '/pages/Information/informationShow_buddy?radio=4'
-						}
 						uni.navigateTo({
-							url: url
+							url: '/pages/Information/Success?radio='+this.form.radio
 						})
 					} else {
 						console.log('验证失败');
@@ -592,9 +594,9 @@
 			this.$refs.uForm.setRules(this.rules);
 		},
 		// 获取参数
-		onLoad(res){
-			console.log(res,'res')
-			if(res.Active_radio) {
+		onLoad(res) {
+			console.log(res, 'res')
+			if (res.Active_radio) {
 				this.form.radio = parseInt(res.Active_radio);
 				this.active_show = true;
 				this.show_back_btn = false;
@@ -784,25 +786,30 @@
 					// 下拉弹出框
 					.Upopup_Con {
 						width: 100%;
+						height: 522rpx;
+						background: rgba(255, 255, 255, 1);
+						border-radius: 32rpx 32rpx 4rpx 4rpx;
 
 						.Upopup_header {
 							display: flex;
 							justify-content: center;
 							position: relative;
-							background-color: #ccc;
 
 							.tit {
-								font-size: 32rpx;
-								font-weight: 400;
+								font-size: 36rpx;
+								font-weight: 600;
 								color: rgba(49, 49, 49, 1);
+								padding: 0;
+								padding: 30rpx 0rpx;
 							}
 
 							.submit {
 								position: absolute;
-								right: 20rpx;
-								top: 15rpx;
+								right: 30rpx;
+								top: 30rpx;
 								font-size: 32rpx;
-								color: red;
+								font-weight: 400;
+								color: rgba(61, 174, 255, 1);
 							}
 						}
 
@@ -812,17 +819,31 @@
 							// display: flex;
 							// align-items: center;
 							padding-top: 50rpx;
-							height: 300rpx;
+							height: 390rpx;
 							overflow: hidden;
 							overflow-y: scroll;
 							box-sizing: border-box;
+							padding: 0rpx 30rpx;
 
 							.box {
 								display: flex;
 								align-items: center;
 								justify-content: space-between;
-								padding-left: 30rpx;
 								box-sizing: border-box;
+								border-bottom: 1px solid #EDEDED;
+								height: 92rpx;
+
+								>text {
+									font-size: 32rpx;
+									font-weight: 400;
+									color: rgba(49, 49, 49, 1);
+								}
+							}
+
+							.u-checkbox-group {
+								>view:last-child {
+									border: none;
+								}
 							}
 						}
 					}
