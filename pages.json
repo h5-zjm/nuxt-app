@@ -3,15 +3,20 @@
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [{
+		"path": "pages/login/index",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	}, {
 		"path": "pages/Information/index",
 		"style": {
 			// "enablePullDownRefresh": true,
-			"navigationBarTitleText": "首页"
+			"navigationBarTitleText": "个人信息"
 		}
 	}, {
 		"path": "pages/makeAppointment/index",
 		"style": {
-			// "navigationBarTitleText":"进门预约（卖货）"
+			"navigationBarTitleText":"进门预约（卖货）"
 		}
 	}, {
 		"path": "pages/ChartPage/chartsOne",
@@ -61,7 +66,7 @@
 	}, {
 		"path": "pages/record/index",
 		"style": {
-			"navigationBarTitleText": "上货记录"
+			"navigationBarTitleText": "卖货记录"
 		}
 	}, {
 		"path": "pages/checkOrder/index",
@@ -73,7 +78,7 @@
 		"style": {
 			"navigationBarTitleText": "食用农产品合格证"
 		}
-	}    ,{
+	},{
             "path" : "pages/ChartPage/approachData",
             "style" : {
 				"navigationBarTitleText":"数据统计"
@@ -86,6 +91,55 @@
         ,{
             "path" : "pages/ChartPage/peopleCarData",
             "style" : {}
+        }, {
+		"path": "pages/Information/informationShow_ferry",
+		"style": {
+			"navigationBarTitleText": "个人信息"
+		}
+	}, {
+		"path": "pages/Information/informationShow_procurer",
+		"style": {
+			"navigationBarTitleText": "个人信息"
+		}
+	}, {
+		"path": "pages/Information/informationShow_supplier",
+		"style": {
+			"navigationBarTitleText": "个人信息"
+		}
+	}, {
+		"path": "pages/Information/informationShow_buddy",
+		"style": {
+			"navigationBarTitleText": "个人信息"
+		}
+	}, {
+		"path": "pages/Information/Error",
+		"style": {
+			"navigationBarTitleText": "系统提示"
+		}
+	}, {
+		"path": "pages/Information/Success",
+		"style": {
+			"navigationBarTitleText": "系统提示"
+		}
+	}, {
+		"path": "pages/Information/VipCode",
+		"style": {
+			"navigationBarTitleText": "会员二维码",
+			"navigationBarBackgroundColor": "#37B3FF",
+			"navigationBarTextStyle": "white"
+		}
+	}, {
+		"path": "pages/Information/BuyerCode",
+		"style": {
+			"navigationBarTitleText": "会员二维码",
+			"navigationBarBackgroundColor": "#37B3FF",
+			"navigationBarTextStyle": "white"
+		}
+	}    ,{
+            "path" : "pages/record/visit",
+            "style" : {
+				"navigationBarTitleText": "上货记录"
+			}
         }
     ],
 	"globalStyle": {

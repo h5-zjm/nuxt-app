@@ -25,6 +25,10 @@
 			},
 			BgColor: {
 				type: String
+			},
+			ShowBorder: {
+				type: Boolean,
+				default: false
 			}
 		},
 		inject: ['uTable'],
@@ -34,8 +38,10 @@
 				if (this.width) style.flex = `0 0 ${this.width}`;
 				style.textAlign = this.uTable.align;
 				style.padding = this.uTable.padding;
-				style.borderBottom = `solid 1px ${this.uTable.borderColor}`;
-				style.borderRight = `solid 1px ${this.uTable.borderColor}`;
+				if(!this.ShowBorder){
+					style.borderBottom = `solid 1px ${this.uTable.borderColor}`;
+					style.borderRight = `solid 1px ${this.uTable.borderColor}`;
+				}
 				style.background = this.BgColor;
 				style.color = this.Color;
 				Object.assign(style, this.uTable.thStyle);
