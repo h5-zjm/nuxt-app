@@ -1,7 +1,7 @@
 <template>
 	<view class="all">
 		<view class="main">
-			<image src="../../static/images/prompt/sucess.png" mode=""></image>
+			<image src="/static/images/success.png" mode=""></image>
 			<view class="success">
 				预约成功
 			</view>

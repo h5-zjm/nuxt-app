@@ -1,6 +1,6 @@
 <template>
 	<view class="all">
-		<image src="../../static/images/prompt/promt.png" mode=""></image>
+		<image src="/static/images/error.png" mode=""></image>
 	</view>
 </template>
 

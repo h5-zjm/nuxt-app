@@ -1,5 +1,5 @@
 <template>
-	<view class="u-form-item" :class="{'u-border-bottom': elBorderBottom, 'u-form-item__border-bottom--error': validateState === 'error' && showError('border-bottom')}">
+	<view class="u-form-item" :class="{'u-border-bottom': elBorderBottom, 'u-form-item__border-bottom--error': validateState === 'error' && showError('border-bottom'),'noPadding':noPadding}">
 		<view class="u-form-item__body" :style="{
 			flexDirection: elLabelPosition == 'left' ? 'row' : 'column'
 		}">
@@ -37,7 +37,7 @@
 		</view>
 		<view class="u-form-item__message" v-if="validateState === 'error' && showError('message')" :style="{
 			paddingLeft: elLabelPosition == 'left' ? $u.addUnit(elLabelWidth) : '0',
-		}">{{validateMessage}}</view>
+		}" :class="{'noPadding__message':noPadding}">{{validateMessage}}</view>
 	</view>
 </template>
 
@@ -141,6 +141,10 @@ export default {
 		// 是否显示左边的必填星号，只作显示用，具体校验必填的逻辑，请在rules中配置
 		required: {
 			type: Boolean,
+			default: false
+		},
+		noPadding: {
+			type: String,
 			default: false
 		}
 	},
@@ -397,5 +401,13 @@ export default {
 			color: $u-type-error;
 			margin-top: 12rpx;
 		}
+	}
+	
+	.noPadding {
+		padding: 0;
+	}
+	
+	.noPadding__message {
+		padding-left: 73rpx;
 	}
 </style>

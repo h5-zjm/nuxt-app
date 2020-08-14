@@ -32,17 +32,22 @@
 		background:rgba(255,255,255,1);
 		box-shadow:0px 0px 20rpx 0px rgba(196,196,196,0.5);
 		border-radius:22rpx;
-		
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 		.code {
 			font-size:48rpx;
 			font-weight:600;
 			color:rgba(49,49,49,1);
+			padding-top: 106rpx;
+			margin-bottom: 36rpx;
 		}
 		>image {
 			width:386rpx;
 			height:380rpx;
 		}
 		.scan {
+			padding-top: 60rpx;
 			font-size:32rpx;
 			font-weight:400;
 			color:rgba(49,49,49,1);
