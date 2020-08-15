@@ -9,7 +9,7 @@
 				已生成交易溯源单
 			</view>
 			<view class="button">
-				<u-button type="primary">查看交易订单</u-button>
+				<u-button type="primary" @click="goToTransacteOrder">查看交易订单</u-button>
 			</view>
 		</view>
 	</view>
@@ -21,6 +21,13 @@
 			return {
 				
 			};
+		},
+		methods:{
+			goToTransacteOrder() {
+				uni.navigateTo({
+					url: '/pages/appointmentSuccessful/submitSuccessfulmodelId=0&id='+res.id
+				});
+			}
 		}
 	}
 </script>

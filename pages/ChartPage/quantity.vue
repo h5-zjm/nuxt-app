@@ -21,30 +21,9 @@
 						</view>
 					</view>
 				</view>
-			<canvas canvas-id="canvasMix" id="canvasMix" class="charts" disable-scroll=true @touchstart="touchMix" @touchmove="moveMix" @touchend="touchEndMix"></canvas>
+			<canvas canvas-id="canvasMix" id="canvasMix" class="charts" disable-scroll=true @touchstart="touchLineA" @touchmove="moveLineA" @touchend="touchEndLineA"></canvas>
 		</view>
-<!-- 		<view class="table">
-			<u-table>
-				<view class="theader">
-					<u-tr>
-						<u-th>序号</u-th>
-						<u-th>品类</u-th>
-						<u-th>进场车数</u-th>
-						<u-th>进场吨数</u-th>
-					</u-tr>
-				</view>
-
-				<view class="thbody">
-					<u-tr v-for="(item,index) in tableData" :key="index" @click="Clickbox(item,name)">
-						<u-td v-if="index!=0">{{index}}</u-td>
-						<u-td v-if="index==0">---</u-td>
-						<u-td>{{item.name}}</u-td>
-						<u-td>{{item.data}}</u-td>
-						<u-td>{{item.certificateNum}}</u-td>
-					</u-tr>
-				</view>
-			</u-table>
-		</view> -->
+		<u-select v-model="show" value-name="name" label-name="name" :list="list" @confirm="confirm"></u-select>
 	</view>
 </template>
 
@@ -54,10 +33,11 @@
 	var canvaColumn = null;
 	var canvaRing = null;
 	var canvaRing1 = null;
+	var canvaLineA=null;
 	export default {
 		data() {
 			return {
-				Chart_Active: 3,
+				Chart_Active: 4,
 				Chart_List: [{
 						title: '当前车数人数'
 					},
@@ -67,15 +47,15 @@
 					{
 						title: '交易量数据'
 					},
-					// {
-					// 	title: '进场数据'
-					// },
-					// {
-					// 	title: '7日来货量、交易量分析'
-					// },
-					// {
-					// 	title: '7日人车流量分析'
-					// }
+					{
+						title: '进场数据'
+					},
+					{
+						title: '7日来货量、交易量分析'
+					},
+					{
+						title: '7日人车流量分析'
+					}
 				],
 				// 来货量数据时间选择器
 				params: {
@@ -533,6 +513,7 @@
 			//#endif
 			this.cWidth = uni.upx2px(750);
 			this.cHeight = uni.upx2px(500);
+			this.this.getServerData()
 		},
 		methods: {
 			ChartClick(index, item) {
@@ -552,19 +533,35 @@
 					uni.navigateTo({
 					    url: '/pages/ChartPage/chartThree'
 					});
+				} else if (index === 3) {
+					uni.navigateTo({
+						url:'/pages/ChartPage/approachData'
+					})
+				} else if (index === 4) {
+					uni.navigateTo({
+						url:'/pages/ChartPage/quantity'
+					})
+				} else if (index === 5) {
+					uni.navigateTo({
+						url:'/pages/ChartPage/peopleCarData'
+					})
 				} 
 			},
 			getServerData(){
 				uni.request({
-					url: 'https://www.ucharts.cn/data.json',
+					// url: 'https://www.ucharts.cn/data.json',
+					url:'http://192.168.100.215:18088/statistics/tradingVolume',
 					data:{
+						goodsName:this.value,
 					},
 					success: function(res) {
-						console.log(res.data.data)
+						console.log(res)
 						let Mix={categories:[],series:[]};
 						//这里我后台返回的是数组，所以用等于，如果您后台返回的是单条数据，需要push进去
-						Mix.categories=res.data.data.Mix.categories;
-						Mix.series=res.data.data.Mix.series;
+						Mix.categories=res.data.categories;
+						Mix.series=res.data.series;
+						// Mix.categories=res.data.data.Mix.categories;
+						// Mix.series=res.data.data.Mix.series;
 						_self.showMix("canvasMix",Mix);
 					},
 					fail: () => {
@@ -573,7 +570,7 @@
 				});
 			},
 			showMix(canvasId,chartData){
-				canvaMix=new uCharts({
+				canvaLineA=new uCharts({
 					$this:_self,
 					canvasId: canvasId,
 					type: 'mix',
@@ -584,7 +581,7 @@
 					categories: chartData.categories,
 					series: chartData.series,
 					animation: true,
-					enableScroll: true,//开启图表拖拽功能
+					enableScroll: false,//开启图表拖拽功能
 					xAxis: {
 						disableGrid:false,
 						type:'grid',
@@ -623,16 +620,16 @@
 					},
 				});
 			},
-			touchMix(e){
-				canvaMix.scrollStart(e);
+			touchLineA(e){
+				canvaLineA.scrollStart(e);
 			},
-			moveMix(e) {
-				canvaMix.scroll(e);
+			moveLineA(e) {
+				canvaLineA.scroll(e);
 			},
-			touchEndMix(e) {
-				canvaMix.scrollEnd(e);
+			touchEndLineA(e) {
+				canvaLineA.scrollEnd(e);
 				//下面是toolTip事件，如果滚动后不需要显示，可不填写
-				canvaMix.showToolTip(e, {
+				canvaLineA.showToolTip(e, {
 					format: function (item, category) {
 						return category + ' ' + item.name + ':' + item.data 
 					}
@@ -665,9 +662,9 @@
 				console.log('时间获取完成')
 				this.getServerData();
 			},
-			showFirst() {
-				console.log('第一个开始时间被点击')
-				this.show = true
+			confirm(e) {
+				console.log(e)
+				this.value = e[0].value
 			}
 		}
 	}
@@ -725,7 +722,17 @@
 		.qiun-charts {
 			background-color: #fff;
 			margin-top: 16rpx;
-
+			.line{
+				display: flex;
+				justify-content: flex-start;
+				line-height: 76rpx;
+				box-sizing: border-box;
+				padding-left: 20rpx;
+				.valueLabel {
+					display: flex;
+					justify-content: flex-start;
+				}
+			}
 			.times {
 				margin-top: 20rpx;
 				height: 76rpx;

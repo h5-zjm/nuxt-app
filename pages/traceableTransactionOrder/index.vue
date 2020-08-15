@@ -545,7 +545,7 @@
 			},
 			getInfo() {
 				uni.request({
-					url: 'http://192.168.100.215:18088//h5/accouninfo/getInfo',
+					url: 'http://192.168.100.215:18088/h5/accouninfo/getInfo',
 					method: 'GET',
 					success: (res) => {
 						console.log('获取的用户信息', res)
@@ -631,16 +631,18 @@
                         sellerOpenId:this.sellerOpenId,
                         buyerOpenId:this.buyerOpenId,
                     },
-                        success: (res) =>{
-                            if(res.code === 0){
-                                //跳转页面
-								uni.navigateTo({
-									url: '/pages/appointmentSuccessful/submitSuccessfulmodelId=0&id='+res.id
-								});
-                            }else {
-                                alert('保存失败')
-                            }
+					dataType:"json",
+                    success: (res) =>{
+                        if(res.code === 0){
+								
+                            //跳转页面
+							uni.navigateTo({
+								url: '/pages/appointmentSuccessful/submitSuccessful?modelId=0&id='+res.id
+							});
+                        }else {
+                            alert('保存失败')
                         }
+                    }
 				})
 			}
 		}

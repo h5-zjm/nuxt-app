@@ -11,7 +11,7 @@
 			<view class="times">
 				新发地七日人车流量分析
 			</view>
-			<canvas canvas-id="canvasMix" id="canvasMix" class="charts" disable-scroll=true @touchstart="touchMix" @touchmove="moveMix" @touchend="touchEndMix"></canvas>
+			<canvas canvas-id="canvasLineA" id="canvasLineA" class="charts" disable-scroll=true @touchstart="touchLineA" @touchmove="moveLineA" @touchend="touchEndLineA"></canvas>
 		</view>
 <!-- 		<view class="table">
 			<u-table>
@@ -40,14 +40,12 @@
 
 <script>
 	import uCharts from '../../js_sdk/u-charts/u-charts/u-charts.min.js';
+	var canvaLineA=null;
 	var _self;
-	var canvaColumn = null;
-	var canvaRing = null;
-	var canvaRing1 = null;
 	export default {
 		data() {
 			return {
-				Chart_Active: 3,
+				Chart_Active: 5,
 				Chart_List: [{
 						title: '当前车数人数'
 					},
@@ -57,15 +55,15 @@
 					{
 						title: '交易量数据'
 					},
-					// {
-					// 	title: '进场数据'
-					// },
-					// {
-					// 	title: '7日来货量、交易量分析'
-					// },
-					// {
-					// 	title: '7日人车流量分析'
-					// }
+					{
+						title: '进场数据'
+					},
+					{
+						title: '7日来货量、交易量分析'
+					},
+					{
+						title: '7日人车流量分析'
+					}
 				],
 				// 来货量数据时间选择器
 				params: {
@@ -93,7 +91,7 @@
 			};
 		},
 		created() {
-			this.getNow()
+			this.getServerData()
 		},
 		onBackPress(options) {
 			console.log(5555555)
@@ -116,6 +114,7 @@
 			//#endif
 			this.cWidth = uni.upx2px(750);
 			this.cHeight = uni.upx2px(500);
+			this.this.getServerData()
 		},
 		methods: {
 			ChartClick(index, item) {
@@ -135,31 +134,44 @@
 					uni.navigateTo({
 					    url: '/pages/ChartPage/chartThree'
 					});
+				} else if (index === 3) {
+					uni.navigateTo({
+						url:'/pages/ChartPage/approachData'
+					})
+				} else if (index === 4) {
+					uni.navigateTo({
+						url:'/pages/ChartPage/quantity'
+					})
+				} else if (index === 5) {
+					uni.navigateTo({
+						url:'/pages/ChartPage/peopleCarData'
+					})
 				} 
 			},
 			getServerData(){
 				uni.request({
-					url: 'https://www.ucharts.cn/data.json',
+					url: 'http://192.168.100.215:18088/statistics/humanTraffic',
 					data:{
 					},
 					success: function(res) {
-						console.log(res.data.data)
-						let Mix={categories:[],series:[]};
+						console.log('返回数据',res)
+						let LineA={categories:[],series:[]};
 						//这里我后台返回的是数组，所以用等于，如果您后台返回的是单条数据，需要push进去
-						Mix.categories=res.data.data.Mix.categories;
-						Mix.series=res.data.data.Mix.series;
-						_self.showMix("canvasMix",Mix);
+						
+						LineA.categories = res.data.categories;
+						LineA.series = res.data.series
+						_self.showLineA("canvasLineA",LineA);
 					},
 					fail: () => {
 						_self.tips="网络错误，小程序端请检查合法域名";
 					},
 				});
 			},
-			showMix(canvasId,chartData){
-				canvaMix=new uCharts({
+			showLineA(canvasId,chartData){
+				canvaLineA=new uCharts({
 					$this:_self,
 					canvasId: canvasId,
-					type: 'mix',
+					type: 'line',
 					fontSize:11,
 					legend:{show:true},
 					background:'#FFFFFF',
@@ -167,7 +179,7 @@
 					categories: chartData.categories,
 					series: chartData.series,
 					animation: true,
-					enableScroll: true,//开启图表拖拽功能
+					enableScroll: false,//开启图表拖拽功能
 					xAxis: {
 						disableGrid:false,
 						type:'grid',
@@ -206,21 +218,6 @@
 					},
 				});
 			},
-			touchMix(e){
-				canvaMix.scrollStart(e);
-			},
-			moveMix(e) {
-				canvaMix.scroll(e);
-			},
-			touchEndMix(e) {
-				canvaMix.scrollEnd(e);
-				//下面是toolTip事件，如果滚动后不需要显示，可不填写
-				canvaMix.showToolTip(e, {
-					format: function (item, category) {
-						return category + ' ' + item.name + ':' + item.data 
-					}
-				});
-			},
 			confirmStart(e) {
 				console.log('时间', e)
 				this.startTime = e.year + '-' + e.month + '-' + e.day + ' ' + e.hour + ':' + e.minute
@@ -230,28 +227,22 @@
 				this.endTime = e.year + '-' + e.month + '-' + e.day + ' ' + e.hour + ':' + e.minute
 				this.getServerData();
 			},
-			// 获取当前时间
-			getNow() {
-				let date = new Date(),
-					year = date.getFullYear(),
-					month = date.getMonth() + 1,
-					day = date.getDate(),
-					hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
-					minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-				month >= 1 && month <= 9 ? (month = "0" + month) : "";
-				day >= 0 && day <= 9 ? (day = "0" + day) : "";
-				let timer = year + '-' + month + '-' + day + ' ' + hour + ':' + minute;
-				this.startTime = year + '-' + month + '-' + day + ' ' + '00:00';
-				this.endTime = year + '-' + month + '-' + day + ' ' + hour + ':' + minute;
-				this.startTimeT = year + '-' + month + '-' + day + ' ' + '00:00';
-				this.endTimeT = year + '-' + month + '-' + day + ' ' + hour + ':' + minute;
-				console.log('时间获取完成')
-				this.getServerData();
+			touchLineA(e){
+				canvaLineA.scrollStart(e);
 			},
-			showFirst() {
-				console.log('第一个开始时间被点击')
-				this.show = true
-			}
+			moveLineA(e) {
+				canvaLineA.scroll(e);
+			},
+			touchEndLineA(e) {
+				canvaLineA.scrollEnd(e);
+				//下面是toolTip事件，如果滚动后不需要显示，可不填写
+				canvaLineA.showToolTip(e, {
+					format: function (item, category) {
+						return category + ' ' + item.name + ':' + item.data 
+					}
+				});
+			},
+			// 获取当前时间
 		}
 	}
 </script>

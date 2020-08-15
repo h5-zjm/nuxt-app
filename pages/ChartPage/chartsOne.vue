@@ -89,12 +89,12 @@
 					{
 						title: '进场数据'
 					},
-					// {
-					// 	title: '7日来货量、交易量分析'
-					// },
-					// {
-					// 	title: '7日人车流量分析'
-					// }
+					{
+						title: '7日来货量、交易量分析'
+					},
+					{
+						title: '7日人车流量分析'
+					}
 				],
 				// 表格数据
 				TableData: [],
@@ -154,6 +154,14 @@
 				} else if (index === 3) {
 					uni.navigateTo({
 						url:'/pages/ChartPage/approachData'
+					})
+				} else if (index === 4) {
+					uni.navigateTo({
+						url:'/pages/ChartPage/quantity'
+					})
+				} else if (index === 5) {
+					uni.navigateTo({
+						url:'/pages/ChartPage/peopleCarData'
 					})
 				}
 			},

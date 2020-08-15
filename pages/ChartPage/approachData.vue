@@ -53,9 +53,7 @@
 <script>
 	import uCharts from '../../js_sdk/u-charts/u-charts/u-charts.min.js';
 	var _self;
-	var canvaLineA = null;
-	var canvaRing = null;
-	var canvaRing1 = null;
+	var canvaLineA=null;
 	export default {
 		data() {
 			return {
@@ -72,12 +70,12 @@
 					{
 						title: '进场数据'
 					},
-					// {
-					// 	title: '7日来货量、交易量分析'
-					// },
-					// {
-					// 	title: '7日人车流量分析'
-					// }
+					{
+						title: '7日来货量、交易量分析'
+					},
+					{
+						title: '7日人车流量分析'
+					}
 				],
 				// 来货量数据时间选择器
 				params: {
@@ -166,14 +164,6 @@
 						console.log('返回数据',res.data.data)
 						console.log('数组',res.data.data.figure)
 						_self.tableData = res.data.data.table
-						// let partition = []
-						// if(res.data.data.figure[1]) {
-						// 	console.log('开始组装')
-						// 	for (let i = 0;i<res.data.data.figure.length;i++) {
-						// 		console.log('组装数据',i,partition)
-						// 		partition[i] = res.data.data.figure[i].name
-						// 	}
-						// }
 						let LineA={categories:[],series:[]};
 						//这里我后台返回的是数组，所以用等于，如果您后台返回的是单条数据，需要push进去
 						LineA.categories=res.data.data.figure.categories;
@@ -193,37 +183,49 @@
 					type: 'line',
 					fontSize:11,
 					legend:{show:true},
-					dataLabel:false,
-					dataPointShape:true,
 					background:'#FFFFFF',
 					pixelRatio:_self.pixelRatio,
 					categories: chartData.categories,
 					series: chartData.series,
 					animation: true,
+					enableScroll: false,//开启图表拖拽功能
 					xAxis: {
+						disableGrid:false,
 						type:'grid',
-						gridColor:'#CCCCCC',
 						gridType:'dash',
-						dashLength:8
+						itemCount:4,
+						scrollShow:true,
+						scrollAlign:'left',
 					},
 					yAxis: {
 						gridType:'dash',
-						gridColor:'#CCCCCC',
-						dashLength:8,
 						splitNumber:5,
 						min:10,
 						max:180,
-						format:(val)=>{return val.toFixed(0)+'元'}
+						format:(val)=>{return val.toFixed(0)}
 					},
 					width: _self.cWidth*_self.pixelRatio,
 					height: _self.cHeight*_self.pixelRatio,
+					dataLabel: true,
+					dataPointShape: true,
 					extra: {
-						line:{
-							type: 'straight'
+						tooltip:{
+							bgColor:'#000000',
+							bgOpacity:0.7,
+							gridType:'dash',
+							dashLength:8,
+							gridColor:'#1890ff',
+							fontColor:'#FFFFFF',
+							horizentalLine:true,
+							xAxisLabel:true,
+							yAxisLabel:true,
+							labelBgColor:'#DFE8FF',
+							labelBgOpacity:0.95,
+							labelAlign:'left',
+							labelFontColor:'#666666'
 						}
-					}
+					},
 				});
-				
 			},
 			touchLineA(e) {
 				canvaLineA.showToolTip(e, {
@@ -270,7 +272,8 @@
 <style lang="scss">
 	#ChartPage {
 		.Chart_head::-webkit-scrollbar {
-			display: none
+			display: none;
+			overflow-x:scroll;
 		}
 
 		.Chart_head {
