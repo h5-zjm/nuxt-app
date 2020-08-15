@@ -141,7 +141,7 @@
 
 <script>
 	import Uploader from '@/components/Uploader/Uploader.vue'
-	import cityData from '@/js_sdk/cityData.js'
+	import citys from '@/js_sdk/cityData.js'
 	export default {
 		components: {
 			Uploader
@@ -755,7 +755,7 @@
 			comfirmCategory(e) {
 				console.log('选中的数据',e)
 				this.form.goods = e[0].label
-				console.log('城市列表',this.cityData)
+				console.log('城市列表',this.citys)
 			},
 			
 		},

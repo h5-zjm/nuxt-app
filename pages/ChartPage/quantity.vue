@@ -560,12 +560,13 @@
 						//这里我后台返回的是数组，所以用等于，如果您后台返回的是单条数据，需要push进去
 						for(let i = 0;i<res.data.series.length;i++) {
 							if(res.data.series[i].name==='来货量') {
-								res.data.series[i].style = 'line'
+								res.data.series[i].type = 'line'
 							}
 							if(res.data.series[i].name==='交易量') {
-								res.data.series[i].style = 'column'
+								res.data.series[i].type = 'column'
 							}
 						}
+						console.log('图表数据',res.data.series)
 						Mix.categories=res.data.categories;
 						Mix.series=res.data.series;
 						// Mix.categories=res.data.data.Mix.categories;
