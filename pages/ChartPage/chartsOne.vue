@@ -245,10 +245,7 @@
 			},
 			// 表格数据请求
 			Table_Data() {
-				// console.log(`${this.PLATFORM}statistics/carsAndPeopleNumber`, 'url')]
-				console.log(1111)
 				uni.request({
-					// url: `${this.PLATFORM}statistics/carsAndPeopleNumber`,
 					url: 'http://wechat.daizhangfang.net/statistics/carsAndPeopleNumber',
 					method: 'get',
 					success: (data) => {
@@ -259,8 +256,6 @@
 
 							this.Echarts_Data = res.categories;
 							this.showColumn("canvasColumn", res.series);
-
-
 						}
 
 					}

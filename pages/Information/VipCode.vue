@@ -7,7 +7,7 @@
 				<u-form :model="form" ref="uForm" label-width="auto">
 					<u-form-item prop="time">
 						<view class="Con_box">
-							<text>姓&nbsp;&nbsp;&nbsp;&nbsp;名：</text>
+							<text>姓&nbsp;&nbsp;&nbsp;名：</text>
 							<view>{{form.name | ''}}</view>
 						</view>
 					</u-form-item>
@@ -19,13 +19,13 @@
 					</u-form-item>
 					<u-form-item prop="time">
 						<view class="Con_box">
-							<text>性&nbsp;&nbsp;&nbsp;&nbsp;别：</text>
+							<text>性&nbsp;&nbsp;&nbsp;别：</text>
 							<view>{{form.gender | ''}}</view>
 						</view>
 					</u-form-item>
 					<u-form-item prop="time">
 						<view class="Con_box">
-							<text>年&nbsp;&nbsp;&nbsp;&nbsp;龄：</text>
+							<text>年&nbsp;&nbsp;&nbsp;龄：</text>
 							<view>{{form.age | ''}}</view>
 						</view>
 					</u-form-item>
@@ -94,9 +94,28 @@
 						}
 					}
 				})
+			},
+			// 登录权限
+			login(){
+				this.uniRequest({
+					url: 'accouninfo/getInfo',
+					success: (res) => {
+						if (!res.data.account.cellphone) {
+							uni.navigateTo({
+								url: '/pages/login/index'
+							})
+						} else if (!res.data.info.name || !res.data.info.cardNo) {
+							uni.navigateTo({
+								url: '/pages/Information/index'
+							})
+						}
+				
+					}
+				})
 			}
 		},
 		onShow(){
+			this.login()
 			this.submit()
 			this.getCode()
 		},

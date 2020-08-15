@@ -6,31 +6,31 @@
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>姓名：</text>
-						<view>{{form.name | ''}}</view>
+						<view>{{form.name}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>手机号：</text>
-						<view>{{form.phone | ''}}</view>
+						<view>{{form.phone}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>身份证号：</text>
-						<view>{{form.cardNo | ''}}</view>
+						<view>{{form.cardNo}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>性别：</text>
-						<view>{{form.gender | ''}}</view>
+						<view>{{form.gender}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>年龄：</text>
-						<view>{{form.age | ''}}</view>
+						<view>{{form.age}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
@@ -48,7 +48,7 @@
 				<u-form-item prop="time">
 					<view class="Conbox" style="transform: translateX(-8rpx);">
 						<text>现住地（详细地址）：</text>
-						<text>{{form.currentPlace | ''}}</text>
+						<text>{{form.currentPlace}}</text>
 					</view>
 				</u-form-item>
 			</view>
@@ -65,7 +65,7 @@
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>车牌号：</text>
-						<view>{{form.carNumber | ''}}</view>
+						<view>{{form.carNumber}}</view>
 					</view>
 				</u-form-item>
 			</view>
@@ -120,7 +120,7 @@
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
 						uni.navigateTo({
-							url:'/pages/Information/index?Active_radio='+this.Active_radio
+							url: '/pages/Information/index?Active_radio=' + this.Active_radio
 						})
 					} else {
 						console.log('验证失败');
@@ -133,34 +133,45 @@
 			this.$refs.uForm.setRules(this.rules);
 		},
 		// 获取参数
-		onLoad(res){
-			if(res.radio) {
+		onLoad(res) {
+			if (res.radio) {
 				this.Active_radio = parseInt(res.radio);
 			}
 		},
 		// 获取用户信息
-		onShow(){
+		onShow() {
 			this.uniRequest({
 				url: 'accouninfo/getInfo',
-				success:(res)=>{
-					this.form = {
-						name: res.data.info.name,
-						phone: res.data.account.cellphone,
-						cardNo: res.data.info.cardNo,
-						gender: res.data.info.gender,
-						age: res.data.info.age,
-						// 原籍
-						registProvince: res.data.info.registProvince,
-						registCity: res.data.info.registCity,
-						registArea: res.data.info.registArea,
-						// 先居住地
-						curentProvince: res.data.info.curentProvince,
-						curentCity: res.data.info.curentCity,
-						curentArea: res.data.info.curentArea,
-						// 现居住地
-						currentPlace: res.data.info.currentPlace,
-						carNumber: res.data.info.carNumber
+				success: (res) => {
+					if (!res.data.account.cellphone) {
+						uni.navigateTo({
+							url: '/pages/login/index'
+						})
+					} else if (!res.data.info.name || !res.data.info.cardNo) {
+						uni.navigateTo({
+							url: '/pages/Information/index'
+						})
+					} else {
+						this.form = {
+							name: res.data.info.name,
+							phone: res.data.account.cellphone,
+							cardNo: res.data.info.cardNo,
+							gender: res.data.info.gender,
+							age: res.data.info.age,
+							// 原籍
+							registProvince: res.data.info.registProvince,
+							registCity: res.data.info.registCity,
+							registArea: res.data.info.registArea,
+							// 先居住地
+							curentProvince: res.data.info.curentProvince,
+							curentCity: res.data.info.curentCity,
+							curentArea: res.data.info.curentArea,
+							// 现居住地
+							currentPlace: res.data.info.currentPlace,
+							carNumber: res.data.info.carNumber
+						}
 					}
+
 				}
 			})
 		}
@@ -183,6 +194,7 @@
 			.Con_box {
 				display: flex;
 				width: 100%;
+
 				>text {
 					margin-right: 10rpx;
 					transform: translateX(-8rpx);
@@ -205,19 +217,20 @@
 				}
 
 				>view {
-					font-size:28rpx;
-					font-weight:400;
-					color:rgba(49,49,49,1);
+					font-size: 28rpx;
+					font-weight: 400;
+					color: rgba(49, 49, 49, 1);
 				}
-				
+
 				.Con_tit {
 					display: flex;
 					align-items: center;
 					margin-right: 30rpx;
+
 					>view {
-						width:24rpx;
-						height:24rpx;
-						background:rgba(0,158,255,1);
+						width: 24rpx;
+						height: 24rpx;
+						background: rgba(0, 158, 255, 1);
 						border-radius: 50%;
 					}
 				}
@@ -228,23 +241,27 @@
 		.Con_goods {
 			margin-top: 20rpx;
 		}
-		
+
 		.Uploader_box {
 			background-color: #fff;
 			margin-top: 20rpx;
 			display: flex;
 			padding: 0rpx 30rpx;
+
 			>view {
 				padding: 20rpx 0rpx;
+
 				>view {
-					font-size:32rpx;
-					font-weight:400;
-					color:rgba(49,49,49,1);
+					font-size: 32rpx;
+					font-weight: 400;
+					color: rgba(49, 49, 49, 1);
 					margin-bottom: 24rpx;
 				}
 			}
+
 			.Uploader_box_left {
 				margin-right: 186rpx;
+
 				>view::after {
 					content: '*';
 					color: #ff0000;
@@ -253,25 +270,26 @@
 				}
 			}
 		}
-		
+
 		.Checkbox {
 			margin-top: 20rpx;
 			background-color: #fff;
 			padding: 20rpx 30rpx;
 			display: flex;
+
 			>view {
-				font-size:24rpx;
-				font-weight:400;
-				color:rgba(228,39,39,1);
+				font-size: 24rpx;
+				font-weight: 400;
+				color: rgba(228, 39, 39, 1);
 			}
 		}
-		
+
 		.btn {
 			width: 100%;
 			display: flex;
 			justify-content: center;
 			padding: 28rpx 0rpx 34rpx 0rpx;
-		
+
 			.btn_box {
 				width: 690rpx;
 				height: 80rpx;

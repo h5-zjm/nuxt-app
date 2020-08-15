@@ -6,31 +6,31 @@
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>姓名：</text>
-						<view>{{form.name | ''}}</view>
+						<view>{{form.name}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>手机号：</text>
-						<view>{{form.mobile | ''}}</view>
+						<view>{{form.mobile}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>身份证号：</text>
-						<view>{{form.cardNo | ''}}</view>
+						<view>{{form.cardNo}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>性别：</text>
-						<view>{{form.gender | ''}}</view>
+						<view>{{form.gender}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>年龄：</text>
-						<view>{{form.age | ''}}</view>
+						<view>{{form.age}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
@@ -48,7 +48,7 @@
 				<u-form-item prop="time">
 					<view class="Conbox" style="transform: translateX(-8rpx);">
 						<text>现住地（详细地址）：</text>
-						<text>{{form.currentPlace | ''}}</text>
+						<text>{{form.currentPlace}}</text>
 					</view>
 				</u-form-item>
 			</view>
@@ -65,13 +65,13 @@
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>公司联系人：</text>
-						<view>{{form.businessLinkman | ''}}</view>
+						<view>{{form.businessLinkman}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>联系人电话：</text>
-						<view>{{form.businessLinkmobile | ''}}</view>
+						<view>{{form.businessLinkmobile}}</view>
 					</view>
 				</u-form-item>
 			</view>
@@ -93,13 +93,13 @@
 					gender: '',
 					age: '',
 					// 原籍
-					registProvince: null,
-					registCity: null,
-					registArea: null,
+					registProvince: '',
+					registCity: '',
+					registArea: '',
 					// 先居住地
-					curentProvince: null,
-					curentCity: null,
-					curentArea: null,
+					curentProvince: '',
+					curentCity: '',
+					curentArea: '',
 					// 现居住地
 					currentPlace: '',
 					businessLinkman: '',
@@ -150,24 +150,34 @@
 			this.uniRequest({
 				url: 'accouninfo/getInfo',
 				success:(res)=>{
-					this.form = {
-						name: res.data.info.name,
-						phone: res.data.account.cellphone,
-						cardNo: res.data.info.cardNo,
-						gender: res.data.info.gender,
-						age: res.data.info.age,
-						// 原籍
-						registProvince: res.data.info.registProvince,
-						registCity: res.data.info.registCity,
-						registArea: res.data.info.registArea,
-						// 先居住地
-						curentProvince: res.data.info.curentProvince,
-						curentCity: res.data.info.curentCity,
-						curentArea: res.data.info.curentArea,
-						// 现居住地
-						currentPlace: res.data.info.currentPlace,
-						businessLinkman: res.data.info.businessLinkman,
-						businessLinkmobile: res.data.info.businessLinkmobile
+					if(!res.data.account.cellphone) {
+						uni.navigateTo({
+							url: '/pages/login/index'
+						})
+					} else if(!res.data.info.name || !res.data.info.cardNo){
+						uni.navigateTo({
+							url: '/pages/Information/index'
+						})
+					} else {
+						this.form = {
+							name: res.data.info.name,
+							phone: res.data.account.cellphone,
+							cardNo: res.data.info.cardNo,
+							gender: res.data.info.gender,
+							age: res.data.info.age,
+							// 原籍
+							registProvince: res.data.info.registProvince,
+							registCity: res.data.info.registCity,
+							registArea: res.data.info.registArea,
+							// 先居住地
+							curentProvince: res.data.info.curentProvince,
+							curentCity: res.data.info.curentCity,
+							curentArea: res.data.info.curentArea,
+							// 现居住地
+							currentPlace: res.data.info.currentPlace,
+							businessLinkman: res.data.info.businessLinkman,
+							businessLinkmobile: res.data.info.businessLinkmobile
+						}
 					}
 				}
 			})

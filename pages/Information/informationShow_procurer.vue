@@ -6,31 +6,31 @@
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>姓名：</text>
-						<view>{{form.name | ''}}</view>
+						<view>{{form.name}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>手机号：</text>
-						<view>{{form.phone | ''}}</view>
+						<view>{{form.phone}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>身份证号：</text>
-						<view>{{form.cardNo | ''}}</view>
+						<view>{{form.cardNo}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>性别：</text>
-						<view>{{form.gender | ''}}</view>
+						<view>{{form.gender}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>年龄：</text>
-						<view>{{form.age | ''}}</view>
+						<view>{{form.age}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
@@ -48,7 +48,7 @@
 				<u-form-item prop="time">
 					<view class="Conbox" style="transform: translateX(-8rpx);">
 						<text>现住地（详细地址）：</text>
-						<text>{{form.currentPlace | ''}}</text>
+						<text>{{form.currentPlace}}</text>
 					</view>
 				</u-form-item>
 			</view>
@@ -206,28 +206,38 @@
 			this.uniRequest({
 				url: 'accouninfo/getInfo',
 				success:(res)=>{
-					this.form = {
-						name: res.data.info.name,
-						phone: res.data.account.cellphone,
-						cardNo: res.data.info.cardNo,
-						gender: res.data.info.gender,
-						age: res.data.info.age,
-						// 原籍
-						registProvince: res.data.info.registProvince,
-						registCity: res.data.info.registCity,
-						registArea: res.data.info.registArea,
-						// 先居住地
-						curentProvince: res.data.info.curentProvince,
-						curentCity: res.data.info.curentCity,
-						curentArea: res.data.info.curentArea,
-						// 现居住地
-						currentPlace: res.data.info.currentPlace,
-						businessName: res.data.info.businessName,
-						businessCode: res.data.info.businessCode,
-						businessAddr: res.data.info.businessAddr,
-						purchaseArea: res.data.info.purchaseArea,
-						businessCatalog: res.data.info.businessCatalog,
-						// PartnerList: res.data.info.PartnerList
+					if(!res.data.account.cellphone) {
+						uni.navigateTo({
+							url: '/pages/login/index'
+						})
+					} else if(!res.data.info.name || !res.data.info.cardNo){
+						uni.navigateTo({
+							url: '/pages/Information/index'
+						})
+					} else {
+						this.form = {
+							name: res.data.info.name,
+							phone: res.data.account.cellphone,
+							cardNo: res.data.info.cardNo,
+							gender: res.data.info.gender,
+							age: res.data.info.age,
+							// 原籍
+							registProvince: res.data.info.registProvince,
+							registCity: res.data.info.registCity,
+							registArea: res.data.info.registArea,
+							// 先居住地
+							curentProvince: res.data.info.curentProvince,
+							curentCity: res.data.info.curentCity,
+							curentArea: res.data.info.curentArea,
+							// 现居住地
+							currentPlace: res.data.info.currentPlace,
+							businessName: res.data.info.businessName,
+							businessCode: res.data.info.businessCode,
+							businessAddr: res.data.info.businessAddr,
+							purchaseArea: res.data.info.purchaseArea,
+							businessCatalog: res.data.info.businessCatalog,
+							// PartnerList: res.data.info.PartnerList
+						}
 					}
 				}
 			})

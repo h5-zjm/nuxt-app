@@ -8,6 +8,11 @@
 			"navigationStyle": "custom"
 		}
 	}, {
+		"path": "pages/ChartPage/chartsOne",
+		"style": {
+			"navigationBarTitleText": "数据统计"
+		}
+	}, {
 		"path": "pages/Information/index",
 		"style": {
 			// "enablePullDownRefresh": true,
@@ -16,12 +21,7 @@
 	}, {
 		"path": "pages/makeAppointment/index",
 		"style": {
-			"navigationBarTitleText":"进门预约（卖货）"
-		}
-	}, {
-		"path": "pages/ChartPage/chartsOne",
-		"style": {
-			"navigationBarTitleText": "数据统计"
+			"navigationBarTitleText": "进门预约（卖货）"
 		}
 	}, {
 		"path": "pages/appointmentRecord/index",
@@ -78,24 +78,22 @@
 		"style": {
 			"navigationBarTitleText": "食用农产品合格证"
 		}
-	},{
-            "path" : "pages/ChartPage/approachData",
-            "style" : {
-				"navigationBarTitleText":"数据统计"
-			}
-        }
-        ,{
-            "path" : "pages/ChartPage/quantity",
-            "style" : {
-				"navigationBarTitleText":"数据统计"
-			}
-        }
-        ,{
-            "path" : "pages/ChartPage/peopleCarData",
-            "style" : {
-				"navigationBarTitleText":"数据统计"
-			}
-        }, {
+	}, {
+		"path": "pages/ChartPage/approachData",
+		"style": {
+			"navigationBarTitleText": "数据统计"
+		}
+	}, {
+		"path": "pages/ChartPage/quantity",
+		"style": {
+			"navigationBarTitleText": "数据统计"
+		}
+	}, {
+		"path": "pages/ChartPage/peopleCarData",
+		"style": {
+			"navigationBarTitleText": "数据统计"
+		}
+	}, {
 		"path": "pages/Information/informationShow_ferry",
 		"style": {
 			"navigationBarTitleText": "个人信息"
@@ -139,21 +137,18 @@
 			"navigationBarBackgroundColor": "#37B3FF",
 			"navigationBarTextStyle": "white"
 		}
-	}    ,{
-            "path" : "pages/record/visit",
-            "style" : {
-				"navigationBarTitleText": "上货记录"
-			}
-        }
-        ,{
-            "path" : "pages/appointmentSuccessful/submitSuccessful",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/Information/hint",
-            "style" : {}
-        }
-    ],
+	}, {
+		"path": "pages/record/visit",
+		"style": {
+			"navigationBarTitleText": "上货记录"
+		}
+	}, {
+		"path": "pages/appointmentSuccessful/submitSuccessful",
+		"style": {}
+	}, {
+		"path": "pages/Information/hint",
+		"style": {}
+	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",
