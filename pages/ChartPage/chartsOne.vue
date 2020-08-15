@@ -47,11 +47,10 @@
 
 				<view class="thbody" v-for="(item,index) in TableData" :key="index">
 					<u-tr>
-						<u-td :class="{'gray': index % 2 === 1}" :showTd="showTd">{{item.name}}</u-td>
-						<u-td v-for="(i,j) in item.data" :key="j" v-if="j <3" :class="{'gray': index % 2 === 1}" :showTd="showTd">{{i}}</u-td>
-						<!-- <u-td :class="{'gray': index % 2 === 1}" :showTd="showTd">白萝卜</u-td>
-						<u-td :class="{'gray': index % 2 === 1}" :showTd="showTd">200</u-td>
-						<u-td :class="{'gray': index % 2 === 1}" :showTd="showTd">72</u-td> -->
+						<u-td :class="{'gray': index % 2 === 1}" :showTd="showTd">{{item.area}}</u-td>
+						<u-td :class="{'gray': index % 2 === 1}" :showTd="showTd">{{item.buyCarNum}}</u-td>
+						<u-td :class="{'gray': index % 2 === 1}" :showTd="showTd">{{item.sellCarNum}}</u-td>
+						<u-td :class="{'gray': index % 2 === 1}" :showTd="showTd">{{item.fieldPeople}}</u-td>
 					</u-tr>
 				</view>
 			</u-table>
@@ -153,7 +152,7 @@
 					});
 				} else if (index === 3) {
 					uni.navigateTo({
-						url:'/pages/ChartPage/approachData'
+						url: '/pages/ChartPage/approachData'
 					})
 				}
 			},
@@ -246,35 +245,14 @@
 					method: 'get',
 					success: (data) => {
 						if (data.data.code === 0) {
+							
+							let res = data.data.data;
+							this.TableData = res.table;
 
-							console.log(data, 'data')
-							this.TableData = data.data.data[0];
+							this.Echarts_Data = res.categories;
+							this.showColumn("canvasColumn", res.series);
 
-							this.Echarts_Data = [];
-							
-							
-							let Data = JSON.parse(JSON.stringify(data.data.data[0]));
-							
-							// this.Echarts_Data = data.data[0];
-							data.data.data[0].forEach((item, index) => {
-								this.Echarts_Data.push(item.name)
-							})
-							// console.log(this.Echarts_Data,'Echarts_Data')
-							
-							Array_Func_Filter(Data,(res=>{
-								console.log(res,'res')
-								res.forEach((item,index)=>{
-									if(index === 0){
-										item.color = "#2fc25b"
-									} else if(index === 2){
-										item.color = "#facc14"
-									}
-								})
-								this.showColumn("canvasColumn", res);
-								
-							}))
 
-							
 						}
 
 					}
@@ -287,7 +265,7 @@
 		onShow() {
 			console.log(888888)
 		}
-		
+
 	}
 </script>
 

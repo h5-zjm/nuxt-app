@@ -6,7 +6,7 @@
 					<view class="" v-if="active_show">
 						<view class="tit">选择身份（必选）</view>
 						<view class="status">
-							<u-radio-group v-model="form.radio" :wrap="true">
+							<u-radio-group v-model="form.radio " :wrap="true">
 								<view class="status_radio">
 									<u-radio :name="1">供应商（前来卖货）</u-radio>
 								</view>
@@ -24,7 +24,7 @@
 
 						<view class="tit" v-if="form.radio">必填信息</view>
 						<view class="uploaderBox" v-if="form.radio">
-							<u-upload :action="action" :max-count="1" :file-list="fileList">
+							<u-upload :action="action" :max-count="1" :file-list="supplier.fileList" @on-success="Supplier_Upload">
 
 							</u-upload>
 							<view class="Conbox">
@@ -39,22 +39,22 @@
 									<u-input v-model="form.name" input-align="right" style="flex: 1;" placeholder="请输入姓名" />
 								</view>
 							</u-form-item>
-							<u-form-item prop="phone">
+							<u-form-item prop="mobile">
 								<view class="Con_box">
 									<text class="star">手机号</text>
-									<view :class="{'place_box':!form.phone}">{{form.phone ? form.phone : '注册登录带过来的数据不可修改'}}</view>
+									<view :class="{'place_box':!form.mobile}">{{form.mobile ? form.mobile : '注册登录带过来的数据不可修改'}}</view>
 								</view>
 							</u-form-item>
-							<u-form-item prop="car" v-if="form.radio === 3">
+							<u-form-item prop="carNumber" v-if="form.radio === 3">
 								<view class="Con_box">
 									<text class="star">车牌号</text>
-									<u-input v-model="form.car" input-align="right" style="flex: 1;" placeholder="请输入车牌号" />
+									<u-input v-model="form.carNumber" input-align="right" style="flex: 1;" placeholder="请输入车牌号" />
 								</view>
 							</u-form-item>
-							<u-form-item prop="card">
+							<u-form-item prop="cardNo">
 								<view class="Con_box">
 									<text class="star">身份证号</text>
-									<u-input v-model="form.card" input-align="right" style="flex: 1;" placeholder="请输入身份证号" />
+									<u-input v-model="form.cardNo" input-align="right" style="flex: 1;" placeholder="请输入身份证号" />
 								</view>
 							</u-form-item>
 							<u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
@@ -63,13 +63,13 @@
 
 
 					<!-- 摆渡车 -->
-					<view class="Active_box" v-if="active_copy === 3">
+					<view class="Active_box">
 						<view class="tit">个人信息</view>
 						<view class="Active_box_sun">
-							<u-form-item label="性别" prop="sex">
-								<u-input v-model="form.sex" input-align="right" placeholder="请输入性别" />
+							<u-form-item label="性别">
+								<u-input v-model="form.gender" input-align="right" placeholder="请输入性别" />
 							</u-form-item>
-							<u-form-item label="年龄" prop="age">
+							<u-form-item label="年龄">
 								<u-input v-model="form.age" input-align="right" placeholder="请输入年龄" />
 							</u-form-item>
 							<u-form-item label="籍贯" prop="place" class="place">
@@ -94,19 +94,19 @@
 											<u-checkbox-group>
 												<view class="box">
 													<text>荔枝</text>
-													<u-checkbox v-model="checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
+													<u-checkbox v-model="form.checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
 												</view>
 												<view class="box">
 													<text>香蕉</text>
-													<u-checkbox style="width: 38rpx;" v-model="checked" :disabled="false"></u-checkbox>
+													<u-checkbox style="width: 38rpx;" v-model="form.checked" :disabled="false"></u-checkbox>
 												</view>
 												<view class="box">
 													<text>橙子</text>
-													<u-checkbox v-model="checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
+													<u-checkbox v-model="form.checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
 												</view>
 												<view class="box">
 													<text>橙子</text>
-													<u-checkbox v-model="checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
+													<u-checkbox v-model="form.checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
 												</view>
 											</u-checkbox-group>
 										</view>
@@ -120,14 +120,14 @@
 					</view>
 
 					<!-- 采购商 -->
-					<view class="Active_box">
-						<view class="Active_box" v-if="active_copy === 2">
+					<view class="Active_box" v-if="active_copy === 2">
+						<view class="Active_box">
 							<view class="tit">个人信息</view>
 							<view class="Active_box_sun">
-								<u-form-item label="性别" prop="sex">
-									<u-input v-model="form.sex" input-align="right" placeholder="请输入性别" />
+								<u-form-item label="性别">
+									<u-input v-model="form.gender" input-align="right" placeholder="请输入性别" />
 								</u-form-item>
-								<u-form-item label="年龄" prop="age">
+								<u-form-item label="年龄">
 									<u-input v-model="form.age" input-align="right" placeholder="请输入年龄" />
 								</u-form-item>
 								<u-form-item label="籍贯" prop="place" class="place">
@@ -137,8 +137,8 @@
 								<u-form-item label="居住地" prop="residence" class="place">
 									<view @click="openSelect('居住地')" :class="{'place_box':!form.residence}">{{form.residence ? form.residence : '请选择居住地'}}</view>
 								</u-form-item>
-								<u-form-item label="详细地址" prop="address">
-									<u-input v-model="form.address" input-align="right" placeholder="请输入居住地详细地址" />
+								<u-form-item label="详细地址">
+									<u-input v-model="form.currentPlace" input-align="right" placeholder="请输入居住地详细地址" />
 								</u-form-item>
 
 								<!-- select框 -->
@@ -148,30 +148,30 @@
 							<!-- 企业信息 -->
 							<view class="tit">企业信息</view>
 							<view class="Active_box_sun">
-								<u-form-item label="企业名称" prop="sex">
-									<u-input v-model="form.sex" input-align="right" placeholder="请输入企业名称" />
+								<u-form-item label="企业名称">
+									<u-input v-model="form.businessName" input-align="right" placeholder="请输入企业名称" />
 								</u-form-item>
-								<u-form-item label="营业执照" prop="sex">
-									<u-input v-model="form.sex" input-align="right" placeholder="请输入营业执照" />
+								<u-form-item label="营业执照">
+									<u-input v-model="form.businessCode" input-align="right" placeholder="请输入营业执照" />
 								</u-form-item>
 								<view class="uploaderBox">
-									<u-upload :action="action" :max-count="1" :file-list="fileList">
+									<u-upload :action="action" @on-success="Procurer_Upload" :max-count="1" :file-list="procurer.fileList">
 
 									</u-upload>
 									<view class="Conbox">
 										(请上传营业执照附件）
 									</view>
 								</view>
-								<u-form-item prop="card">
+								<u-form-item>
 									<view class="Con_box">
 										<text class="star">主营业务</text>
-										<u-input v-model="form.card" input-align="right" style="flex: 1;" placeholder="请输入主营业务" />
+										<u-input v-model="form.businessCatalog" input-align="right" style="flex: 1;" placeholder="请输入主营业务" />
 									</view>
 								</u-form-item>
-								<u-form-item label="公司地址" prop="sex">
-									<u-input v-model="form.sex" input-align="right" placeholder="请输入公司地址" />
+								<u-form-item label="公司地址">
+									<u-input v-model="form.businessAddr" input-align="right" placeholder="请输入公司地址" />
 								</u-form-item>
-								<u-form-item label="采购区域" prop="region" class="place">
+								<u-form-item label="采购区域" class="place">
 									<view @click="openUpopup('采购区域')" :class="{'place_box':!form.region}">{{form.region ? form.region : '请选择当前计划经营区域（可多选）'}}</view>
 									<u-popup v-model="showUpopup" mode="bottom" :closeable="false" border-radius="14">
 										<view class="Upopup_Con">
@@ -205,27 +205,39 @@
 							</view>
 
 							<!-- 伙伴信息 -->
-							<view class="partner" v-for="(item,index) in PartnerList" :key="index">
-								<view class="tit_con">伙计{{index + 1}}信息</view>
-								<view class="add_con" @click="AddPartner" v-if="index === 0">继续添加</view>
+							<view class="partner_box" v-for="(item,index) in PartnerList" :key="index">
+								<view class="partner">
+									<view class="tit_con">伙计{{index + 1}}信息</view>
+									<view class="add_con" @click="AddPartner" v-if="index === 0">继续添加</view>
+								</view>
+								<view class="Active_box_sun">
+									<u-form-item prop="sex">
+										<view class="Con_box">
+											<text>伙计{{index + 1}}姓名</text>
+											<u-input style="flex: 1;text-align: right;" v-model="item.staffName" input-align="right" placeholder="请输入伙计姓名" />
+										</view>
+									</u-form-item>
+									<u-form-item prop="sex">
+										<view class="Con_box">
+											<text>伙计{{index + 1}}身份证</text>
+											<u-input style="flex: 1;text-align: right;" v-model="form.staffCardNo" input-align="right" placeholder="请输入伙计身份证" />
+										</view>
+									</u-form-item>
+									<u-form-item prop="sex">
+										<view class="Con_box">
+											<text>伙计{{index + 1}}手机号</text>
+											<u-input style="flex: 1;text-align: right;" v-model="form.staffMobile" input-align="right" placeholder="请输入伙计手机号" />
+										</view>
+									</u-form-item>
+									<u-form-item prop="sex">
+										<view class="Con_box">
+											<text>伙计{{index + 1}}现住址</text>
+											<u-input style="flex: 1;text-align: right;" v-model="form.staffAddr" input-align="right" placeholder="请输入伙计现住址" />
+										</view>
+									</u-form-item>
+								</view>
 							</view>
-							<view class="Active_box_sun">
-								<u-form-item prop="sex">
-									<view class="Con_box">
-										<text>伙计{{index + 1}}姓名</text>
-										<u-input style="flex: 1;text-align: right;" v-model="form.sex" input-align="right" placeholder="请输入伙计1姓名" />
-									</view>
-								</u-form-item>
-								<u-form-item label="伙计1身份证" prop="sex">
-									<u-input v-model="form.sex" input-align="right" placeholder="请输入伙计1身份证" />
-								</u-form-item>
-								<u-form-item label="伙计1手机号" prop="sex">
-									<u-input v-model="form.sex" input-align="right" placeholder="请输入伙计1手机号" />
-								</u-form-item>
-								<u-form-item label="伙计1现住址" prop="sex">
-									<u-input v-model="form.sex" input-align="right" placeholder="请输入伙计1现住址" />
-								</u-form-item>
-							</view>
+							
 						</view>
 					</view>
 
@@ -233,10 +245,10 @@
 					<view class="Active_box" v-if="active_copy === 1">
 						<view class="tit">个人信息</view>
 						<view class="Active_box_sun">
-							<u-form-item label="性别" prop="sex">
+							<u-form-item label="性别">
 								<u-input v-model="form.sex" input-align="right" placeholder="请输入性别" />
 							</u-form-item>
-							<u-form-item label="年龄" prop="age">
+							<u-form-item label="年龄">
 								<u-input v-model="form.age" input-align="right" placeholder="请输入年龄" />
 							</u-form-item>
 							<u-form-item label="籍贯" prop="place" class="place">
@@ -246,8 +258,8 @@
 							<u-form-item label="居住地" prop="residence" class="place">
 								<view @click="openSelect('居住地')" :class="{'place_box':!form.residence}">{{form.residence ? form.residence : '请选择居住地'}}</view>
 							</u-form-item>
-							<u-form-item label="详细地址" prop="address">
-								<u-input v-model="form.address" input-align="right" placeholder="请输入居住地详细地址" />
+							<u-form-item label="详细地址">
+								<u-input v-model="form.currentPlace" input-align="right" placeholder="请输入居住地详细地址" />
 							</u-form-item>
 
 							<!-- select框 -->
@@ -257,64 +269,33 @@
 						<!-- 企业信息 -->
 						<view class="tit">企业信息</view>
 						<view class="Active_box_sun">
-							<u-form-item label="企业名称" prop="sex">
-								<u-input v-model="form.sex" input-align="right" placeholder="请输入企业名称" />
+							<u-form-item label="企业名称">
+								<u-input v-model="form.businessName " input-align="right" placeholder="请输入企业名称" />
 							</u-form-item>
-							<u-form-item label="营业执照" prop="sex">
-								<u-input v-model="form.sex" input-align="right" placeholder="请输入营业执照" />
+							<u-form-item label="营业执照">
+								<u-input v-model="form.businessCode" input-align="right" placeholder="请输入营业执照" />
 							</u-form-item>
 							<view class="uploaderBox">
-								<u-upload :action="action" :max-count="1" :file-list="fileList">
+								<u-upload :action="action" :max-count="1" :file-list="supplier.businessList">
 
 								</u-upload>
 								<view class="Conbox">
 									(请上传营业执照附件）
 								</view>
 							</view>
-							<u-form-item prop="card">
+							<u-form-item>
 								<view class="Con_box">
 									<text class="star">主营业务</text>
-									<u-input v-model="form.card" input-align="right" style="flex: 1;" placeholder="请输入主营业务" />
+									<u-input v-model="form.businessCatalog" input-align="right" style="flex: 1;" placeholder="请输入主营业务" />
 								</view>
 							</u-form-item>
 							<u-form-item prop="time">
 								<view class="Con_box">
-									<text class="star">预约时间</text>
-									<view @click="openLipicker('预约时间')" :class="{'place_box':!form.time}">{{form.time ? form.time : '请选择预约时间'}}</view>
+									<text class="star">入驻时间</text>
+									<view @click="openLipicker('入驻时间')" :class="{'place_box':!form.inTime}">{{form.inTime ? form.inTime : '请选择开始在新法地市场经营的时间'}}</view>
 								</view>
 							</u-form-item>
-							<u-form-item label="采购区域" prop="region" class="place">
-								<view @click="openUpopup('采购区域')" :class="{'place_box':!form.region}">{{form.region ? form.region : '请选择当前计划经营区域（可多选）'}}</view>
-								<u-popup v-model="showUpopup" mode="bottom" :closeable="false" border-radius="14">
-									<view class="Upopup_Con">
-										<view class="Upopup_header">
-											<text class="tit">请选择计划经营区域</text>
-											<text class="submit">确定</text>
-										</view>
-										<view class="Upopup_box">
-											<u-checkbox-group>
-												<view class="box">
-													<text>荔枝</text>
-													<u-checkbox v-model="checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
-												</view>
-												<view class="box">
-													<text>香蕉</text>
-													<u-checkbox style="width: 38rpx;" v-model="checked" :disabled="false"></u-checkbox>
-												</view>
-												<view class="box">
-													<text>橙子</text>
-													<u-checkbox v-model="checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
-												</view>
-												<view class="box">
-													<text>橙子</text>
-													<u-checkbox v-model="checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
-												</view>
-											</u-checkbox-group>
-										</view>
-									</view>
-								</u-popup>
-							</u-form-item>
-
+							
 							<!-- 日期框-(设置不了默认时间) -->
 							<u-picker mode="time" v-model="showTime" default-time="2020-08-03" :params="params"></u-picker>
 						</view>
@@ -344,10 +325,10 @@
 					<view class="Active_box" v-if="active_copy === 4">
 						<view class="tit">个人信息</view>
 						<view class="Active_box_sun">
-							<u-form-item label="性别" prop="sex">
-								<u-input v-model="form.sex" input-align="right" placeholder="请输入性别" />
+							<u-form-item label="性别">
+								<u-input v-model="form.gender" input-align="right" placeholder="请输入性别" />
 							</u-form-item>
-							<u-form-item label="年龄" prop="age">
+							<u-form-item label="年龄">
 								<u-input v-model="form.age" input-align="right" placeholder="请输入年龄" />
 							</u-form-item>
 							<u-form-item label="籍贯" prop="place" class="place">
@@ -357,14 +338,14 @@
 							<u-form-item label="居住地" prop="residence" class="place">
 								<view @click="openSelect('居住地')" :class="{'place_box':!form.residence}">{{form.residence ? form.residence : '请选择居住地'}}</view>
 							</u-form-item>
-							<u-form-item label="详细地址" prop="address">
-								<u-input v-model="form.address" input-align="right" placeholder="请输入居住地详细地址" />
+							<u-form-item label="详细地址">
+								<u-input v-model="form.currentPlace" input-align="right" placeholder="请输入居住地详细地址" />
 							</u-form-item>
-							<u-form-item label="公司联系人" prop="address">
-								<u-input v-model="form.address" input-align="right" placeholder="请输入公司联系人" />
+							<u-form-item label="公司联系人">
+								<u-input v-model="form.businessLinkman" input-align="right" placeholder="请输入公司联系人" />
 							</u-form-item>
-							<u-form-item label="联系人电话" prop="address">
-								<u-input v-model="form.address" input-align="right" placeholder="请输入公司联系人电话" />
+							<u-form-item label="联系人电话">
+								<u-input v-model="form.businessLinkmobile" input-align="right" placeholder="请输入公司联系人电话" />
 							</u-form-item>
 
 							<!-- select框 -->
@@ -388,7 +369,8 @@
 </template>
 
 <script>
-	import CONFIG from '../../common/configs.js'
+	import CONFIG from '../../common/configs.js';
+	import cityData from '../../common/cityData.js';
 	// import Uploader from '@/components/Uploader/Uploader.vue'
 	export default {
 		// components: {
@@ -397,31 +379,53 @@
 		data() {
 			return {
 				// 上传附件
-				action: 'http://www.example.com/upload',
-				form: {
-					name: '',
-					phone: '',
-					car: '',
-					card: '',
-					sex: '',
-					age: '',
-					place: '',
-					residence: '',
-					address: '',
-					// 摆渡车
-					car: '',
-					region: '',
-					// 采购商
-					company: '',
-					business: '',
-					// 身份状态
-					radio: '',
-					checked: false,
-					// 采购商
-					action: 'http://www.example.com/upload',
+				action: 'http://192.168.100.215:18088/common/sysFile/upload',
+				supplier: {
+					fileList: [],
+					businessList: []
+				},
+				procurer: {
+					fileList: []
+				},
+				ferry: {
+					action: 'http://192.168.100.215:18088/common/sysFile/upload',
 					fileList: [{
-						url: 'http://pics.sc.chinaz.com/files/pic/pic9/201912/hpic1886.jpg',
+						url: 'http://newlands.oss-cn-beijing.aliyuncs.com/IMAGE/43d02186-3ddf-45d2-abcf-9f5516bd931f.jpg',
 					}]
+				},
+				partner: {
+					action: 'http://192.168.100.215:18088/common/sysFile/upload',
+					fileList: [{
+						url: 'http://newlands.oss-cn-beijing.aliyuncs.com/IMAGE/43d02186-3ddf-45d2-abcf-9f5516bd931f.jpg',
+					}]
+				},
+				placeList: [],
+				form: {
+					id: null,
+					name: '',
+					businessType : '',
+					carNumber: '',
+					mobile: '',
+					cardNo: '',
+					
+					currentPlace: '',
+					curentArea: '',
+					curentCity: '',
+					curentProvince: '',
+					businessCatalog: '',
+					businessAddr: '',
+					businessUrl: '',
+					businessCode: '',
+					businessName: '',
+					birthday: '',
+					gender: '',
+					age: '',
+					currentPlace: '',
+					businessLinkman: '',
+					businessLinkmobile: '',
+					urlImg: '',
+					
+					checked: false
 				},
 				rules: {
 					name: [{
@@ -430,14 +434,44 @@
 						// 可以单个或者同时写两个触发验证方式 
 						trigger: ['change', 'blur'],
 					}],
-					intro: [{
-						min: 5,
-						message: '简介不能少于5个字',
-						trigger: 'change'
+					mobile: [{
+						required: true,
+						message: '请输入手机号码',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
+					},
+					{
+						pattern: CONFIG.MOBILE_REGEXP,
+						// 正则检验前先将值转为字符串
+						transform(value) {
+							return String(value);
+						},
+						message: '请输入11位手机号',
+						trigger: ['change', 'blur']
+					}],
+					cardNo: [{
+						required: true,
+						message: '请输入身份证号',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
+					},{
+						pattern: CONFIG.ID_CODE,
+						// 正则检验前先将值转为字符串
+						transform(value) {
+							return String(value);
+						},
+						message: '请输入18位身份证号',
+						trigger: ['change', 'blur']
+					}],
+					carNumber: [{
+						required: true,
+						message: '请输入车牌号',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
 					}]
 				},
 				// 模拟多级联动
-				placeList: [],
+				
 				residenceList: [],
 
 				// 下一步
@@ -446,50 +480,7 @@
 				active_copy: null,
 				show_back_btn: false,
 				show: false,
-				list: [{
-						value: 1,
-						label: '中国',
-						children: [{
-								value: 2,
-								label: '广东',
-								children: [{
-										value: 3,
-										label: '深圳'
-									},
-									{
-										value: 4,
-										label: '广州'
-									}
-								]
-							},
-							{
-								value: 5,
-								label: '广西',
-								children: [{
-										value: 6,
-										label: '南宁'
-									},
-									{
-										value: 7,
-										label: '桂林'
-									}
-								]
-							}
-						]
-					},
-					{
-						value: 8,
-						label: '美国',
-						children: [{
-							value: 9,
-							label: '纽约',
-							children: [{
-								value: 10,
-								label: '皇后街区'
-							}]
-						}]
-					}
-				],
+				list: cityData.City,
 				// 打开Upopup
 				showUpopup: false,
 				// 日期控件
@@ -511,9 +502,26 @@
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						console.log('验证通过');
+						let params = {
+							name: '',
+							cardNo: '',
+							age: '',
+							birthday: '',
+							gender: '',
+							businessType: '',
+							mobile: '',
+							businessName: '',
+							manageArea: ''
+						}
+						this.uniRequest({
+							url: 'accouninfo/save',
+							data: {},
+							success:(res)=>{
+								
+							}
+						})
 						uni.navigateTo({
-							url: '/pages/Information/Success?radio='+this.form.radio
+							url: '/pages/Information/Success?radio=' + this.form.radio
 						})
 					} else {
 						console.log('验证失败');
@@ -587,7 +595,22 @@
 			},
 			// 添加伙计信息
 			AddPartner() {
-				this.PartnerList.push({});
+				if(this.PartnerList.length < 3) {
+					this.PartnerList.push({});
+				}
+				console.log(this.PartnerList,'PartnerList')
+			},
+			// 上传图片
+			Supplier_Upload(data, index, lists, name) {
+				console.log(data,'data')
+				this.supplier = [{
+					url: data.url
+				}]
+			},
+			Procurer_Upload(data, index, lists, name){
+				this.procurer = [{
+					url: data.url
+				}]
 			}
 		},
 		onReady() {
@@ -596,11 +619,14 @@
 		// 获取参数
 		onLoad(res) {
 			console.log(res, 'res')
+			console.log(this.list,'list')
 			if (res.Active_radio) {
 				this.form.radio = parseInt(res.Active_radio);
 				this.active_show = true;
 				this.show_back_btn = false;
 			}
+		},
+		created(){
 		}
 	}
 </script>
