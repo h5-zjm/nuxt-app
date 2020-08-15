@@ -114,7 +114,7 @@
 			//#endif
 			this.cWidth = uni.upx2px(750);
 			this.cHeight = uni.upx2px(500);
-			this.this.getServerData()
+			this.getServerData()
 		},
 		methods: {
 			ChartClick(index, item) {
