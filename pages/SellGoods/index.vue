@@ -31,7 +31,7 @@
 				<!-- select框 -->
 				<u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
 				<!-- 日期框-(设置不了默认时间) -->
-				<u-picker mode="time" v-model="showTime" default-time="2020-08-03" :params="params"></u-picker>
+				<u-picker mode="time" v-model="showTime" default-time="2020-08-03" :params="params" @confirm="sureTime"></u-picker>
 			</view>
 
 			<view class="Con_goods">
@@ -63,20 +63,20 @@
 				<!-- 多级联动 -->
 				<u-select v-model="showRegion" mode="mutil-column-auto" :list="list" @confirm="confirmRegion"></u-select>
 			</view>
-			
+
 			<view class="Uploader_box">
 				<view class="Uploader_box_left">
 					<view>货物照片</view>
-					<Uploader></Uploader>
+					<u-upload :action="action" @on-success="Procurer_Upload" :max-count="1" :file-list="procurer.fileList" />
 				</view>
 				<view class="Uploader_box_right">
 					<view>检测证明</view>
 					<Uploader></Uploader>
 				</view>
 			</view>
-			
+
 			<view class="tit">《食品农产品合格证》</view>
-			
+
 			<view class="Good_box">
 				<u-form-item prop="name">
 					<view class="Con_box">
@@ -121,7 +121,7 @@
 					</view>
 				</u-form-item>
 			</view>
-			
+
 			<view class="Checkbox">
 				<u-checkbox v-model="form.checked"></u-checkbox>
 				<view>
@@ -155,6 +155,9 @@
 					region: '',
 					starTime: '',
 					checked: false
+				},
+				procurer: {
+					fileList: ''
 				},
 				rules: {
 					name: [{
@@ -237,9 +240,15 @@
 							}]
 						}]
 					}
-				]
+				],
 
+				action: 'http://192.168.100.215:18088/common/sysFile/upload',
+				supplier: {
+					fileList: [],
+					businessList: []
+				},
 
+				openTime: '',
 			}
 
 		},
@@ -248,6 +257,9 @@
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
 						console.log('验证通过');
+						let data = {
+
+						}
 					} else {
 						console.log('验证失败');
 					}
@@ -258,7 +270,7 @@
 				console.log(e);
 				this.show = false;
 				if (this.SelectCon === '交易区') {
-					this.form.deal = e[0].label;
+					this.form.deal = e[0].label
 				} else if (this.SelectCon === '进场门') {
 					this.form.enter = e[0].label;
 				} else if (this.SelectCon === '货品品类') {
@@ -269,26 +281,65 @@
 			openSelect(v) {
 				this.SelectCon = v;
 				this.show = true;
+				console.log('选中的类别', v)
+				if (v === '交易区') {
+					this.list = [{
+						children: [{
+							text: "芒果交易区正门"
+						}, {
+							text: "芒果员工通道"
+						}],
+						text: "芒果交易区"
+					}, {
+						children: [{
+							text: "周转一区1门"
+						}, {
+							text: "周转一区2门"
+						}, {
+							text: "周转一区3门"
+						}],
+						text: "周转一区"
+					}, {
+						children: [],
+						text: "水果区"
+					}];
+				}
+
 			},
 			// 打开日期框
 			openLipicker(v) {
+				console.log('谁打开', v)
 				this.showTime = true;
+				this.openTime = v
 			},
 			// 地区多级联动
-			confirmRegion(e){
-				console.log(e,'e');
+			confirmRegion(e) {
+				console.log(e, 'e');
 				let val = '';
-				e.forEach((item, index) => {
-					console.log(item, 'item')
-					val += item.label;
-				})
-				if(this.activeRegion === '具体产地') {
+				// e.forEach((item, index) => {
+				// 	console.log(item, 'item')
+				// 	val += item.label;
+				// })
+				for (let i = 0; i < e.length; i++) {
+					val += e[i].label
+				}
+				if (this.activeRegion === '具体产地') {
 					this.form.region = val;
 				}
 			},
 			openSelectMore(v) {
 				this.activeRegion = v;
 				this.showRegion = true;
+			},
+			// 图片上传
+			Supplier_Upload(data, index, lists, name) {
+				this.supplier = data.url;
+			},
+			sureTime(date) {
+				console.log('选中日期', date)
+				if (this.openTime == '预约时间') {
+					this.form.time = date.year + '-' + date.month + '-' + date.day
+				}
 			}
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
@@ -356,23 +407,27 @@
 		.Con_goods {
 			margin-top: 20rpx;
 		}
-		
+
 		.Uploader_box {
 			background-color: #fff;
 			margin-top: 20rpx;
 			display: flex;
 			padding: 0rpx 30rpx;
+
 			>view {
 				padding: 20rpx 0rpx;
+
 				>view {
-					font-size:32rpx;
-					font-weight:400;
-					color:rgba(49,49,49,1);
+					font-size: 32rpx;
+					font-weight: 400;
+					color: rgba(49, 49, 49, 1);
 					margin-bottom: 24rpx;
 				}
 			}
+
 			.Uploader_box_left {
 				margin-right: 186rpx;
+
 				>view::after {
 					content: '*';
 					color: #ff0000;
@@ -381,25 +436,26 @@
 				}
 			}
 		}
-		
+
 		.Checkbox {
 			margin-top: 20rpx;
 			background-color: #fff;
 			padding: 20rpx 30rpx;
 			display: flex;
+
 			>view {
-				font-size:24rpx;
-				font-weight:400;
-				color:rgba(228,39,39,1);
+				font-size: 24rpx;
+				font-weight: 400;
+				color: rgba(228, 39, 39, 1);
 			}
 		}
-		
+
 		.btn {
 			width: 100%;
 			display: flex;
 			justify-content: center;
 			padding: 28rpx 0rpx 34rpx 0rpx;
-		
+
 			.btn_box {
 				width: 690rpx;
 				height: 80rpx;

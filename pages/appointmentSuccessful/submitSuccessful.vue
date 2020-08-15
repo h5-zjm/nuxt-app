@@ -23,9 +23,20 @@
 			};
 		},
 		methods:{
+			// 获取URL上的参数
+            getQueryVariable(variable){
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i=0;i<vars.length;i++) {
+                    var pair = vars[i].split("=");
+                    if(pair[0] == variable){return pair[1];}
+                }
+                return(false);
+            },
 			goToTransacteOrder() {
+				let id = this.getQueryVariable("cardNo");
 				uni.navigateTo({
-					url: '/pages/appointmentSuccessful/submitSuccessfulmodelId=0&id='+res.id
+					url: 'http://192.168.100.215:18088/pages/appointmentSuccessful/submitSuccessful?modelId=0&id='+id
 				});
 			}
 		}

@@ -6,7 +6,7 @@
 					品类:
 				</view>
 				<view class="valueLabel">
-					大白菜
+					{{category}}
 				</view>
 			</view>
 			<view class="weight">
@@ -14,7 +14,7 @@
 					重量:
 				</view>
 				<view class="valueLabel">
-					500
+					{{weight}}
 				</view>
 				<view class="unit">
 					Kg
@@ -25,7 +25,7 @@
 					金额:
 				</view>
 				<view class="valueLabel">
-					500
+					{{price}}
 				</view>
 				<view class="unit">
 					元
@@ -65,10 +65,10 @@
 					卖家信息:
 				</view>
 				<view class="valueLabel">
-					王**
+					{{sellerName}}
 				</view>
 				<view class="unit">
-					180****2321
+					{{sellerPhone}}
 				</view>
 			</view>
 			<view class="weight">
@@ -76,10 +76,10 @@
 					买家信息:
 				</view>
 				<view class="valueLabel">
-					王**
+					{{buyerName}}
 				</view>
 				<view class="unit">
-					180****2321
+					{{buyerMobile}}
 				</view>
 			</view>
 			<view class="amount">
@@ -87,10 +87,7 @@
 					交易时间:
 				</view>
 				<view class="valueLabel">
-					2020.7.24
-				</view>
-				<view class="unit">
-					09:21:23
+					{{tradingTime}}
 				</view>
 			</view>
 			<view class="origin">
@@ -98,7 +95,7 @@
 					交易地点:
 				</view>
 				<view class="valueLabel">
-					苹果区
+					{{tradingSite}}
 				</view>
 			</view>
 			<view class="origin">
@@ -106,7 +103,7 @@
 					单号:
 				</view>
 				<view class="valueLabel">
-					JY202007240921231234
+					{{orderNo}}
 				</view>
 			</view>
 			<view class="total">
@@ -114,7 +111,7 @@
 					状态:
 				</view>
 				<view class="valueLabel">
-					未出场
+					{{status}}
 				</view>
 			</view>
 		</view>
@@ -125,22 +122,63 @@
 	export default {
 		data() {
 			return {
-				data: ''
+				data: '',
+				category: '',
+				weight: '',
+				price: '',
+				sellerName: '',
+				sellerPhone: '',
+				buyerName: '',
+				buyerMobile: '',
+				tradingTime: '',
+				tradingSite: '',
+				orderNo: '',
+				status: ''
 			};
 		},
 		created() {
-			
+			this.getData()
 		},
 		methods:{
+			// 获取地址栏里的数据
+            getQueryVariable(variable){
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i=0;i<vars.length;i++) {
+                    var pair = vars[i].split("=");
+                    if(pair[0] == variable){return pair[1];}
+                }
+                return(false);
+            },
 			getData() {
+				let id = this.getQueryVariable("id");
 				uni.request({
-					url: '',
+					url: 'http://192.168.100.215:18088/h5/order/selectMyOrderDetails?orderId=' + '1',
 					method:'GET',
-					params: {
-						
-					},
 					success: (res) => {
 						console.log('查看溯源交易单数据',res)
+						this.category = res.data.orderListVos[0].goodsName
+						this.weight = res.data.orderListVos[0].weight
+						this.price = res.data.orderListVos[0].price
+						this.sellerName = res.data.sellerName
+						this.sellerPhone = res.data.sellerMobile
+						this.buyerName = res.data.buyerName
+						this.buyerMobile = res.data.buyerMobile
+						this.tradingTime = res.data.tradingTime
+						this.tradingSite = res.data.tradingSite
+						this.orderNo = res.data.orderNo
+						if(res.data.status == 1) {
+							this.status = '未进场'
+						}
+						if(res.data.status == 2) {
+							this.status = '已进场'
+						}
+						if(res.data.status == 3) {
+							this.status = '已删除'
+						}
+						if(res.data.status == 4) {
+							this.status = '已离场'
+						}
 					}
 				})
 			}

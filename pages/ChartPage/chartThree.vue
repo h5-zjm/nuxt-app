@@ -181,6 +181,7 @@
 		},
 		methods: {
 			ChartClick(index, item) {
+				
 				this.Chart_Active = index;
 				if (index === 0) {
 					for(var i = 0;i<=2;i++){

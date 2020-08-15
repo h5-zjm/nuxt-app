@@ -149,6 +149,14 @@
 					uni.navigateTo({
 						url:'/pages/ChartPage/approachData'
 					})
+				} else if (index === 4) {
+					uni.navigateTo({
+						url:'/pages/ChartPage/quantity'
+					})
+				} else if (index === 5) {
+					uni.navigateTo({
+						url:'/pages/ChartPage/peopleCarData'
+					})
 				}
 			},
 			getServerData(){
@@ -162,12 +170,12 @@
 					},
 					success: function(res) {
 						console.log('返回数据',res.data.data)
-						console.log('数组',res.data.data.figure)
+						console.log('数组',res.data.data)
 						_self.tableData = res.data.data.table
 						let LineA={categories:[],series:[]};
 						//这里我后台返回的是数组，所以用等于，如果您后台返回的是单条数据，需要push进去
-						LineA.categories=res.data.data.figure.categories;
-						LineA.series=res.data.data.figure.series;
+						LineA.categories=res.data.data.categories;
+						LineA.series=res.data.data.series;
 						// console.log('横坐标',partition)
 						_self.showLineA("canvasLineA",LineA);
 					},

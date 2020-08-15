@@ -135,9 +135,9 @@
 			}
 		},
 		created(){
-			uni.navigateTo({
-				url: '/pages/ChartPage/chartsOne'
-			})
+			// uni.navigateTo({
+			// 	url: '/pages/ChartPage/chartsOne'
+			// })
 		},
 		onBackPress(options) {
 			console.log(5555555)
