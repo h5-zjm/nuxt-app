@@ -63,7 +63,7 @@
 						message: '请输入11位手机号',
 						trigger: ['change', 'blur']
 					} ],
-					verify: [{
+					code: [{
 						required: true,
 						min: 6,
 						message: '请输入验证码',
@@ -113,7 +113,7 @@
 			// 获取手机验证码
 			getverify(e){
 				this.uniRequest({
-					url: 'accouninfo/getInfo',
+					url: 'accouninfo/sendmsg',
 					method: 'get',
 					data: {
 						phone: this.form.phone
@@ -135,19 +135,6 @@
 						}
 					}
 				})
-			},
-			// 获取用户信息
-			getInfo(){
-				this.uniRequest({
-					url: 'accouninfo/sendmsg',
-					method: 'get',
-					data: {},
-					success:(res)=>{
-						// uni.showToast({
-							
-						// })
-					}
-				})
 			}
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
@@ -156,7 +143,6 @@
 		},
 		// 获取用户信息
 		onShow(){
-			this.getInfo()
 		}
 	}
 </script>

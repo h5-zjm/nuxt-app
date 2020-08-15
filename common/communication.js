@@ -28,6 +28,12 @@ export const uniRequest = function(obj) {
 		'content-type': parm.contentType,
 		'store-id': shopInfn.id || '',
 		'store-name': encodeURI(shopInfn.name) || '',
+		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Origin': origin,
+		'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, DELETE',
+		'Access-Control-Max-Age': '3600',
+		'Access-Control-Allow-Headers': 'x-requested-with,Authorization,token, content-type',
+		'Access-Control-Allow-Credentials': 'true'
 	}
 	if (XSRFTOKEN) {
 		header['X-XSRF-TOKEN'] = XSRFTOKEN;
