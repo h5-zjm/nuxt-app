@@ -155,11 +155,13 @@
 							uni.navigateTo({
 								url: '/pages/login/index'
 							})
-						} else if (!res.data.info.name) {
+						} else if (!res.data.info.name || !res.data.info.cellphone) {
 							uni.navigateTo({
-								url: '/pages/Information/index'
+								url: '/pages/Information/Error'
 							})
-						} else if(!res.data.account.cellphone){}
+						} else if(!res.data.account.cellphone){
+							
+						}
 					}
 		
 				}
