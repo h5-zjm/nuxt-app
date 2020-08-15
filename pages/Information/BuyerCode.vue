@@ -1,42 +1,9 @@
 <template>
-	<view id="BuyerCode">
+	<view id="VipCode">
 		<view class="VipCode_Con">
-			<view class="code">供应商</view>
-			<image :src="this.img_src" mode=""></image>
-			<view class="scan">
-				<u-form :model="form" ref="uForm" label-width="auto">
-					<u-form-item prop="time">
-						<view class="Con_box">
-							<text>姓名：</text>
-							<view>王美玲</view>
-						</view>
-					</u-form-item>
-					<u-form-item prop="time">
-						<view class="Con_box">
-							<text>手机号：</text>
-							<view>180 1234 5678</view>
-						</view>
-					</u-form-item>
-					<u-form-item prop="time">
-						<view class="Con_box">
-							<text>性别：</text>
-							<view>女</view>
-						</view>
-					</u-form-item>
-					<u-form-item prop="time">
-						<view class="Con_box">
-							<text>年龄：</text>
-							<view>32</view>
-						</view>
-					</u-form-item>
-					<u-form-item prop="time">
-						<view class="Con_box">
-							<text>身份证号：</text>
-							<view>130681********1253</view>
-						</view>
-					</u-form-item>
-				</u-form>
-			</view>
+			<view class="code">买家交易码</view>
+			<image :src="img_src" mode=""></image>
+			<view class="scan">微信扫一扫</view>
 		</view>
 	</view>
 </template>
@@ -45,53 +12,22 @@
 	export default {
 		data() {
 			return {
-				form: {
-					img_src: '',
-				},
-				rules: {
-					// name: [{
-					// 	required: true,
-					// 	message: '请输入姓名',
-					// 	// 可以单个或者同时写两个触发验证方式 
-					// 	trigger: ['change', 'blur'],
-					// }],
-					// intro: [{
-					// 	min: 5,
-					// 	message: '简介不能少于5个字',
-					// 	trigger: 'change'
-					// }]
-				},
+				img_src: ''
 			};
 		},
-		methods: {
-			submit() {
-				this.uniRequest({
-					url: `accouninfo/getMyCode`,
-					method: 'get',
-					data: {},
-					success:(res)=>{
-						console.log(res,'res')
-						res = {"code":0, "msg":"", "data":"base64码"}
-						this.img_src = res.data;
-					}
-				})
-			}
-		},
 		onShow(){
-			this.submit()
-		},
-		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
-		onReady() {
-			this.$refs.uForm.setRules(this.rules);
-		},
-		created(){
-			this.submit()
+			this.uniRequest({
+				url: 'accouninfo/getmyTradeCode',
+				success:(res)=>{
+					this.img_src = res.data ? res.data : '';
+				}
+			})
 		}
 	}
 </script>
 
 <style lang="scss">
-#BuyerCode {
+#VipCode {
 	width: 100vw;
 	height: 100vh;
 	background-color: #37B3FF;
@@ -119,11 +55,10 @@
 			height:380rpx;
 		}
 		.scan {
-			width: 100%;
-			padding: 0rpx 44rpx;
-			.Con_box {
-				display: flex;
-			}
+			padding-top: 60rpx;
+			font-size:32rpx;
+			font-weight:400;
+			color:rgba(49,49,49,1);
 		}
 	}
 }

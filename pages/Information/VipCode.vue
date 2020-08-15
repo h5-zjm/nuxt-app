@@ -1,9 +1,42 @@
 <template>
-	<view id="VipCode">
+	<view id="BuyerCode">
 		<view class="VipCode_Con">
-			<view class="code">买家交易码</view>
-			<image src="/static/images/code.png" mode=""></image>
-			<view class="scan">微信扫一扫</view>
+			<view class="code">供应商</view>
+			<image :src="img_src" mode=""></image>
+			<view class="scan">
+				<u-form :model="form" ref="uForm" label-width="auto">
+					<u-form-item prop="time">
+						<view class="Con_box">
+							<text>姓&nbsp;&nbsp;&nbsp;&nbsp;名：</text>
+							<view>{{form.name | ''}}</view>
+						</view>
+					</u-form-item>
+					<u-form-item prop="time">
+						<view class="Con_box">
+							<text>手机号：</text>
+							<view>{{form.mobile | ''}}</view>
+						</view>
+					</u-form-item>
+					<u-form-item prop="time">
+						<view class="Con_box">
+							<text>性&nbsp;&nbsp;&nbsp;&nbsp;别：</text>
+							<view>{{form.gender | ''}}</view>
+						</view>
+					</u-form-item>
+					<u-form-item prop="time">
+						<view class="Con_box">
+							<text>年&nbsp;&nbsp;&nbsp;&nbsp;龄：</text>
+							<view>{{form.age | ''}}</view>
+						</view>
+					</u-form-item>
+					<u-form-item prop="time">
+						<view class="Con_box">
+							<text>身份证号：</text>
+							<view>{{form.cardNo | ''}}</view>
+						</view>
+					</u-form-item>
+				</u-form>
+			</view>
 		</view>
 	</view>
 </template>
@@ -12,14 +45,73 @@
 	export default {
 		data() {
 			return {
-				
+				form: {
+					img_src: '',
+					name: '',
+					mobile: '',
+					gender: '',
+					age: '',
+					cardNo: ''
+				},
+				rules: {
+					// name: [{
+					// 	required: true,
+					// 	message: '请输入姓名',
+					// 	// 可以单个或者同时写两个触发验证方式 
+					// 	trigger: ['change', 'blur'],
+					// }],
+					// intro: [{
+					// 	min: 5,
+					// 	message: '简介不能少于5个字',
+					// 	trigger: 'change'
+					// }]
+				},
 			};
+		},
+		methods: {
+			submit() {
+				this.uniRequest({
+					url: `accouninfo/getMyCode`,
+					method: 'get',
+					data: {},
+					success:(res)=>{
+						console.log(res,'res')
+						this.img_src = res.data ? res.data : '';
+					}
+				})
+			},
+			// 获取数据
+			getCode(){
+				this.uniRequest({
+					url: 'accouninfo/getInfo',
+					success:(res)=>{
+						this.form = {
+							name: res.data.info.name,
+							mobile: res.data.info.mobile,
+							gender: res.data.info.gender,
+							age: res.data.info.age,
+							cardNo: res.data.info.cardNo
+						}
+					}
+				})
+			}
+		},
+		onShow(){
+			this.submit()
+			this.getCode()
+		},
+		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
+		onReady() {
+			this.$refs.uForm.setRules(this.rules);
+		},
+		created(){
+			this.submit()
 		}
 	}
 </script>
 
 <style lang="scss">
-#VipCode {
+#BuyerCode {
 	width: 100vw;
 	height: 100vh;
 	background-color: #37B3FF;
@@ -47,10 +139,11 @@
 			height:380rpx;
 		}
 		.scan {
-			padding-top: 60rpx;
-			font-size:32rpx;
-			font-weight:400;
-			color:rgba(49,49,49,1);
+			width: 100%;
+			padding: 0rpx 44rpx;
+			.Con_box {
+				display: flex;
+			}
 		}
 	}
 }

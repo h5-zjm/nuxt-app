@@ -11,12 +11,12 @@
 					</u-tr>
 				</view>				
 				
-				<view class="thbody" v-for="(item,index) in 4" :key="index" @click="Clickbox(item,index)">
+				<view class="thbody" v-for="(item,index) in List" :key="index" @click="Clickbox(item,index)">
 					<u-tr>
-						<u-td :ShowBorder="true">7.21 22:12</u-td>
-						<u-td :ShowBorder="true">白萝卜</u-td>
-						<u-td :ShowBorder="true">200</u-td>
-						<u-td :ShowBorder="true">72</u-td>
+						<u-td :ShowBorder="true">{{item.tradingTime}}</u-td>
+						<u-td :ShowBorder="true">{{item.goodsName}}</u-td>
+						<u-td :ShowBorder="true">{{item.weight}}</u-td>
+						<u-td :ShowBorder="true">{{item.price}}</u-td>
 						<u-icon name="arrow-right" color="#D6D6D6" size="28"></u-icon>
 					</u-tr>
 				</view>
@@ -29,7 +29,9 @@
 	export default {
 		data() {
 			return {
-
+				List: [],
+				offset: 0,
+				identity: 1
 			};
 		},
 		methods: {
@@ -37,9 +39,21 @@
 				console.log(index,'index')
 				console.log(item,'item')
 				uni.navigateTo({
-					url: '/pages/SellGoods/visit'
+					url: '/pages/SellGoods/index'
 				})
 			}
+		},
+		onShow(){
+			this.uniRequest({
+				url: 'order/selectMyOrderList',
+				data: {
+					offset: this.offset,
+					identity: this.identity
+				},
+				success:(res)=>{
+					this.List = res.data.rows || [];
+				}
+			})
 		}
 	}
 </script>

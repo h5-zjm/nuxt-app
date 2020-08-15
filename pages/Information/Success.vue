@@ -26,14 +26,26 @@
 		},
 		onLoad(res){
 			if(res.radio){
-				this.radio = res.radio;
+				this.radio = parseInt(res.radio);
 			}
 		},
 		methods: {
 			// 个人信息
 			LocationInfo(){
+				console.log(this.radio,'radio')
+				let url = '';
+				if(this.radio === 1) {
+					url = '/pages/Information/informationShow_supplier?radio='+ this.radio
+				} else if(this.radio === 2) {
+					url = '/pages/Information/informationShow_procurer?radio='+ this.radio
+				} else if(this.radio === 3) {
+					url = '/pages/Information/informationShow_ferry?radio='+ this.radio
+				} else if(this.radio === 4) {
+					url = '/pages/Information/informationShow_buddy?radio='+ this.radio
+				} 
+				
 				uni.navigateTo({
-					url: '/pages/Information/informationShow_supplier?radio=' + this.radio
+					url: url 
 				})
 			},
 			// 会员二维码

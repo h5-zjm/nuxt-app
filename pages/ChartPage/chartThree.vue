@@ -364,7 +364,7 @@
 			white-space: nowrap;
 			overflow-x: scroll;
 			box-sizing: content-box;
-			justify-content: space-around;
+			// justify-content: space-around;
 
 			.Chart_box {
 				font-size: 24rpx;

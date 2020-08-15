@@ -6,49 +6,49 @@
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>姓名：</text>
-						<view>王美玲</view>
+						<view>{{form.name | ''}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>手机号：</text>
-						<view>180 1234 5678</view>
+						<view>{{form.phone | ''}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>身份证号：</text>
-						<view>130681********1253</view>
+						<view>{{form.cardNo | ''}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>性别：</text>
-						<view>女</view>
+						<view>{{form.gender | ''}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>年龄：</text>
-						<view>32</view>
+						<view>{{form.age | ''}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>户籍所在地：</text>
-						<view>河北省沧州市河间县</view>
+						<view>{{(form.registProvince ? form.registProvince : '') + (form.registCity ? ('-' + form.registCity) : '') + (form.registArea ? ('-' + form.registArea) : '')}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>居住地：</text>
-						<view>北京市丰台区</view>
+						<view>{{(form.curentProvince ? form.curentProvince : '') + (form.curentCity ? ('-' + form.curentCity) : '') + (form.curentArea ? ('-' + form.curentArea) : '')}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Conbox" style="transform: translateX(-8rpx);">
 						<text>现住地（详细地址）：</text>
-						<text>北京市丰台区新发地天伦景城小区12号楼1832</text>
+						<text>{{form.currentPlace | ''}}</text>
 					</view>
 				</u-form-item>
 			</view>
@@ -65,59 +65,59 @@
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>企业名称：</text>
-						<view>北京之光果树有限公司</view>
+						<view>{{form.businessName}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>营业执照：</text>
-						<view>911238967788</view>
+						<view>{{form.businessCode}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>主营业务：</text>
-						<view>生鲜超市</view>
+						<view>{{form.businessCatalog}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>公司地址：</text>
-						<view>北京市丰台右安门街道123号</view>
+						<view>{{form.businessAddr}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>采购区域：</text>
-						<view>芒果区、苹果区、精品一区</view>
+						<view>{{form.purchaseArea}}</view>
 					</view>
 				</u-form-item>
 			</view>
-			<view class="Con_box">
+			<view class="Con_box" v-for="(item,index) in PartnerList" :key="index">
 				<view class="tit">伙计1信息</view>
 				<view class="Con">
 					<u-form-item prop="time">
 						<view class="Con_box">
 							<text>伙计1姓名：</text>
-							<view>胡美丽</view>
+							<view>{{item.staffName}}</view>
 						</view>
 					</u-form-item>
 					<u-form-item prop="time">
 						<view class="Con_box">
 							<text>伙计1身份证：</text>
-							<view>3607312312311232713</view>
+							<view>{{item.staffCardNo}}</view>
 						</view>
 					</u-form-item>
 					<u-form-item prop="time">
 						<view class="Con_box">
 							<text>伙计1手机号：</text>
-							<view>18250229018</view>
+							<view>{{item.staffMobile}}</view>
 						</view>
 					</u-form-item>
 					<u-form-item prop="time">
 						<view class="Con_box">
 							<text>伙计1现住址：</text>
-							<view>北京北京市房山区万花胡同644号</view>
+							<view>{{item.staffAddr}}</view>
 						</view>
 					</u-form-item>
 				</view>
@@ -134,13 +134,32 @@
 		data() {
 			return {
 				form: {
-					time: '',
-					deal: '',
-					enter: '',
-					goods: '',
-					region: '',
-					starTime: '',
-					checked: false
+					name: '',
+					phone: '',
+					cardNo: '',
+					gender: '',
+					age: '',
+					// 原籍
+					registProvince: null,
+					registCity: null,
+					registArea: null,
+					// 先居住地
+					curentProvince: null,
+					curentCity: null,
+					curentArea: null,
+					// 现居住地
+					currentPlace: '',
+					businessName: '',
+					businessCode: '',
+					businessAddr: '',
+					purchaseArea: '',
+					businessCatalog: '',
+					PartnerList: [{
+						staffName: '',
+						staffCardNo: '',
+						staffMobile: '',
+						staffAddr: ''
+					}]
 				},
 				rules: {
 					name: [{
@@ -182,6 +201,36 @@
 			if(res.radio) {
 				this.Active_radio = parseInt(res.radio);
 			}
+		},
+		onShow(){
+			this.uniRequest({
+				url: 'accouninfo/getInfo',
+				success:(res)=>{
+					this.form = {
+						name: res.data.info.name,
+						phone: res.data.account.cellphone,
+						cardNo: res.data.info.cardNo,
+						gender: res.data.info.gender,
+						age: res.data.info.age,
+						// 原籍
+						registProvince: res.data.info.registProvince,
+						registCity: res.data.info.registCity,
+						registArea: res.data.info.registArea,
+						// 先居住地
+						curentProvince: res.data.info.curentProvince,
+						curentCity: res.data.info.curentCity,
+						curentArea: res.data.info.curentArea,
+						// 现居住地
+						currentPlace: res.data.info.currentPlace,
+						businessName: res.data.info.businessName,
+						businessCode: res.data.info.businessCode,
+						businessAddr: res.data.info.businessAddr,
+						purchaseArea: res.data.info.purchaseArea,
+						businessCatalog: res.data.info.businessCatalog,
+						// PartnerList: res.data.info.PartnerList
+					}
+				}
+			})
 		}
 	}
 </script>
