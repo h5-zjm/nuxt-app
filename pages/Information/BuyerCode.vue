@@ -2,7 +2,7 @@
 	<view id="BuyerCode">
 		<view class="VipCode_Con">
 			<view class="code">供应商</view>
-			<image src="/static/images/code.png" mode=""></image>
+			<image :src="this.img_src" mode=""></image>
 			<view class="scan">
 				<u-form :model="form" ref="uForm" label-width="auto">
 					<u-form-item prop="time">
@@ -46,46 +46,46 @@
 		data() {
 			return {
 				form: {
-					time: '',
-					deal: '',
-					enter: '',
-					goods: '',
-					region: '',
-					starTime: '',
-					checked: false
+					img_src: '',
 				},
 				rules: {
-					name: [{
-						required: true,
-						message: '请输入姓名',
-						// 可以单个或者同时写两个触发验证方式 
-						trigger: ['change', 'blur'],
-					}],
-					intro: [{
-						min: 5,
-						message: '简介不能少于5个字',
-						trigger: 'change'
-					}]
+					// name: [{
+					// 	required: true,
+					// 	message: '请输入姓名',
+					// 	// 可以单个或者同时写两个触发验证方式 
+					// 	trigger: ['change', 'blur'],
+					// }],
+					// intro: [{
+					// 	min: 5,
+					// 	message: '简介不能少于5个字',
+					// 	trigger: 'change'
+					// }]
 				},
 			};
 		},
 		methods: {
 			submit() {
-				this.$refs.uForm.validate(valid => {
-					if (valid) {
-						console.log('验证通过');
-						uni.navigateTo({
-							url:'/pages/Information/index?Active_radio='+this.Active_radio
-						})
-					} else {
-						console.log('验证失败');
+				this.uniRequest({
+					url: `accouninfo/getMyCode`,
+					method: 'get',
+					data: {},
+					success:(res)=>{
+						console.log(res,'res')
+						res = {"code":0, "msg":"", "data":"base64码"}
+						this.img_src = res.data;
 					}
-				});
+				})
 			}
+		},
+		onShow(){
+			this.submit()
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
+		},
+		created(){
+			this.submit()
 		}
 	}
 </script>

@@ -80,7 +80,7 @@
         },
         "devServer" : {
             "port" : 80,
-            "https" : true
+            "https" : false
         },
         "domain" : "http://xfdiomg.daizhangfang.net/"
     }

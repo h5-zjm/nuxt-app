@@ -27,7 +27,7 @@
 							<image src="../../static/images/verify.png" mode=""></image>
 						</view>
 						<view class="Con_box_phone">
-							<u-input v-model="form.verify" style="width: 430rpx;" placeholder="请输入验证码" />
+							<u-input v-model="form.code" style="width: 430rpx;" placeholder="请输入验证码" />
 						</view>
 					</view>
 				</u-form-item>
@@ -44,7 +44,7 @@
 			return {
 				form: {
 					phone: '',
-					verify: ''
+					code: ''
 				},
 				message_verify: '获取验证码',
 				rules: {
@@ -87,9 +87,23 @@
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						console.log('验证通过');
-						uni.navigateTo({
-							url: '/pages/Information/index?Active_radio=' + this.Active_radio
+						this.uniRequest({
+							url: 'accouninfo/binding',
+							method: 'get',
+							data: {
+								phone: this.form.phone,
+								code: this.form.code
+							},
+							success:(res)=>{
+								if(res === 'success'){
+									uni.navigateTo({
+										url: '/pages/Information/index?Active_radio=' + this.Active_radio
+									})
+								}
+								// uni.showToast({
+									
+								// })
+							}
 						})
 					} else {
 						console.log('验证失败');
@@ -98,23 +112,51 @@
 			},
 			// 获取手机验证码
 			getverify(e){
-				this.noPointer = true;
-				let count = 60;
-				this.message_verify = '倒计时'+count;
-				this.ClearSetInterval = setInterval(()=>{
-					--count;
-					this.message_verify = '倒计时'+count;
-					if(count < 1) {
-						clearInterval(this.ClearSetInterval)
-						this.message_verify = '获取验证码';
-						this.noPointer = false;
+				this.uniRequest({
+					url: 'accouninfo/getInfo',
+					method: 'get',
+					data: {
+						phone: this.form.phone
+					},
+					success:(res)=>{
+						if(res === 'success'){
+							this.noPointer = true;
+							let count = 60;
+							this.message_verify = '倒计时'+count;
+							this.ClearSetInterval = setInterval(()=>{
+								--count;
+								this.message_verify = '倒计时'+count;
+								if(count < 1) {
+									clearInterval(this.ClearSetInterval)
+									this.message_verify = '获取验证码';
+									this.noPointer = false;
+								}
+							},1000)
+						}
 					}
-				},1000)
+				})
+			},
+			// 获取用户信息
+			getInfo(){
+				this.uniRequest({
+					url: 'accouninfo/sendmsg',
+					method: 'get',
+					data: {},
+					success:(res)=>{
+						// uni.showToast({
+							
+						// })
+					}
+				})
 			}
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
+		},
+		// 获取用户信息
+		onShow(){
+			this.getInfo()
 		}
 	}
 </script>

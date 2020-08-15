@@ -10,8 +10,8 @@ Vue.use(uView);
 
 // 请求地址
 // Vue.prototype.HOST = 'https://huawin.imwork.net/minapp/app/mock/';
-Vue.prototype.HOST = 'http://wechat.daizhangfang.net/';//正式环境
-// Vue.prototype.HOST = 'https://gylmpdev.yingeo.com/'; //测试环境
+// Vue.prototype.HOST = 'http://wechat.daizhangfang.net/';//正式环境
+Vue.prototype.HOST = 'http://192.168.100.215:18088/h5/'; //测试环境
 Vue.prototype.PLATFORM = ''; //23/
 Vue.prototype.CLIENT = ''; //19/
 
