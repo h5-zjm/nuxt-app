@@ -513,7 +513,7 @@
 			//#endif
 			this.cWidth = uni.upx2px(750);
 			this.cHeight = uni.upx2px(500);
-			this.this.getServerData()
+			this.getServerData()
 		},
 		methods: {
 			ChartClick(index, item) {
@@ -685,7 +685,7 @@
 			white-space: nowrap;
 			overflow-x: scroll;
 			box-sizing: content-box;
-			// justify-content: space-around;
+			justify-content: space-around;
 
 			.Chart_box {
 				font-size: 24rpx;
