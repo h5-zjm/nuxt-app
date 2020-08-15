@@ -15,11 +15,31 @@
 				img_src: ''
 			};
 		},
+		methods: {
+			getImg(){
+				this.uniRequest({
+					url: 'accouninfo/getmyTradeCode',
+					success:(res)=>{
+						this.img_src = res.data ? res.data : '';
+					}
+				})
+			}
+		},
 		onShow(){
 			this.uniRequest({
-				url: 'accouninfo/getmyTradeCode',
+				url: 'accouninfo/getInfo',
 				success:(res)=>{
-					this.img_src = res.data ? res.data : '';
+					if(!res.data.account.cellphone) {
+						uni.navigateTo({
+							url: '/pages/login/index'
+						})
+					} else if(!res.data.info.name || !res.data.info.cardNo){
+						uni.navigateTo({
+							url: '/pages/Information/index'
+						})
+					} else {
+						this.getImg()
+					}
 				}
 			})
 		}

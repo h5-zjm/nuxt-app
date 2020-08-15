@@ -3,6 +3,11 @@
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [{
+		"path": "pages/ChartPage/chartsOne",
+		"style": {
+			"navigationBarTitleText": "数据统计"
+		}
+	}, {
 		"path": "pages/login/index",
 		"style": {
 			"navigationStyle": "custom"
@@ -17,11 +22,6 @@
 		"path": "pages/makeAppointment/index",
 		"style": {
 			"navigationBarTitleText":"进门预约（卖货）"
-		}
-	}, {
-		"path": "pages/ChartPage/chartsOne",
-		"style": {
-			"navigationBarTitleText": "数据统计"
 		}
 	}, {
 		"path": "pages/appointmentRecord/index",

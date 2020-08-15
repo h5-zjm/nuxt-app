@@ -112,41 +112,33 @@
 			},
 			// 获取手机验证码
 			getverify(e){
-				// debugger;
-				this.uniRequest({
-					url: 'accouninfo/sendmsg',
-					method: 'get',
-					data: {
-						phone: this.form.phone
-					},
-					success:(res)=>{
-						if(res.data === 'success'){
-							this.noPointer = true;
-							let count = 60;
-							this.message_verify = '倒计时'+count;
-							this.ClearSetInterval = setInterval(()=>{
-								--count;
-								this.message_verify = '倒计时'+count;
-								if(count < 1) {
-									clearInterval(this.ClearSetInterval)
-									this.message_verify = '获取验证码';
-									this.noPointer = false;
-								}
-							},1000)
+				let regPos = CONFIG.MOBILE_REGEXP;
+				if(regPos.test(this.form.phone)) {
+					this.noPointer = true;
+					let count = 60;
+					this.message_verify = '倒计时'+count;
+					this.ClearSetInterval = setInterval(()=>{
+						--count;
+						this.message_verify = '倒计时'+count;
+						if(count < 1) {
+							clearInterval(this.ClearSetInterval)
+							this.message_verify = '获取验证码';
+							this.noPointer = false;
 						}
-					}
-				})
-				// uni.request({
-				// 	url: 'http://192.168.100.215:18088/h5/accouninfo/sendmsg',
-				// 	method:'get',
-				// 	data: {
-				// 		phone: this.form.phone
-				// 	},
-				// 	success:(res)=>{
-				// 		console.log(res,'res')
-				// 	}
-					
-				// })
+					},1000)
+					this.uniRequest({
+						url: 'accouninfo/sendmsg',
+						method: 'get',
+						data: {
+							phone: this.form.phone
+						},
+						success:(res)=>{
+							if(res.data === 'success'){
+								
+							}
+						}
+					})
+				}
 			}
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
@@ -154,7 +146,24 @@
 			this.$refs.uForm.setRules(this.rules);
 		},
 		// 获取用户信息
-		onShow(){
+		onShow() {
+			this.uniRequest({
+				url: 'accouninfo/getInfo',
+				success: (res) => {
+					if (res.code === 0) {
+						if (!res.data.account.cellphone) {
+							uni.navigateTo({
+								url: '/pages/login/index'
+							})
+						} else if (!res.data.info.name) {
+							uni.navigateTo({
+								url: '/pages/Information/index'
+							})
+						} else if(!res.data.account.cellphone){}
+					}
+		
+				}
+			})
 		}
 	}
 </script>

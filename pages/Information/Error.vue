@@ -28,6 +28,24 @@
 					url: '/pages/Information/index'
 				})
 			}
+		},
+		onShow(){
+			this.uniRequest({
+				url: 'accouninfo/getInfo',
+				success:(res)=>{
+					if(!res.data.account.cellphone) {
+						uni.navigateTo({
+							url: '/pages/login/index'
+						})
+					} else if(!res.data.info.name || !res.data.info.cardNo){
+						uni.navigateTo({
+							url: '/pages/Information/index'
+						})
+					} else {
+						this.LocationInfo()
+					}
+				}
+			})
 		}
 	}
 </script>

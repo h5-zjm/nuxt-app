@@ -24,7 +24,7 @@
 
 						<view class="tit" v-if="form.radio">必填信息</view>
 						<view class="uploaderBox" v-if="form.radio">
-							<u-upload :action="action" :max-count="1" :file-list="supplier.fileList" @on-success="Supplier_Upload">
+							<u-upload :action="action" :max-count="1" :file-list="supplier.fileList" :show-progress="false" @on-success="Supplier_Upload">
 
 							</u-upload>
 							<view class="Conbox">
@@ -596,7 +596,7 @@
 						console.log(item, 'item')
 						val += (index > 0 ? '-' : '') + item.label;
 					})
-					console.log(e,'e')
+					console.log(e, 'e')
 					if (this.form.active === '籍贯') {
 						this.form.place = val;
 
@@ -696,53 +696,66 @@
 				success: (res) => {
 					console.log(res, 'res')
 					if (res.code === 0) {
-						this.form = {
-							id: res.data.info.id,
-							name: res.data.info.name,
-							businessType: res.data.info.businessType,
-							carNumber: res.data.info.carNumber,
-							mobile: res.data.account.mobile ? res.data.account.mobile : '18727087210',
-							cardNo: res.data.info.cardNo,
-							registProvince: res.data.info.registProvince,
-							registCity: res.data.info.registCity,
-							registArea: res.data.info.registArea,
-							currentPlace: res.data.info.currentPlace,
-							curentArea: res.data.info.curentArea,
-							curentCity: res.data.info.curentCity,
-							curentProvince: res.data.info.curentProvince,
-							businessCatalog: res.data.info.businessCatalog,
-							businessAddr: res.data.info.businessAddr,
-							businessUrl: res.data.info.businessUrl,
-							businessCode: res.data.info.businessCode,
-							businessName: res.data.info.businessName,
-							birthday: res.data.info.birthday,
-							gender: res.data.info.gender,
-							age: res.data.info.age,
-							currentPlace: res.data.info.currentPlace,
-							businessLinkman: res.data.info.businessLinkman,
-							businessLinkmobile: res.data.info.businessLinkmobile,
-							inTime: res.data.info.inTime,
-							urlImg: res.data.info.urlImg,
-							// 自定义
-							
+						if (!res.data.account.cellphone) {
+							uni.navigateTo({
+								url: '/pages/login/index'
+							})
+						} else if (!res.data.info.name || !res.data.info.cardNo) {
+							uni.navigateTo({
+								url: '/pages/Information/index'
+							})
+						} else {
+							this.form = {
+								id: res.data.info.id,
+								name: res.data.info.name,
+								businessType: res.data.info.businessType,
+								carNumber: res.data.info.carNumber,
+								mobile: res.data.account.mobile ? res.data.account.mobile : '18727087210',
+								cardNo: res.data.info.cardNo,
+								registProvince: res.data.info.registProvince,
+								registCity: res.data.info.registCity,
+								registArea: res.data.info.registArea,
+								currentPlace: res.data.info.currentPlace,
+								curentArea: res.data.info.curentArea,
+								curentCity: res.data.info.curentCity,
+								curentProvince: res.data.info.curentProvince,
+								businessCatalog: res.data.info.businessCatalog,
+								businessAddr: res.data.info.businessAddr,
+								businessUrl: res.data.info.businessUrl,
+								businessCode: res.data.info.businessCode,
+								businessName: res.data.info.businessName,
+								birthday: res.data.info.birthday,
+								gender: res.data.info.gender,
+								age: res.data.info.age,
+								currentPlace: res.data.info.currentPlace,
+								businessLinkman: res.data.info.businessLinkman,
+								businessLinkmobile: res.data.info.businessLinkmobile,
+								inTime: res.data.info.inTime,
+								urlImg: res.data.info.urlImg,
+								// 自定义
+								radio: null
+							}
+							// 身份
+							if (res.data.info.businessType === '供应商') {
+								this.form.radio = 1;
+							} else if (res.data.info.businessType === '采购商') {
+								this.form.radio = 2;
+							} else if (res.data.info.businessType === '摆渡车') {
+								this.form.radio = 3;
+							} else if (res.data.info.businessType === '员工/伙计') {
+								this.form.radio = 4;
+							}
+							// 户籍
+							this.form.place = res.data.info.registProvince + '-' + res.data.info.registCity + '-' + res.data.info.registArea;
+							// 居住地
+							this.form.residence = res.data.info.curentProvince + '-' + res.data.info.curentCity + '-' + res.data.info.curentArea;
+							// 图片
+							this.supplier.fileList = [{
+								url: this.form.urlImg
+							}]
 						}
-						// 身份
-						if(res.data.info.businessType === '供应商') {
-							this.form.radio = 1;
-						} else if(res.data.info.businessType === '采购商') {
-							this.form.radio = 2;
-						} else if(res.data.info.businessType === '摆渡车') {
-							this.form.radio = 3;
-						} else if(res.data.info.businessType === '员工/伙计') {
-							this.form.radio = 4;
-						}
-						// 户籍
-						this.form.place = res.data.info.registProvince + '-' + res.data.info.registCity + '-' + res.data.info.registArea;
-						// 居住地
-						this.form.residence = res.data.info.curentProvince + '-' + res.data.info.curentCity + '-' + res.data.info.curentArea;
-						// 图片
-						this.supplier.fileList = [{url: this.form.urlImg}]
 					}
+
 				}
 			})
 		}
