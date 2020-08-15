@@ -48,16 +48,22 @@ export const uniRequest = function(obj) {
 		data: parm.data,
 		header: header,
 		success: (result) => {
-			if (result.data.status != 0 && parm.url.indexOf('get-user-info') === -1) {
-				uni.showToast({
-					title: result.data.msg,
-					icon: 'none'
-				})
-			} else {
+			if(result.data.data) {
 				parm.success(result.data)
-				console.log(result,'result')
+			} else {
+				parm.success(result)
 			}
+			// if (result.data.status != 0 && parm.url.indexOf('get-user-info') === -1) {
+			// 	uni.showToast({
+			// 		title: result.data.msg,
+			// 		icon: 'none'
+			// 	})
+			// } else {
+			// 	parm.success(result.data)
+			// 	console.log(result,'result')
+			// }
 			// uni.hideLoading();
+			
 		},
 		fail: (error) => {
 			parm.error(error)

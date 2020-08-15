@@ -6,49 +6,49 @@
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>姓名：</text>
-						<view>王美玲</view>
+						<view>{{form.name | ''}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>手机号：</text>
-						<view>180 1234 5678</view>
+						<view>{{form.mobile | ''}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>身份证号：</text>
-						<view>130681********1253</view>
+						<view>{{form.cardNo | ''}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>性别：</text>
-						<view>女</view>
+						<view>{{form.gender | ''}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>年龄：</text>
-						<view>32</view>
+						<view>{{form.age | ''}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>户籍所在地：</text>
-						<view>河北省沧州市河间县</view>
+						<view>{{(form.registProvince ? form.registProvince : '') + (form.registCity ? ('-' + form.registCity) : '') + (form.registArea ? ('-' + form.registArea) : '')}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>居住地：</text>
-						<view>北京市丰台区</view>
+						<view>{{(form.curentProvince ? form.curentProvince : '') + (form.curentCity ? ('-' + form.curentCity) : '') + (form.curentArea ? ('-' + form.curentArea) : '')}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Conbox" style="transform: translateX(-8rpx);">
 						<text>现住地（详细地址）：</text>
-						<text>北京市丰台区新发地天伦景城小区12号楼1832</text>
+						<text>{{form.currentPlace | ''}}</text>
 					</view>
 				</u-form-item>
 			</view>
@@ -65,13 +65,13 @@
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>公司联系人：</text>
-						<view>王丽丽</view>
+						<view>{{form.businessLinkman | ''}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>联系人电话：</text>
-						<view>1361234678</view>
+						<view>{{form.businessLinkmobile | ''}}</view>
 					</view>
 				</u-form-item>
 			</view>
@@ -87,13 +87,23 @@
 		data() {
 			return {
 				form: {
-					time: '',
-					deal: '',
-					enter: '',
-					goods: '',
-					region: '',
-					starTime: '',
-					checked: false
+					name: '',
+					phone: '',
+					cardNo: '',
+					gender: '',
+					age: '',
+					// 原籍
+					registProvince: null,
+					registCity: null,
+					registArea: null,
+					// 先居住地
+					curentProvince: null,
+					curentCity: null,
+					curentArea: null,
+					// 现居住地
+					currentPlace: '',
+					businessLinkman: '',
+					businessLinkmobile: ''
 				},
 				rules: {
 					name: [{
@@ -135,6 +145,32 @@
 			if(res.radio) {
 				this.Active_radio = parseInt(res.radio);
 			}
+		},// 获取用户信息
+		onShow(){
+			this.uniRequest({
+				url: 'accouninfo/getInfo',
+				success:(res)=>{
+					this.form = {
+						name: res.data.info.name,
+						phone: res.data.account.cellphone,
+						cardNo: res.data.info.cardNo,
+						gender: res.data.info.gender,
+						age: res.data.info.age,
+						// 原籍
+						registProvince: res.data.info.registProvince,
+						registCity: res.data.info.registCity,
+						registArea: res.data.info.registArea,
+						// 先居住地
+						curentProvince: res.data.info.curentProvince,
+						curentCity: res.data.info.curentCity,
+						curentArea: res.data.info.curentArea,
+						// 现居住地
+						currentPlace: res.data.info.currentPlace,
+						businessLinkman: res.data.info.businessLinkman,
+						businessLinkmobile: res.data.info.businessLinkmobile
+					}
+				}
+			})
 		}
 	}
 </script>

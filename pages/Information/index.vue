@@ -57,13 +57,12 @@
 									<u-input v-model="form.cardNo" input-align="right" style="flex: 1;" placeholder="请输入身份证号" />
 								</view>
 							</u-form-item>
-							<u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
 						</view>
 					</view>
 
 
 					<!-- 摆渡车 -->
-					<view class="Active_box">
+					<view class="Active_box" v-if="active_copy === 3">
 						<view class="tit">个人信息</view>
 						<view class="Active_box_sun">
 							<u-form-item label="性别">
@@ -92,21 +91,9 @@
 										</view>
 										<view class="Upopup_box">
 											<u-checkbox-group>
-												<view class="box">
-													<text>荔枝</text>
-													<u-checkbox v-model="form.checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
-												</view>
-												<view class="box">
-													<text>香蕉</text>
-													<u-checkbox style="width: 38rpx;" v-model="form.checked" :disabled="false"></u-checkbox>
-												</view>
-												<view class="box">
-													<text>橙子</text>
-													<u-checkbox v-model="form.checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
-												</view>
-												<view class="box">
-													<text>橙子</text>
-													<u-checkbox v-model="form.checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
+												<view class="box" v-for="(item,index) in subcampList" :key="index">
+													<text>{{item.title}}</text>
+													<u-checkbox v-model="item.checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
 												</view>
 											</u-checkbox-group>
 										</view>
@@ -142,7 +129,7 @@
 								</u-form-item>
 
 								<!-- select框 -->
-								<u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
+								<!-- <u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select> -->
 							</view>
 
 							<!-- 企业信息 -->
@@ -181,21 +168,9 @@
 											</view>
 											<view class="Upopup_box">
 												<u-checkbox-group>
-													<view class="box">
-														<text>荔枝</text>
-														<u-checkbox v-model="checked" :disabled="false"></u-checkbox>
-													</view>
-													<view class="box">
-														<text>香蕉</text>
-														<u-checkbox v-model="checked" :disabled="false"></u-checkbox>
-													</view>
-													<view class="box">
-														<text>橙子</text>
-														<u-checkbox v-model="checked" :disabled="false"></u-checkbox>
-													</view>
-													<view class="box">
-														<text>橙子</text>
-														<u-checkbox v-model="checked" :disabled="false"></u-checkbox>
+													<view class="box" v-for="(item,index) in subcampList" :key="index">
+														<text>{{item.title}}</text>
+														<u-checkbox v-model="item.checked" :disabled="false"></u-checkbox>
 													</view>
 												</u-checkbox-group>
 											</view>
@@ -237,7 +212,7 @@
 									</u-form-item>
 								</view>
 							</view>
-							
+
 						</view>
 					</view>
 
@@ -263,7 +238,7 @@
 							</u-form-item>
 
 							<!-- select框 -->
-							<u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
+							<!-- <u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select> -->
 						</view>
 
 						<!-- 企业信息 -->
@@ -283,41 +258,55 @@
 									(请上传营业执照附件）
 								</view>
 							</view>
-							<u-form-item>
+							<u-form-item prop="businessCatalog">
 								<view class="Con_box">
 									<text class="star">主营业务</text>
 									<u-input v-model="form.businessCatalog" input-align="right" style="flex: 1;" placeholder="请输入主营业务" />
 								</view>
 							</u-form-item>
-							<u-form-item prop="time">
+							<u-form-item prop="inTime">
 								<view class="Con_box">
 									<text class="star">入驻时间</text>
 									<view @click="openLipicker('入驻时间')" :class="{'place_box':!form.inTime}">{{form.inTime ? form.inTime : '请选择开始在新法地市场经营的时间'}}</view>
 								</view>
 							</u-form-item>
-							
+
 							<!-- 日期框-(设置不了默认时间) -->
-							<u-picker mode="time" v-model="showTime" default-time="2020-08-03" :params="params"></u-picker>
+							<u-picker mode="time" v-model="showTime" :default-time="form.NowTime" :params="params" @confirm="PickerConfirm"></u-picker>
 						</view>
 
 						<!-- 伙伴信息 -->
-						<view class="partner">
-							<view class="tit_con">伙计1信息</view>
-							<view class="add_con">继续添加</view>
-						</view>
-						<view class="Active_box_sun">
-							<u-form-item label="伙计1姓名" prop="sex">
-								<u-input v-model="form.sex" input-align="right" placeholder="请输入伙计1姓名" />
-							</u-form-item>
-							<u-form-item label="伙计1身份证" prop="sex">
-								<u-input v-model="form.sex" input-align="right" placeholder="请输入伙计1身份证" />
-							</u-form-item>
-							<u-form-item label="伙计1手机号" prop="sex">
-								<u-input v-model="form.sex" input-align="right" placeholder="请输入伙计1手机号" />
-							</u-form-item>
-							<u-form-item label="伙计1现住址" prop="sex">
-								<u-input v-model="form.sex" input-align="right" placeholder="请输入伙计1现住址" />
-							</u-form-item>
+						<view class="partner_box" v-for="(item,index) in PartnerList" :key="index">
+							<view class="partner">
+								<view class="tit_con">伙计{{index + 1}}信息</view>
+								<view class="add_con" @click="AddPartner" v-if="index === 0">继续添加</view>
+							</view>
+							<view class="Active_box_sun">
+								<u-form-item prop="sex">
+									<view class="Con_box">
+										<text>伙计{{index + 1}}姓名</text>
+										<u-input style="flex: 1;text-align: right;" v-model="item.staffName" input-align="right" placeholder="请输入伙计姓名" />
+									</view>
+								</u-form-item>
+								<u-form-item prop="sex">
+									<view class="Con_box">
+										<text>伙计{{index + 1}}身份证</text>
+										<u-input style="flex: 1;text-align: right;" v-model="form.staffCardNo" input-align="right" placeholder="请输入伙计身份证" />
+									</view>
+								</u-form-item>
+								<u-form-item prop="sex">
+									<view class="Con_box">
+										<text>伙计{{index + 1}}手机号</text>
+										<u-input style="flex: 1;text-align: right;" v-model="form.staffMobile" input-align="right" placeholder="请输入伙计手机号" />
+									</view>
+								</u-form-item>
+								<u-form-item prop="sex">
+									<view class="Con_box">
+										<text>伙计{{index + 1}}现住址</text>
+										<u-input style="flex: 1;text-align: right;" v-model="form.staffAddr" input-align="right" placeholder="请输入伙计现住址" />
+									</view>
+								</u-form-item>
+							</view>
 						</view>
 					</view>
 
@@ -349,7 +338,7 @@
 							</u-form-item>
 
 							<!-- select框 -->
-							<u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
+							<!-- <u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select> -->
 						</view>
 					</view>
 					<view class="state">
@@ -370,12 +359,11 @@
 
 <script>
 	import CONFIG from '../../common/configs.js';
-	import cityData from '../../common/cityData.js';
-	// import Uploader from '@/components/Uploader/Uploader.vue'
+	import citys from '../../common/citys.js'
+	import {
+		timeFormat
+	} from '../../common/common.js'
 	export default {
-		// components: {
-		// 	Uploader
-		// },
 		data() {
 			return {
 				// 上传附件
@@ -384,6 +372,7 @@
 					fileList: [],
 					businessList: []
 				},
+				supplier: '',
 				procurer: {
 					fileList: []
 				},
@@ -400,14 +389,26 @@
 					}]
 				},
 				placeList: [],
+				subcampList: [{
+					title: "水果区",
+					checked: false
+				}, {
+					title: "芒果区",
+					checked: false
+				}, {
+					title: "周转一区",
+					checked: false
+				}],
 				form: {
 					id: null,
 					name: '',
-					businessType : '',
+					businessType: '',
 					carNumber: '',
-					mobile: '',
+					mobile: '18727087210',
 					cardNo: '',
-					
+					registProvince: '',
+					registCity: '',
+					registArea: '',
 					currentPlace: '',
 					curentArea: '',
 					curentCity: '',
@@ -423,9 +424,13 @@
 					currentPlace: '',
 					businessLinkman: '',
 					businessLinkmobile: '',
+					inTime: '',
 					urlImg: '',
-					
-					checked: false
+
+					// 自定义
+					NowTime: timeFormat(new Date()),
+					radio: null,
+					active: null
 				},
 				rules: {
 					name: [{
@@ -435,26 +440,27 @@
 						trigger: ['change', 'blur'],
 					}],
 					mobile: [{
-						required: true,
-						message: '请输入手机号码',
-						// 可以单个或者同时写两个触发验证方式 
-						trigger: ['change', 'blur'],
-					},
-					{
-						pattern: CONFIG.MOBILE_REGEXP,
-						// 正则检验前先将值转为字符串
-						transform(value) {
-							return String(value);
+							required: true,
+							message: '请输入手机号码',
+							// 可以单个或者同时写两个触发验证方式 
+							trigger: ['change', 'blur'],
 						},
-						message: '请输入11位手机号',
-						trigger: ['change', 'blur']
-					}],
+						{
+							pattern: CONFIG.MOBILE_REGEXP,
+							// 正则检验前先将值转为字符串
+							transform(value) {
+								return String(value);
+							},
+							message: '请输入11位手机号',
+							trigger: ['change', 'blur']
+						}
+					],
 					cardNo: [{
 						required: true,
 						message: '请输入身份证号',
 						// 可以单个或者同时写两个触发验证方式 
 						trigger: ['change', 'blur'],
-					},{
+					}, {
 						pattern: CONFIG.ID_CODE,
 						// 正则检验前先将值转为字符串
 						transform(value) {
@@ -468,10 +474,22 @@
 						message: '请输入车牌号',
 						// 可以单个或者同时写两个触发验证方式 
 						trigger: ['change', 'blur'],
+					}],
+					inTime: [{
+						required: true,
+						message: '请选择开始在新法地市场经营的时间',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
+					}],
+					businessCatalog: [{
+						required: true,
+						message: '请输入主营业务',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
 					}]
 				},
 				// 模拟多级联动
-				
+
 				residenceList: [],
 
 				// 下一步
@@ -480,7 +498,7 @@
 				active_copy: null,
 				show_back_btn: false,
 				show: false,
-				list: cityData.City,
+				list: citys,
 				// 打开Upopup
 				showUpopup: false,
 				// 日期控件
@@ -502,27 +520,66 @@
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						let params = {
-							name: '',
-							cardNo: '',
-							age: '',
-							birthday: '',
-							gender: '',
-							businessType: '',
-							mobile: '',
-							businessName: '',
-							manageArea: ''
+						// debugger;
+						console.log(this.form.radio, '111')
+						if (this.form.radio === 1) {
+							this.form.businessType = '供应商'
+						} else if (this.form.radio === 2) {
+							this.form.businessType = '采购商'
+						} else if (this.form.radio === 3) {
+							this.form.businessType = '摆渡车'
+						} else if (this.form.radio === 4) {
+							this.form.businessType = '员工/伙计'
 						}
-						this.uniRequest({
-							url: 'accouninfo/save',
-							data: {},
-							success:(res)=>{
-								
-							}
-						})
-						uni.navigateTo({
-							url: '/pages/Information/Success?radio=' + this.form.radio
-						})
+						let params = {
+							// id: null,
+							name: this.form.name,
+							businessType: this.form.businessType,
+							carNumber: this.form.carNumber,
+							mobile: this.form.mobile,
+							cardNo: this.form.cardNo,
+							registProvince: this.form.registProvince,
+							registCity: this.form.registCity,
+							registArea: this.form.registArea,
+							currentPlace: this.form.currentPlace,
+							curentArea: this.form.curentArea,
+							curentCity: this.form.curentCity,
+							curentProvince: this.form.curentProvince,
+							businessCatalog: this.form.businessCatalog,
+							businessAddr: this.form.businessAddr,
+							businessUrl: this.form.businessUrl,
+							businessCode: this.form.businessCode,
+							businessName: this.form.businessName,
+							birthday: this.form.birthday,
+							gender: this.form.gender,
+							age: this.form.age,
+							currentPlace: this.form.currentPlace,
+							businessLinkman: this.form.businessLinkman,
+							businessLinkmobile: this.form.businessLinkmobile,
+							inTime: this.form.inTime,
+							urlImg: this.supplier,
+						}
+						let ImgIstrue = true;
+						if (!this.supplier) {
+							ImgIstrue = false;
+							uni.showToast({
+								title: '请上传用户头像',
+								icon: 'none'
+							})
+						}
+						if (ImgIstrue) {
+							this.uniRequest({
+								url: 'accouninfo/save',
+								method: 'get',
+								data: params,
+								success: (res) => {
+									uni.navigateTo({
+										url: '/pages/Information/Success?radio=' + this.form.radio
+									})
+								}
+							})
+						}
+
 					} else {
 						console.log('验证失败');
 					}
@@ -533,22 +590,33 @@
 			},
 			// 多级联动-赋值
 			confirm(e) {
-				console.log(e);
 				if (e.length > 0) {
 					let val = '';
 					e.forEach((item, index) => {
 						console.log(item, 'item')
-						val += item.label;
+						val += (index > 0 ? '-' : '') + item.label;
 					})
-					console.log(val, 'val')
+					console.log(e,'e')
 					if (this.form.active === '籍贯') {
 						this.form.place = val;
+
+						this.form.registProvince = e[0] ? e[0].label : '';
+						this.form.registCity = e[1] ? e[1].label : '';
+						this.form.registArea = e[2] ? e[2].label : '';
 					} else if (this.form.active === '居住地') {
 						this.form.residence = val;
+
+						this.form.curentProvince = e[0] ? e[0].label : '';
+						this.form.curentCity = e[1] ? e[1].label : '';
+						this.form.curentArea = e[2] ? e[2].label : '';
 					}
-					this.form.place = val;
 				}
 
+			},
+			// 日期控件
+			PickerConfirm(e) {
+				console.log(e, '111')
+				this.form.inTime = e.year + '-' + e.month + '-' + e.day
 			},
 			// 打开多级联动
 			openSelect(v) {
@@ -595,19 +663,16 @@
 			},
 			// 添加伙计信息
 			AddPartner() {
-				if(this.PartnerList.length < 3) {
+				if (this.PartnerList.length < 3) {
 					this.PartnerList.push({});
 				}
-				console.log(this.PartnerList,'PartnerList')
+				console.log(this.PartnerList, 'PartnerList')
 			},
 			// 上传图片
 			Supplier_Upload(data, index, lists, name) {
-				console.log(data,'data')
-				this.supplier = [{
-					url: data.url
-				}]
+				this.supplier = data.url;
 			},
-			Procurer_Upload(data, index, lists, name){
+			Procurer_Upload(data, index, lists, name) {
 				this.procurer = [{
 					url: data.url
 				}]
@@ -618,15 +683,68 @@
 		},
 		// 获取参数
 		onLoad(res) {
-			console.log(res, 'res')
-			console.log(this.list,'list')
 			if (res.Active_radio) {
 				this.form.radio = parseInt(res.Active_radio);
 				this.active_show = true;
 				this.show_back_btn = false;
 			}
 		},
-		created(){
+		// 获取数据
+		onShow() {
+			this.uniRequest({
+				url: 'accouninfo/getInfo',
+				success: (res) => {
+					console.log(res, 'res')
+					if (res.code === 0) {
+						this.form = {
+							id: res.data.info.id,
+							name: res.data.info.name,
+							businessType: res.data.info.businessType,
+							carNumber: res.data.info.carNumber,
+							mobile: res.data.account.mobile ? res.data.account.mobile : '18727087210',
+							cardNo: res.data.info.cardNo,
+							registProvince: res.data.info.registProvince,
+							registCity: res.data.info.registCity,
+							registArea: res.data.info.registArea,
+							currentPlace: res.data.info.currentPlace,
+							curentArea: res.data.info.curentArea,
+							curentCity: res.data.info.curentCity,
+							curentProvince: res.data.info.curentProvince,
+							businessCatalog: res.data.info.businessCatalog,
+							businessAddr: res.data.info.businessAddr,
+							businessUrl: res.data.info.businessUrl,
+							businessCode: res.data.info.businessCode,
+							businessName: res.data.info.businessName,
+							birthday: res.data.info.birthday,
+							gender: res.data.info.gender,
+							age: res.data.info.age,
+							currentPlace: res.data.info.currentPlace,
+							businessLinkman: res.data.info.businessLinkman,
+							businessLinkmobile: res.data.info.businessLinkmobile,
+							inTime: res.data.info.inTime,
+							urlImg: res.data.info.urlImg,
+							// 自定义
+							
+						}
+						// 身份
+						if(res.data.info.businessType === '供应商') {
+							this.form.radio = 1;
+						} else if(res.data.info.businessType === '采购商') {
+							this.form.radio = 2;
+						} else if(res.data.info.businessType === '摆渡车') {
+							this.form.radio = 3;
+						} else if(res.data.info.businessType === '员工/伙计') {
+							this.form.radio = 4;
+						}
+						// 户籍
+						this.form.place = res.data.info.registProvince + '-' + res.data.info.registCity + '-' + res.data.info.registArea;
+						// 居住地
+						this.form.residence = res.data.info.curentProvince + '-' + res.data.info.curentCity + '-' + res.data.info.curentArea;
+						// 图片
+						this.supplier.fileList = [{url: this.form.urlImg}]
+					}
+				}
+			})
 		}
 	}
 </script>

@@ -95,7 +95,7 @@
 								code: this.form.code
 							},
 							success:(res)=>{
-								if(res === 'success'){
+								if(res.data === 'success'){
 									uni.navigateTo({
 										url: '/pages/Information/index?Active_radio=' + this.Active_radio
 									})
@@ -112,6 +112,7 @@
 			},
 			// 获取手机验证码
 			getverify(e){
+				// debugger;
 				this.uniRequest({
 					url: 'accouninfo/sendmsg',
 					method: 'get',
@@ -119,7 +120,7 @@
 						phone: this.form.phone
 					},
 					success:(res)=>{
-						if(res === 'success'){
+						if(res.data === 'success'){
 							this.noPointer = true;
 							let count = 60;
 							this.message_verify = '倒计时'+count;
@@ -135,6 +136,17 @@
 						}
 					}
 				})
+				// uni.request({
+				// 	url: 'http://192.168.100.215:18088/h5/accouninfo/sendmsg',
+				// 	method:'get',
+				// 	data: {
+				// 		phone: this.form.phone
+				// 	},
+				// 	success:(res)=>{
+				// 		console.log(res,'res')
+				// 	}
+					
+				// })
 			}
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕

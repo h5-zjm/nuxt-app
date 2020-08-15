@@ -149,6 +149,10 @@
             "path" : "pages/appointmentSuccessful/submitSuccessful",
             "style" : {}
         }
+        ,{
+            "path" : "pages/Information/hint",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
