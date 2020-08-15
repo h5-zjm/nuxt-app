@@ -568,7 +568,7 @@
 						}
 						console.log('图表数据',res.data.series)
 						Mix.categories=res.data.categories;
-						Mix.series=res.data.series;
+						Mix.series=res.data.series.reverse();
 						// Mix.categories=res.data.data.Mix.categories;
 						// Mix.series=res.data.data.Mix.series;
 						_self.showMix("canvasMix",Mix);
