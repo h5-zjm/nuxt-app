@@ -56,6 +56,9 @@
 					</view>
 				</view>
 			</view>
+          <view v-show="isLoadMore">  //loading加载提示处
+                <uni-load-more :status="loadStatus" ></uni-load-more>
+          </view>
 <!-- 			<view class="sellGoods">
 				<view class="time">
 					2020.07.21
@@ -177,6 +180,8 @@
 	export default {
 		data() {
 			return {
+                loadStatus:'loading',  //加载样式：more-加载前样式，loading-加载中样式，nomore-没有数据样式
+                isLoadMore:false,  //是否加载中
 				offset: 0,
 				// list:[],
 				list: [{
@@ -1225,10 +1230,24 @@
 		created() {
 			this.getData()
 		},
+		
+		onReachBottom(){  //上拉触底函数
+			  if(!this.isLoadMore){  //此处判断，上锁，防止重复请求
+					this.isLoadMore=true
+					this.offset+=10
+					this.getData()
+			  }
+		},
 		methods: {
+			// 获取用户信息
+			getUser() {
+				
+			},
 			getData() {
+				
+				// 获取页面数据
 				uni.request({
-					url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getList',
+					url: 'http://192.168.100.215:18088/h5/carSubscribe/getList',
 					method: 'GET',
 					data: {
 						offset: this.offset

@@ -125,8 +125,25 @@
 	export default {
 		data() {
 			return {
-				
+				data: ''
 			};
+		},
+		created() {
+			
+		},
+		methods:{
+			getData() {
+				uni.request({
+					url: '',
+					method:'GET',
+					params: {
+						
+					},
+					success: (res) => {
+						console.log('查看溯源交易单数据',res)
+					}
+				})
+			}
 		}
 	}
 </script>

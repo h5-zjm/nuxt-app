@@ -145,6 +145,10 @@
 				"navigationBarTitleText": "上货记录"
 			}
         }
+        ,{
+            "path" : "pages/appointmentSuccessful/submitSuccessful",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

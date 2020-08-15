@@ -7,14 +7,17 @@
 			<view class="title">
 				买家信息：王** 180****1234
 			</view>
-			<view class="list">
+			<view class="list" v-for="(item,index) in dataList">
 				<view class="line">
 					<view class="keyLabel">
 						品类：
 					</view>
 					<view class="valueLabel">
 						<view class="valueWorth">
-							<u-input v-model="value" disabled :type="type" style="height: 90rpx;line-height: 90rpx;" :border="border" @click="show = true" />
+							<!-- <u-input v-model="value" :type="type" style="height: 90rpx;line-height: 90rpx;" placeholder="请选择品类" :border="border" @click="show = true" /> -->
+							<u-input v-model="item.goodsName" :type="type" style="height: 90rpx;line-height: 90rpx;" placeholder="请选择品类" :border="border"
+							 @click="editType(index)" />
+							<!-- <u-action-sheet :list="actionSheetList" v-model="show" @click="actionSheetCallback"></u-action-sheet> -->
 						</view>
 						<view class="unit">
 							清空
@@ -27,7 +30,7 @@
 					</view>
 					<view class="valueLabel">
 						<view class="valueWorth">
-							<u-input v-model="weight" :type="type" :border="border" />
+							<u-input v-model="item.weight" :type="type" :border="border" />
 						</view>
 						<view class="unit">
 							KG
@@ -40,7 +43,7 @@
 					</view>
 					<view class="valueLabel">
 						<view class="valueWorth">
-							<u-input v-model="amont" :type="type" :border="border" />
+							<u-input v-model="item.price" :type="type" :border="border" />
 						</view>
 						<view class="unit">
 							元
@@ -53,7 +56,7 @@
 					</view>
 					<view class="valueLabel">
 						<view class="valueWorth">
-							<u-input v-model="origin" :type="type" :border="border" />
+							<u-input v-model="item.placeOfOrigin" :type="type" :border="border" />
 						</view>
 					</view>
 				</view>
@@ -63,7 +66,7 @@
 					</view>
 					<view class="valueLabel">
 						<view class="valueWorth">
-							<u-input v-model="producer" :type="type" :border="border" />
+							<u-input v-model="item.producers" :type="type" :border="border" />
 						</view>
 					</view>
 				</view>
@@ -73,18 +76,18 @@
 					<u-button type="primary" @click="showPopUp">添加商品</u-button>
 				</view>
 				<view class="sureAdd">
-					<u-button >确认提交</u-button>
+					<u-button @click="savePersonInformation">确认提交</u-button>
 				</view>
 			</view>
 		</view>
 		<u-select v-model="show" value-name="name" label-name="name" :list="list" @confirm="confirm"></u-select>
-		<u-popup v-model="showPop" mode="center" border-radius="10">
+		<u-popup v-model="showPop" mode="center" border-radius="10" style="max-height: 60%;margin-top: 20%;">
 			<view class="popAll">
 				<view class="search">
 					<u-search placeholder="请输入种类" v-model="keyword"></u-search>
 				</view>
-				<view class="popList">
-					大白菜
+				<view class="popList" v-for="item in list" @click="add(item.name)">
+					{{item.name}}
 				</view>
 			</view>
 		</u-popup>
@@ -96,13 +99,25 @@
 		data() {
 			return {
 				show: false,
-				value:'',
-				weight:'',
-				amont:'',
-				origin:'',
-				producer:'',
+				value: '',
+				weight: '',
+				amont: '',
+				origin: '',
+				producer: '',
 				showPop: false,
+				type:'text',
 				keyword: '',
+				valueIndex: '', // 修改的数据index
+				sellerOpenId:"",
+				buyerOpenId:"",
+				dataList: [{
+					id: "",
+					goodsName: "",
+					weight: "",
+					price: "",
+					placeOfOrigin: "",
+					producers: "",
+				}],
 				list: [{
 					name: '白萝卜'
 				}, {
@@ -510,13 +525,123 @@
 				}]
 			};
 		},
-		methods:{
+		created() {
+			this.getInfo()
+		},
+        mounted() {
+            this.load();
+        },
+		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
+			console.log(option)
+			// console.log(option.id); //打印出上个页面传递的参数。
+			// console.log(option.name); //打印出上个页面传递的参数。
+		},
+		methods: {
 			confirm(e) {
-				console.log('选中的数据',e)
-				this.value = e[0].value
+				this.dataList[this.valueIndex].goodsName = e[0].value
 			},
 			showPopUp() {
 				this.showPop = true
+			},
+			getInfo() {
+				uni.request({
+					url: 'http://192.168.100.215:18088//h5/accouninfo/getInfo',
+					method: 'GET',
+					success: (res) => {
+						console.log('获取的用户信息', res)
+					}
+				})
+			},
+			editType(i) {
+				this.show = true
+				this.valueIndex = i
+			},
+			add(e) {
+				console.log('选中的菜品',e)
+				let item = {
+					id: '',
+					goodsName: e,
+					weight: '',
+					price: '',
+					placeOfOrigin: '',
+					producers: ''
+				}
+				this.dataList.push(item)
+			},
+            getQueryVariable(variable){
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i=0;i<vars.length;i++) {
+                    var pair = vars[i].split("=");
+                    if(pair[0] == variable){return pair[1];}
+                }
+                return(false);
+            },
+            load() {
+                console.log("aaaaa");
+                //拿到url上的id值
+                var id = this.getQueryVariable("cardNo");
+                //alert(id);
+                //请求订单数据
+                uni.request({
+                    method: "post",
+                    url: "/h5/order/selectUserInfo?cardNo=" + id,
+                    success: (res) =>{
+                        if (res.rows != '') {
+                            //循环回显 菜品数据
+                            console.log(res);
+                            this.phoneNumber = res.phoneNumber?res.phoneNumber:"";
+                            this.buyName = res.buyName?res.buyName:"";
+                            this.sellerOpenId = res.sellerOpenId?res.sellerOpenId:"";
+                            this.buyerOpenId = res.buyerOpenId?res.buyerOpenId:"";
+                        }
+                    }
+                });
+            },
+			savePersonInformation() {
+                let saveOrderList = this.dataList;
+                let flags = true;
+                saveOrderList.forEach(item=>{
+                    if(!item.goodsName ){
+                        alert("商品名称不能为空");
+                        flags = false;
+                        return false;
+                    }
+                    if(!item.weight){
+                        alert("重量不能为空");
+                        flags = false;
+                        return false;
+                    }
+                    if(!item.price){
+                        alert("价格不能为空");
+                        flags = false;
+                        return false;
+                    }
+                });
+				if(flags) {
+                    console.log(saveOrderList);
+                    var json = JSON.stringify(saveOrderList);
+                    console.log(json);
+				}
+				uni.request({
+					url: 'http://192.168.100.215:18088/h5/order/saveOrder',
+					method: 'POST',
+                    data:{
+                        goodsJson:json,
+                        sellerOpenId:this.sellerOpenId,
+                        buyerOpenId:this.buyerOpenId,
+                    },
+                        success: (res) =>{
+                            if(res.code === 0){
+                                //跳转页面
+								uni.navigateTo({
+									url: '/pages/appointmentSuccessful/submitSuccessfulmodelId=0&id='+res.id
+								});
+                            }else {
+                                alert('保存失败')
+                            }
+                        }
+				})
 			}
 		}
 	}
@@ -567,34 +692,42 @@
 					line-height: 90rpx;
 					display: flex;
 					justify-content: space-between;
+
 					.valueLabel {
 						width: 280rpx;
 						display: flex;
 						justify-content: space-between;
+
 						.valueWorth {
 							width: 200rpx;
 						}
+
 						.unit {
 							float: right;
 						}
-						
+
 					}
 				}
+
 				.line {
 					border-bottom: 1rpx solid #EDEDED;
 				}
+
 				.last {
 					border-bottom: none;
 				}
 			}
+
 			.bottom {
 				width: 100%;
 				float: left;
 				margin-top: 28rpx;
+
 				.addGoods {
 					width: 100%;
 					float: left;
 				}
+
 				.sureAdd {
 					width: 100%;
 					float: left;
@@ -602,13 +735,18 @@
 				}
 			}
 		}
+
 		.popAll {
 			box-sizing: border-box;
 			padding: 32rpx;
+			max-height: 100%;
+			overflow-y: scroll;
+
 			.search {
 				height: 60rpx;
 				line-height: 60rpx;
 			}
+
 			.popList {
 				height: 80rpx;
 				line-height: 80rpx;
