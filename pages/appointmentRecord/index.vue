@@ -56,7 +56,7 @@
 					</view>
 				</view>
 			</view>
-          <view v-show="isLoadMore">  //loading加载提示处
+          <view v-show="isLoadMore">
                 <uni-load-more :status="loadStatus" ></uni-load-more>
           </view>
 <!-- 			<view class="sellGoods">
@@ -228,6 +228,7 @@
 					success: (res) => {
 						console.log('列表返回', res)
 						this.list = res.data
+						this.isLoadMore = false
 					}
 				})
 			},
@@ -239,7 +240,7 @@
 				  }
 			},
 			goDetail(item) {
-				let data = JSON.stringify(item)
+				let data = encodeURIComponent(JSON.stringify(item))
 				uni.navigateTo({
 					url:'/pages/makeAppointment/index?data='+ data
 				})
