@@ -39,6 +39,10 @@
 
 <script>
 	import CONFIG from '../../common/configs.js'
+	// const base_url = 'https://wechat.daizhangfang.net/h5/wechat/#/' // 前端域名
+	// const appid = 'wxba0b19915d264d67';
+	// const wx_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + base_url +
+	// 	'&response_type=code&scope=snsapi_base&state=123#wechat_redirect'
 	export default {
 		data() {
 			return {
@@ -140,10 +144,11 @@
 					})
 				}
 			},
-			async Func_Con() {
+			// 授权
+			Func_Con() {
 				let url = window.location.href;
 				let res = url.split('?');
-				await this.uniRequest({
+				this.uniRequest({
 					url: 'accouninfo/getInfo?code=' + res[1],
 					success: (res) => {
 						if (res.code === 0) {
@@ -157,6 +162,24 @@
 					}
 				})
 			}
+			// 解析URL 参数
+			// getUrlParam(name) {
+			// 	let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
+			// 	let r = window.location.search.substr(1).match(reg)
+			// 	if (r != null) {
+			// 		return unescape(r[2])
+			// 	}
+			// 	return null
+			// },
+			// // 发送code 获取信息
+			// postCode(code) {
+			// 	uni.request({
+			// 		url: 'https://www.example.com/request', //发送code给后台。
+			// 		success: (res) => {
+			// 			//res里面包含用户信息  openid等
+			// 		}
+			// 	});
+			// }
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
 		onReady() {
@@ -164,9 +187,22 @@
 		},
 		// 获取用户信息
 		onShow() {
-			
+
 			this.Func_Con()
 		}
+		// onLoad() {
+		// 	// 获取URL 上code
+		// 	const code = this.getUrlParam('code')
+		// 	// 判断是否存在code
+		// 	if (code == null || code == '') {
+		// 		// 重新获取code
+		// 		// console.log(code)
+		// 		window.location.href = wx_url
+		// 	} else {
+		// 		// 发送code
+		// 		this.postCode(code)
+		// 	}
+		// }
 	}
 </script>
 

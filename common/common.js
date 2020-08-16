@@ -736,4 +736,18 @@ export function Array_Func_Filter(list,callback) {
 /**
  * 截取code
  */
-
+export function Splice_url(callback) {
+	let url = window.location.href;
+	let res = url.split('?');
+	let txt = res[1].split('&');
+	let Con = null;
+	if(txt.length > 0) {
+		txt.forEach((item,index) => {
+			if(item.indexOf('code') !== -1) {
+				Con = item;
+			}
+		})
+	}
+	let num = Con.split('=');
+	callback(num[1]);
+}
