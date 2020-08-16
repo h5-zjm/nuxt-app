@@ -742,7 +742,6 @@
 			box-sizing: border-box;
 			padding: 32rpx;
 			max-height: 100%;
-			overflow-y: scroll;
 
 			.search {
 				height: 60rpx;
