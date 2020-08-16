@@ -242,9 +242,9 @@
 				  }
 			},
 			goDetail(item) {
-				let data = encodeURIComponent(JSON.stringify(item))
+				// let data = encodeURIComponent(JSON.stringify(item))
 				uni.navigateTo({
-					url:'/pages/makeAppointment/index?data='+ data
+					url:'/pages/makeAppointment/index?data='+ encodeURIComponent(JSON.stringify(item))
 				})
 			}
 		}

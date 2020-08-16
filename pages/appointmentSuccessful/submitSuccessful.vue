@@ -28,7 +28,7 @@
 		},
 		methods:{
 			goToTransacteOrder() {
-				let id = this.getQueryVariable("cardNo");
+				// let id = this.getQueryVariable("cardNo");
 				uni.navigateTo({
 					url: '/pages/getTraceableTransacteOrder/index?modelId=0&id='+this.orderID
 				});

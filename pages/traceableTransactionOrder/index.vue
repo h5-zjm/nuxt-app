@@ -73,10 +73,11 @@
 			</view>
 			<view class="bottom">
 				<view class="addGoods">
-					<u-button type="primary" @click="showPopUp">添加商品</u-button>
+					
+					<u-button type="primary" @click="savePersonInformation">确认提交</u-button>
 				</view>
 				<view class="sureAdd">
-					<u-button @click="savePersonInformation">确认提交</u-button>
+					<u-button  @click="showPopUp">添加商品</u-button>
 				</view>
 			</view>
 		</view>
@@ -648,17 +649,21 @@
 				if(flags) {
                     console.log(saveOrderList);
                     let json = JSON.stringify(saveOrderList);
-					let data = {
-						sellerOpenId:this.sellerOpenId,
-						buyerOpenId:this.buyerOpenId,
-						goodsJson:json
-					}
+					// let data = {
+					// 	sellerOpenId:this.sellerOpenId,
+					// 	buyerOpenId:this.buyerOpenId,
+					// 	goodsJson:json
+					// }
                     console.log(json);
 					uni.request({
 						// url: 'https://wechat.daizhangfang.net/h5/order/saveOrder',
 						url: 'http://192.168.100.215:18088/h5/order/saveOrder',
-						method: 'POST',
-						data:json,
+						method: 'GET',
+						data: {
+							sellerOpenId:this.sellerOpenId,
+							buyerOpenId:this.buyerOpenId,
+							goodsJson:json
+						},
 						success: (res) =>{
 							if(res.data.code === 0){
 								console.log('是否保存成功',res)	
