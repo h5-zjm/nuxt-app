@@ -1,7 +1,9 @@
 <template>
 	<view class="all">
 		<view class="title">
-			状态：未进场
+			<view class="notGone">
+				状态：未进场
+			</view>
 		</view>
 		<view class="personInformation">
 			<view class="userName">
@@ -134,6 +136,11 @@
 				})
 			}
 		},
+		onLoad: function(data) {
+            data = data.data.replace(/""/g, "");
+            data=JSON.parse(data)
+            console.log('页面数据',data)
+        },
 		created(){
 			// uni.navigateTo({
 			// 	url: '/pages/ChartPage/chartsOne'
@@ -160,6 +167,9 @@
 		box-sizing: border-box;
 		padding-left: 30rpx;
 		color: #FF8F0A;
+		.notGone {
+			color: #FF8F0A;
+		}
 	}
 	.personInformation {
 		box-sizing: border-box;
