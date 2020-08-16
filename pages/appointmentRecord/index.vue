@@ -212,6 +212,7 @@
 					method: 'GET',
 					success: (res) => {
 						console.log('获取用户信息',res)
+						this.getData()
 					}
 				})
 			},
