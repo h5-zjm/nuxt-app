@@ -136,7 +136,7 @@
 				})
 			}
 		},
-		onLoad: function(data) {
+		onLoad(data) {
 			const item = JSON.parse(decodeURIComponent(data));
             console.log('页面数据',item)
         },
