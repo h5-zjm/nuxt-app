@@ -38,7 +38,7 @@
 				<u-form-item prop="name">
 					<view class="Con_box">
 						<text>产品</text>
-						<u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入产品" />
+						<!-- <u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入产品" /> -->
 					</view>
 				</u-form-item>
 				<u-form-item prop="region">
@@ -50,13 +50,13 @@
 				<u-form-item prop="name">
 					<view class="Con_box">
 						<text>数量</text>
-						<u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入货品重量" />KG
+						<u-input v-model="form.certificateNum" style="flex: 1;text-align: right;" placeholder="请输入货品重量" />KG
 					</view>
 				</u-form-item>
 				<u-form-item prop="name">
 					<view class="Con_box">
 						<text class="star">车牌号</text>
-						<u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入车牌号" />
+						<u-input v-model="form.CarNum" style="flex: 1;text-align: right;" placeholder="请输入车牌号" />
 					</view>
 				</u-form-item>
 
@@ -71,7 +71,7 @@
 				</view>
 				<view class="Uploader_box_right">
 					<view>检测证明</view>
-					<Uploader></Uploader>
+					<u-upload :action="action" @on-success="Procurer_UploadTwo" :max-count="1" :file-list="procurer.fileList" />
 				</view>
 			</view>
 
@@ -87,7 +87,7 @@
 				<u-form-item prop="name">
 					<view class="Con_box">
 						<text>数量（重量）</text>
-						<u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入请输入货品重量" />KG
+						<u-input v-model="form.weight" style="flex: 1;text-align: right;" placeholder="请输入请输入货品重量" />KG
 					</view>
 				</u-form-item>
 				<u-form-item prop="starTime">
@@ -99,25 +99,25 @@
 				<u-form-item prop="name">
 					<view class="Con_box">
 						<text class="star">生产者</text>
-						<u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入生产者" />
+						<u-input v-model="form.producer" style="flex: 1;text-align: right;" placeholder="请输入生产者" />
 					</view>
 				</u-form-item>
 				<u-form-item prop="name">
 					<view class="Con_box">
 						<text>产地地址</text>
-						<u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入产地地址具体到村" />
+						<u-input v-model="form.adress" style="flex: 1;text-align: right;" placeholder="请输入产地地址具体到村" />
 					</view>
 				</u-form-item>
 				<u-form-item prop="name">
 					<view class="Con_box">
 						<text>联系方式</text>
-						<u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入联系电话" />
+						<u-input v-model="form.phone" style="flex: 1;text-align: right;" placeholder="请输入联系电话" />
 					</view>
 				</u-form-item>
 				<u-form-item prop="name">
 					<view class="Con_box">
 						<text>运输车辆车牌</text>
-						<u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入车牌号" />
+						<u-input v-model="form.carCardNum" style="flex: 1;text-align: right;" placeholder="请输入车牌号" />
 					</view>
 				</u-form-item>
 			</view>
@@ -141,7 +141,7 @@
 
 <script>
 	import Uploader from '@/components/Uploader/Uploader.vue'
-	import citys from '@/js_sdk/cityData.js'
+	import citys from '../../common/citys.js'
 	export default {
 		components: {
 			Uploader
@@ -150,12 +150,20 @@
 			return {
 				form: {
 					time: '',
+					name: '',
 					deal: '',
 					enter: '',
 					goods: '',
 					region: '',
 					starTime: '',
-					checked: false
+					certificateNum:'',
+					weight: '',
+					CarNum: '',
+					checked: false,
+					producer: '',
+					adress:'',
+					phone: '',
+					carCardNum: '',
 				},
 				procurer: {
 					fileList: []
@@ -242,13 +250,13 @@
 						}]
 					}
 				],
-
 				action: 'http://192.168.100.215:18088/common/sysFile/upload',
 				supplier: {
 					fileList: [],
 					businessList: []
 				},
-
+				imgUrlFirst:'',
+				imgUrlTwo:'',
 				openTime: '',
 				listCategory: [{
 					name: '白萝卜'
@@ -661,12 +669,36 @@
 		},
 		methods: {
 			submit() {
+				console.log(this.procurer.fileList)
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
 						console.log('验证通过');
 						let data = {
-
+							subscribeTime:this.form.time,
+							tradeSector:this.form.deal,
+							enterDoorNum: this.form.active,
+							certificateName: this.form.name,
+							itemPlace:this.form.region,
+							certificateName: this.form.certificateNum,
+							certificateCarNum: this.form.CarNum,
+							itemImg: this.imgUrlFirst,
+							itemNum: this.form.weight,
+							certificateTime:this.form.starTime,
+							certificateUser: this.form.producer,
+							certificateAddress: this.form.adress,
+							certificatePhone: this.form.phone,
+							certificateCarNum: this.form.carCardNum,
+							checkImg:this.imgUrlTwo
 						}
+						uni.request({
+							url:'http://192.168.100.215:18088/h5/carSubscribe/save',
+							method:'POST',
+							data:data,
+							success: (res) => {
+								console.log('卖货是否成功',res)
+								alert(res.data.msg)
+							}
+						})
 					} else {
 						console.log('验证失败');
 					}
@@ -725,6 +757,7 @@
 			// 地区多级联动
 			confirmRegion(e) {
 				console.log(e, 'e');
+				console.log('城市列表',citys)
 				let val = '';
 				// e.forEach((item, index) => {
 				// 	console.log(item, 'item')
@@ -740,7 +773,7 @@
 			openSelectMore(v) {
 				this.activeRegion = v;
 				this.showRegion = true;
-				// this.list = 
+				this.list = citys
 			},
 			// 图片上传
 			Supplier_Upload(data, index, lists, name) {
@@ -750,13 +783,22 @@
 				console.log('选中日期', date)
 				if (this.openTime == '预约时间') {
 					this.form.time = date.year + '-' + date.month + '-' + date.day
+				} else if(this.openTime == '开具时间') {
+					this.form.starTime = date.year+ '-'+date.month+'-'+date.day
 				}
 			},
 			comfirmCategory(e) {
 				console.log('选中的数据',e)
 				this.form.goods = e[0].label
-				console.log('城市列表',this.citys)
 			},
+			Procurer_Upload(e) {
+				console.log('图片是否成功上传',e)
+				this.imgUrlFirst=e.url 
+			},
+			Procurer_UploadTwo(e) {
+				console.log('图片是否成功上传',e)
+				this.imgUrlTwo=e.url 
+			}
 			
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕

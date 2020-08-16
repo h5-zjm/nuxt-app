@@ -18,7 +18,7 @@
 			</view>
 		</view>
 		<view class="shipment">
-			<view class="sellGoods" v-for="(item,index) in list" :key='item.id'>
+			<view class="sellGoods" v-for="(item,index) in list" :key='item.id' @click="goDetail(item)">
 				<view class="time">
 					{{item.subscribeTime.substring(0,9)}}
 				</view>
@@ -191,13 +191,7 @@
 			this.getData()
 		},
 		
-		onReachBottom(){  //上拉触底函数
-			  if(!this.isLoadMore){  //此处判断，上锁，防止重复请求
-					this.isLoadMore=true
-					this.offset+=10
-					this.getData()
-			  }
-		},
+
 		methods: {
 			// 获取用户信息
 			getUser() {
@@ -207,7 +201,7 @@
 				
 				// 获取页面数据
 				uni.request({
-					url: 'http://192.168.100.215:18088/h5/carSubscribe/getList',
+					url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getList',
 					method: 'GET',
 					data: {
 						offset: this.offset
@@ -216,6 +210,18 @@
 						console.log('列表返回', res)
 						this.list = res
 					}
+				})
+			},
+			onReachBottom(){  //上拉触底函数
+				  if(!this.isLoadMore){  //此处判断，上锁，防止重复请求
+						this.isLoadMore=true
+						this.offset+=10
+						this.getData()
+				  }
+			},
+			goDetail(item) {
+				uni.navigateTo({
+					url:'/pages/makeAppointment/index?item='+ encodeURIComponent(JSON.stringify(item))
 				})
 			}
 		}

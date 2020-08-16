@@ -148,7 +148,11 @@
 	}, {
 		"path": "pages/Information/hint",
 		"style": {}
-	}],
+	}    ,{
+            "path" : "pages/getTraceableTransacteOrder/getTraceableTransacteOrder",
+            "style" : {}
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",

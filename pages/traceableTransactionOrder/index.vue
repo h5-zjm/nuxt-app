@@ -623,15 +623,15 @@
                     var json = JSON.stringify(saveOrderList);
                     console.log(json);
 				}
-				uni.request({
-					url: 'http://192.168.100.215:18088/h5/order/saveOrder',
-					method: 'POST',
-                    data:{
-                        goodsJson:json,
+				let data = {
+                        goodsJson:saveOrderList,
                         sellerOpenId:this.sellerOpenId,
                         buyerOpenId:this.buyerOpenId,
-                    },
-					dataType:"json",
+				}
+				this.uniRequest({
+					url: 'order/saveOrder',
+					method: 'POST',
+                    data:data,
                     success: (res) =>{
                         if(res.code === 0){
 								
