@@ -201,7 +201,7 @@
 				
 				// 获取页面数据
 				uni.request({
-					url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getList',
+					url: 'http://192.168.100.215:18088/h5/carSubscribe/getList',
 					method: 'GET',
 					data: {
 						offset: this.offset
