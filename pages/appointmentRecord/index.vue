@@ -227,7 +227,7 @@
 					},
 					success: (res) => {
 						console.log('列表返回', res)
-						this.list = res
+						this.list = res.data
 					}
 				})
 			},
