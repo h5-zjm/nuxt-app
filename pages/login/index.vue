@@ -49,20 +49,21 @@
 				message_verify: '获取验证码',
 				rules: {
 					phone: [{
-						required: true,
-						message: '请输入手机号码',
-						// 可以单个或者同时写两个触发验证方式 
-						trigger: ['change', 'blur'],
-					},
-					{
-						pattern: CONFIG.MOBILE_REGEXP,
-						// 正则检验前先将值转为字符串
-						transform(value) {
-							return String(value);
+							required: true,
+							message: '请输入手机号码',
+							// 可以单个或者同时写两个触发验证方式 
+							trigger: ['change', 'blur'],
 						},
-						message: '请输入11位手机号',
-						trigger: ['change', 'blur']
-					} ],
+						{
+							pattern: CONFIG.MOBILE_REGEXP,
+							// 正则检验前先将值转为字符串
+							transform(value) {
+								return String(value);
+							},
+							message: '请输入11位手机号',
+							trigger: ['change', 'blur']
+						}
+					],
 					code: [{
 						required: true,
 						min: 6,
@@ -76,7 +77,7 @@
 						},
 						message: '请输入6位数字验证码',
 						trigger: ['change', 'blur'],
-					} ]
+					}]
 				},
 				ClearSetInterval: null,
 				// 禁止div点击事件触发
@@ -94,15 +95,14 @@
 								phone: this.form.phone,
 								code: this.form.code
 							},
-							success:(res)=>{
-								if(res.data === 'success'){
-									uni.navigateTo({
-										url: '/pages/Information/index?Active_radio=' + this.Active_radio
-									})
+							success: (res) => {
+								if (res.data === 'success') {
+									if (!res.data.info.name && !res.data.info.cardNo) {
+										uni.navigateTo({
+											url: '/pages/Information/Error'
+										})
+									}
 								}
-								// uni.showToast({
-									
-								// })
 							}
 						})
 					} else {
@@ -111,34 +111,51 @@
 				});
 			},
 			// 获取手机验证码
-			getverify(e){
+			getverify(e) {
 				let regPos = CONFIG.MOBILE_REGEXP;
-				if(regPos.test(this.form.phone)) {
+				if (regPos.test(this.form.phone)) {
 					this.noPointer = true;
 					let count = 60;
-					this.message_verify = '倒计时'+count;
-					this.ClearSetInterval = setInterval(()=>{
+					this.message_verify = '倒计时' + count;
+					this.ClearSetInterval = setInterval(() => {
 						--count;
-						this.message_verify = '倒计时'+count;
-						if(count < 1) {
+						this.message_verify = '倒计时' + count;
+						if (count < 1) {
 							clearInterval(this.ClearSetInterval)
 							this.message_verify = '获取验证码';
 							this.noPointer = false;
 						}
-					},1000)
+					}, 1000)
 					this.uniRequest({
 						url: 'accouninfo/sendmsg',
 						method: 'get',
 						data: {
 							phone: this.form.phone
 						},
-						success:(res)=>{
-							if(res.data === 'success'){
-								
+						success: (res) => {
+							if (res.data === 'success') {
+
 							}
 						}
 					})
 				}
+			},
+			async Func_Con() {
+				let url = window.location.href;
+				let res = url.split('?');
+				await this.uniRequest({
+					url: 'accouninfo/getInfo?code=' + res[1],
+					success: (res) => {
+						if (res.code === 0) {
+							if (!res.data.info.name && !res.data.info.cardNo) {
+								uni.navigateTo({
+									url: '/pages/Information/Error'
+								})
+							}
+						}
+
+					}
+				})
 			}
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
@@ -147,25 +164,8 @@
 		},
 		// 获取用户信息
 		onShow() {
-			this.uniRequest({
-				url: 'accouninfo/getInfo',
-				success: (res) => {
-					if (res.code === 0) {
-						if (!res.data.account.cellphone) {
-							uni.navigateTo({
-								url: '/pages/login/index'
-							})
-						} else if (!res.data.info.name || !res.data.info.cellphone) {
-							uni.navigateTo({
-								url: '/pages/Information/Error'
-							})
-						} else if(!res.data.account.cellphone){
-							
-						}
-					}
-		
-				}
-			})
+			
+			this.Func_Con()
 		}
 	}
 </script>
@@ -268,7 +268,7 @@
 						font-weight: 400;
 						color: rgba(107, 214, 67, 1);
 					}
-					
+
 					.pointer_verify {
 						pointer-events: none;
 					}

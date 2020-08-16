@@ -74,17 +74,17 @@
 					url: `accouninfo/getMyCode`,
 					method: 'get',
 					data: {},
-					success:(res)=>{
-						console.log(res,'res')
+					success: (res) => {
+						console.log(res, 'res')
 						this.img_src = res.data ? res.data : '';
 					}
 				})
 			},
 			// 获取数据
-			getCode(){
+			getCode() {
 				this.uniRequest({
 					url: 'accouninfo/getInfo',
-					success:(res)=>{
+					success: (res) => {
 						this.form = {
 							name: res.data.info.name,
 							mobile: res.data.info.mobile,
@@ -96,74 +96,81 @@
 				})
 			},
 			// 登录权限
-			login(){
-				this.uniRequest({
-					url: 'accouninfo/getInfo',
+			login() {
+				let url = window.location.href;
+				let res = url.split('?');
+				uni.request({
+					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code=' + res[1],
 					success: (res) => {
-						if (!res.data.account.cellphone) {
-							uni.navigateTo({
-								url: '/pages/login/index'
-							})
-						} else if (!res.data.info.name || !res.data.info.cardNo) {
-							uni.navigateTo({
-								url: '/pages/Information/index'
-							})
+						if (res.code === 0) {
+							if (!res.data.account.cellphone) {
+								uni.navigateTo({
+									url: '/pages/login/index'
+								})
+							} else if (!res.data.info.name && !res.data.info.cardNo) {
+								uni.navigateTo({
+									url: '/pages/Information/Error'
+								})
+							} else {
+								this.submit()
+								this.getCode()
+							}
 						}
-				
+
 					}
 				})
 			}
 		},
-		onShow(){
+		onShow() {
 			this.login()
-			this.submit()
-			this.getCode()
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
-		},
-		created(){
-			this.submit()
 		}
 	}
 </script>
 
 <style lang="scss">
-#BuyerCode {
-	width: 100vw;
-	height: 100vh;
-	background-color: #37B3FF;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	.VipCode_Con {
-		width:620rpx;
-		height:1026rpx;
-		background:rgba(255,255,255,1);
-		box-shadow:0px 0px 20rpx 0px rgba(196,196,196,0.5);
-		border-radius:22rpx;
+	#BuyerCode {
+		width: 100vw;
+		height: 100vh;
+		background-color: #37B3FF;
 		display: flex;
-		flex-direction: column;
+		justify-content: center;
 		align-items: center;
-		.code {
-			font-size:48rpx;
-			font-weight:600;
-			color:rgba(49,49,49,1);
-			padding-top: 106rpx;
-			margin-bottom: 36rpx;
-		}
-		>image {
-			width:386rpx;
-			height:380rpx;
-		}
-		.scan {
-			width: 100%;
-			padding: 0rpx 44rpx;
-			.Con_box {
-				display: flex;
+
+		.VipCode_Con {
+			width: 620rpx;
+			height: 1026rpx;
+			background: rgba(255, 255, 255, 1);
+			box-shadow: 0px 0px 20rpx 0px rgba(196, 196, 196, 0.5);
+			border-radius: 22rpx;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+
+			.code {
+				font-size: 48rpx;
+				font-weight: 600;
+				color: rgba(49, 49, 49, 1);
+				padding-top: 106rpx;
+				margin-bottom: 36rpx;
+			}
+
+			>image {
+				width: 386rpx;
+				height: 380rpx;
+			}
+
+			.scan {
+				width: 100%;
+				padding: 0rpx 44rpx;
+
+				.Con_box {
+					display: flex;
+				}
 			}
 		}
 	}
-}
 </style>

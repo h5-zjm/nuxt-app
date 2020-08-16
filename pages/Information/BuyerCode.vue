@@ -16,26 +16,28 @@
 			};
 		},
 		methods: {
-			getImg(){
+			getImg() {
 				this.uniRequest({
 					url: 'accouninfo/getmyTradeCode',
-					success:(res)=>{
+					success: (res) => {
 						this.img_src = res.data ? res.data : '';
 					}
 				})
 			}
 		},
-		onShow(){
+		onShow() {
+			let url = window.location.href;
+			let res = url.split('?');
 			this.uniRequest({
-				url: 'accouninfo/getInfo',
-				success:(res)=>{
-					if(!res.data.account.cellphone) {
+				url: 'accouninfo/getInfo?code=' + res[1],
+				success: (res) => {
+					if (!res.data.account.cellphone) {
 						uni.navigateTo({
 							url: '/pages/login/index'
 						})
-					} else if(!res.data.info.name || !res.data.info.cardNo){
+					} else if (!res.data.info.name && !res.data.info.cardNo) {
 						uni.navigateTo({
-							url: '/pages/Information/index'
+							url: '/pages/Information/Error'
 						})
 					} else {
 						this.getImg()
@@ -47,39 +49,43 @@
 </script>
 
 <style lang="scss">
-#VipCode {
-	width: 100vw;
-	height: 100vh;
-	background-color: #37B3FF;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	.VipCode_Con {
-		width:620rpx;
-		height:1026rpx;
-		background:rgba(255,255,255,1);
-		box-shadow:0px 0px 20rpx 0px rgba(196,196,196,0.5);
-		border-radius:22rpx;
+	#VipCode {
+		width: 100vw;
+		height: 100vh;
+		background-color: #37B3FF;
 		display: flex;
-		flex-direction: column;
+		justify-content: center;
 		align-items: center;
-		.code {
-			font-size:48rpx;
-			font-weight:600;
-			color:rgba(49,49,49,1);
-			padding-top: 106rpx;
-			margin-bottom: 36rpx;
-		}
-		>image {
-			width:386rpx;
-			height:380rpx;
-		}
-		.scan {
-			padding-top: 60rpx;
-			font-size:32rpx;
-			font-weight:400;
-			color:rgba(49,49,49,1);
+
+		.VipCode_Con {
+			width: 620rpx;
+			height: 1026rpx;
+			background: rgba(255, 255, 255, 1);
+			box-shadow: 0px 0px 20rpx 0px rgba(196, 196, 196, 0.5);
+			border-radius: 22rpx;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+
+			.code {
+				font-size: 48rpx;
+				font-weight: 600;
+				color: rgba(49, 49, 49, 1);
+				padding-top: 106rpx;
+				margin-bottom: 36rpx;
+			}
+
+			>image {
+				width: 386rpx;
+				height: 380rpx;
+			}
+
+			.scan {
+				padding-top: 60rpx;
+				font-size: 32rpx;
+				font-weight: 400;
+				color: rgba(49, 49, 49, 1);
+			}
 		}
 	}
-}
 </style>

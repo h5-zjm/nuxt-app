@@ -140,36 +140,51 @@
 		},
 		// 获取用户信息
 		onShow() {
+			let url = window.location.href;
+			let res = url.split('?');
 			this.uniRequest({
-				url: 'accouninfo/getInfo',
+				url: 'accouninfo/getInfo?code='+res[1],
 				success: (res) => {
 					if (!res.data.account.cellphone) {
 						uni.navigateTo({
 							url: '/pages/login/index'
 						})
-					} else if (!res.data.info.name || !res.data.info.cardNo) {
+					} 
+					if (!res.data.info.name && !res.data.info.cardNo) {
 						uni.navigateTo({
-							url: '/pages/Information/index'
+							url: '/pages/Information/Error'
 						})
-					} else {
-						this.form = {
-							name: res.data.info.name,
-							phone: res.data.account.cellphone,
-							cardNo: res.data.info.cardNo,
-							gender: res.data.info.gender,
-							age: res.data.info.age,
-							// 原籍
-							registProvince: res.data.info.registProvince,
-							registCity: res.data.info.registCity,
-							registArea: res.data.info.registArea,
-							// 先居住地
-							curentProvince: res.data.info.curentProvince,
-							curentCity: res.data.info.curentCity,
-							curentArea: res.data.info.curentArea,
-							// 现居住地
-							currentPlace: res.data.info.currentPlace,
-							carNumber: res.data.info.carNumber
+					}
+					if(res.data.info.name && res.data.info.cardNo && res.data.account.cellphone){
+						let url = '';
+						if (res.data.info.businessType === '供应商') {
+							url = '/pages/Information/informationShow_supplier?radio=' + 1
+						} else if (res.data.info.businessType === '采购商') {
+							url = '/pages/Information/informationShow_procurer?radio=' + 2
+						} else if (res.data.info.businessType === '员工/伙计') {
+							url = '/pages/Information/informationShow_buddy?radio=' + 4
 						}
+						uni.navigateTo({
+							url: url
+						})
+					}
+					this.form = {
+						name: res.data.info.name,
+						phone: res.data.account.cellphone,
+						cardNo: res.data.info.cardNo,
+						gender: res.data.info.gender,
+						age: res.data.info.age,
+						// 原籍
+						registProvince: res.data.info.registProvince,
+						registCity: res.data.info.registCity,
+						registArea: res.data.info.registArea,
+						// 先居住地
+						curentProvince: res.data.info.curentProvince,
+						curentCity: res.data.info.curentCity,
+						curentArea: res.data.info.curentArea,
+						// 现居住地
+						currentPlace: res.data.info.currentPlace,
+						carNumber: res.data.info.carNumber
 					}
 
 				}
