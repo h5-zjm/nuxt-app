@@ -239,8 +239,9 @@
 				  }
 			},
 			goDetail(item) {
+				let data = JSON.stringify(item)
 				uni.navigateTo({
-					url:'/pages/makeAppointment/index?item='+ encodeURIComponent(JSON.stringify(item))
+					url:'/pages/makeAppointment/index?data='+ data
 				})
 			}
 		}
