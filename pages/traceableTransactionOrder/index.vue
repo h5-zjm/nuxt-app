@@ -5,7 +5,7 @@
 		</view>
 		<view class="main">
 			<view class="title">
-				买家信息：王** 180****1234
+				买家信息：{{buyerName}} {{buyerPhoneNumber}}
 			</view>
 			<view class="list" v-for="(item,index) in dataList">
 				<view class="line">
@@ -73,10 +73,11 @@
 			</view>
 			<view class="bottom">
 				<view class="addGoods">
-					<u-button type="primary" @click="showPopUp">添加商品</u-button>
+					
+					<u-button type="primary" @click="savePersonInformation">确认提交</u-button>
 				</view>
 				<view class="sureAdd">
-					<u-button @click="savePersonInformation">确认提交</u-button>
+					<u-button  @click="showPopUp">添加商品</u-button>
 				</view>
 			</view>
 		</view>
@@ -110,6 +111,8 @@
 				valueIndex: '', // 修改的数据index
 				sellerOpenId:"",
 				buyerOpenId:"",
+				buyerName: '',
+				buyerPhoneNumber:"",
 				dataList: [{
 					id: "",
 					goodsName: "",
@@ -526,31 +529,56 @@
 			};
 		},
 		created() {
-			this.getInfo()
+			this.getUser()
+			this.getBuyerInfo()
 		},
         mounted() {
             this.load();
         },
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
-			console.log(option)
+			console.log('买家信息',option)
 			// console.log(option.id); //打印出上个页面传递的参数。
 			// console.log(option.name); //打印出上个页面传递的参数。
 		},
 		methods: {
+			// 获取用户信息
+			getUser() {
+				console.log('执行获取用户信息')
+				// let res = GetQueryValue('code');
+				uni.request({
+					url: 'http://192.168.100.215:18088/h5/accouninfo/getInfo',
+					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
+					method: 'GET',
+					success: (res) => {
+						console.log('获取用户信息',res)
+						// this.getData()
+						this.sellerOpenId = res.data.data.account.openid
+						
+					}
+				})
+			},
+			getBuyerInfo(){
+				uni.request({
+					url: 'http://192.168.100.215:18088/h5/accouninfo/getInfoById?cardNo=511321199001177837' ,
+					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
+					method: 'GET',
+					success: (res) => {
+						console.log('获取买家信息',res)
+						// this.getData()
+						this.buyerName = res.data.data.info.name.substr(0,1)+"**"
+				
+						let phone = res.data.data.account.cellphone;
+						this.buyerPhoneNumber = phone.substr(0,3) + "****" + phone.substr((phone.length - 3));
+						this.buyerOpenId = res.data.data.account.openid;
+					
+					}
+				})
+			},
 			confirm(e) {
 				this.dataList[this.valueIndex].goodsName = e[0].value
 			},
 			showPopUp() {
 				this.showPop = true
-			},
-			getInfo() {
-				uni.request({
-					url: 'https://192.168.100.215:18088/h5/accouninfo/getInfo',
-					method: 'GET',
-					success: (res) => {
-						console.log('获取的用户信息', res)
-					}
-				})
 			},
 			editType(i) {
 				this.show = true
@@ -583,20 +611,20 @@
                 var id = this.getQueryVariable("cardNo");
                 //alert(id);
                 //请求订单数据
-                uni.request({
-                    method: "post",
-                    url: "/h5/order/selectUserInfo?cardNo=" + id,
-                    success: (res) =>{
-                        if (res.rows != '') {
-                            //循环回显 菜品数据
-                            console.log(res);
-                            this.phoneNumber = res.phoneNumber?res.phoneNumber:"";
-                            this.buyName = res.buyName?res.buyName:"";
-                            this.sellerOpenId = res.sellerOpenId?res.sellerOpenId:"";
-                            this.buyerOpenId = res.buyerOpenId?res.buyerOpenId:"";
-                        }
-                    }
-                });
+                // uni.request({
+                //     method: "post",
+                //     url: "http://192.168.100.215:18088/h5/order/selectUserInfo?cardNo=" + id,
+                //     success: (res) =>{
+                //         if (res.rows != '') {
+                //             //循环回显 菜品数据
+                //             console.log(res);
+                //             this.phoneNumber = res.phoneNumber?res.phoneNumber:"";
+                //             this.buyName = res.buyName?res.buyName:"";
+                //             this.sellerOpenId = res.sellerOpenId?res.sellerOpenId:"";
+                //             this.buyerOpenId = res.buyerOpenId?res.buyerOpenId:"";
+                //         }
+                //     }
+                // });
             },
 			savePersonInformation() {
                 let saveOrderList = this.dataList;
@@ -608,7 +636,7 @@
                         return false;
                     }
                     if(!item.weight){
-                        alert("重量不能为空");
+						alert("重量不能为空");
                         flags = false;
                         return false;
                     }
@@ -620,29 +648,36 @@
                 });
 				if(flags) {
                     console.log(saveOrderList);
-                    var json = JSON.stringify(saveOrderList);
+                    let json = JSON.stringify(saveOrderList);
+					// let data = {
+					// 	sellerOpenId:this.sellerOpenId,
+					// 	buyerOpenId:this.buyerOpenId,
+					// 	goodsJson:json
+					// }
                     console.log(json);
+					uni.request({
+						// url: 'https://wechat.daizhangfang.net/h5/order/saveOrder',
+						url: 'http://192.168.100.215:18088/h5/order/saveOrder',
+						method: 'GET',
+						data: {
+							sellerOpenId:this.sellerOpenId,
+							buyerOpenId:this.buyerOpenId,
+							goodsJson:json
+						},
+						success: (res) =>{
+							if(res.data.code === 0){
+								console.log('是否保存成功',res)	
+								// 跳转页面
+								uni.navigateTo({
+									url: '/pages/appointmentSuccessful/submitSuccessful?modelId=0&id='+res.data.id
+								});
+							}else {
+								alert('保存失败')
+							}
+						}
+					})
 				};
-				uni.request({
-					url: 'https://wechat.daizhangfang.net/h5/order/saveOrder',
-					method: 'POST',
-                    data:{
-                        goodsJson:json,
-                        sellerOpenId:this.sellerOpenId,
-                        buyerOpenId:this.buyerOpenId,
-					},
-					success: (res) =>{
-					    if(res.code === 0){
-								
-					        //跳转页面
-							uni.navigateTo({
-								url: '/pages/appointmentSuccessful/submitSuccessful?modelId=0&id='+res.id
-							});
-					    }else {
-					        alert('保存失败')
-					    }
-					}
-				})
+
 				
 			}
 		}

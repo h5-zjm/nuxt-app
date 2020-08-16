@@ -36,7 +36,7 @@
 					产地:
 				</view>
 				<view class="valueLabel">
-					江西省九江市庐山县xx村
+					{{placeOfOrigin}}
 				</view>
 			</view>
 			<view class="origin">
@@ -44,7 +44,7 @@
 					生产经营者:
 				</view>
 				<view class="valueLabel">
-					老王白菜基地
+					{{producers}}
 				</view>
 			</view>
 			<view class="total">
@@ -137,11 +137,17 @@
 				tradingTime: '',
 				tradingSite: '',
 				orderNo: '',
-				status: ''
+				status: '',
+				placeOfOrigin:'',
+				producers: '',
 			};
 		},
 		created() {
 			this.getData()
+		},
+		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
+			console.log(option); //打印出上个页面传递的参数。
+			this.orderID = option.id
 		},
 		methods:{
 			// 获取地址栏里的数据
@@ -155,9 +161,9 @@
                 return(false);
             },
 			getData() {
-				let id = this.getQueryVariable("id");
 				uni.request({
-					url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId=' + '1',
+					url: 'http://192.168.100.215:18088/h5/order/selectMyOrderDetails?orderId=' +this.orderID,
+					// url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId=' +this.orderID,
 					method:'GET',
 					success: (res) => {
 						console.log('查看溯源交易单数据',res)
@@ -171,6 +177,8 @@
 						this.tradingTime = res.data.tradingTime
 						this.tradingSite = res.data.tradingSite
 						this.orderNo = res.data.orderNo
+						this.placeOfOrigin = res.data.orderListVos[0].placeOfOrigin
+						this.producers = res.data.orderListVos[0].producers
 						if(res.data.status == 1) {
 							this.status = '未进场'
 						}

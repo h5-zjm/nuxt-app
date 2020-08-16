@@ -1,12 +1,12 @@
 <template>
 	<view class="all">
-		<view class="productInformate">
+		<view class="productInformate" v-for="item in listData" :key='item.id'>
 			<view class="category">
 				<view class="title">
 					品类:
 				</view>
 				<view class="valueLabel">
-					{{category}}
+					{{item.goodsName}}
 				</view>
 			</view>
 			<view class="weight">
@@ -14,7 +14,7 @@
 					重量:
 				</view>
 				<view class="valueLabel">
-					{{weight}}
+					{{item.weight}}
 				</view>
 				<view class="unit">
 					Kg
@@ -25,7 +25,7 @@
 					金额:
 				</view>
 				<view class="valueLabel">
-					{{price}}
+					{{item.price}}
 				</view>
 				<view class="unit">
 					元
@@ -36,7 +36,7 @@
 					产地:
 				</view>
 				<view class="valueLabel">
-					江西省九江市庐山县xx村
+					{{item.placeOfOrigin}}
 				</view>
 			</view>
 			<view class="origin">
@@ -44,19 +44,19 @@
 					生产经营者:
 				</view>
 				<view class="valueLabel">
-					老王白菜基地
+					{{item.producers}}
 				</view>
 			</view>
-			<view class="total">
-				<view class="title">
-					总计:
-				</view>
-				<view class="valueLabel">
-					1000Kg
-				</view>
-				<view class="unit">
-					1600元
-				</view>
+		</view>
+		<view class="total">
+			<view class="title">
+				总计:
+			</view>
+			<view class="valueLabel">
+				{{totalWeight}}
+			</view>
+			<view class="unit">
+				1600元
 			</view>
 		</view>
 		<view class="customerInformation">
@@ -123,9 +123,6 @@
 		data() {
 			return {
 				data: '',
-				category: '',
-				weight: '',
-				price: '',
 				sellerName: '',
 				sellerPhone: '',
 				buyerName: '',
@@ -133,33 +130,31 @@
 				tradingTime: '',
 				tradingSite: '',
 				orderNo: '',
-				status: ''
+				status: '',
+				orderID:'',
+				placeOfOrigin:'',
+				producers: '',
+				listData:'',
+				totalWeight: '',
+				orderTotalPrice:''
 			};
 		},
 		created() {
 			this.getData()
 		},
+		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
+			console.log(option); //打印出上个页面传递的参数。
+			this.orderID = option.id
+		},
 		methods:{
-			// 获取地址栏里的数据
-            getQueryVariable(variable){
-                var query = window.location.search.substring(1);
-                var vars = query.split("&");
-                for (var i=0;i<vars.length;i++) {
-                    var pair = vars[i].split("=");
-                    if(pair[0] == variable){return pair[1];}
-                }
-                return(false);
-            },
 			getData() {
-				let id = this.getQueryVariable("id");
 				uni.request({
-					url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId=' + '1',
+					url: 'http://192.168.100.215:18088/h5/order/selectMyOrderDetails?orderId='+this.orderID,
+					// url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId='this.orderID,
 					method:'GET',
 					success: (res) => {
+						this.listData = res.data.orderListVos
 						console.log('查看溯源交易单数据',res)
-						this.category = res.data.orderListVos[0].goodsName
-						this.weight = res.data.orderListVos[0].weight
-						this.price = res.data.orderListVos[0].price
 						this.sellerName = res.data.sellerName
 						this.sellerPhone = res.data.sellerMobile
 						this.buyerName = res.data.buyerName
@@ -167,17 +162,13 @@
 						this.tradingTime = res.data.tradingTime
 						this.tradingSite = res.data.tradingSite
 						this.orderNo = res.data.orderNo
-						if(res.data.status == 1) {
-							this.status = '未进场'
+						this.totalWeight = res.data.totalWeight
+						this.orderTotalPrice = res.data.orderTotalPrice
+						if(res.data.isGoOut === 0) {
+							this.status = '出厂'
 						}
-						if(res.data.status == 2) {
-							this.status = '已进场'
-						}
-						if(res.data.status == 3) {
-							this.status = '已删除'
-						}
-						if(res.data.status == 4) {
-							this.status = '已离场'
+						if(res.data.isGoOut === 1) {
+							this.status = '未出厂'
 						}
 					}
 				})
@@ -191,8 +182,7 @@
 	width: 100%;
 	.productInformate {
 		width: 100%;
-		float: left;
-		margin-top: 5rpx;
+		margin-top: 10rpx;
 		background-color: #fff;
 		box-sizing: border-box;
 		padding: 0 30rpx;
@@ -219,11 +209,14 @@
 				float: left;
 			}
 		}
+	}
 		.total {
 			width: 100%;
 			height: 90rpx;
+			margin-top: 20rpx;
 			border-bottom: 1rpx solid #EDEDED;
 			font-size: 32rpx;
+			padding-left: 20rpx;
 			color: #313131;
 			font-weight: 600;
 			.title {
@@ -243,7 +236,6 @@
 				margin-left: 132rpx;
 			}
 		}
-	}
 	.customerInformation {
 		width: 100%;
 		float: left;

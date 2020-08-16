@@ -19,24 +19,18 @@
 	export default {
 		data() {
 			return {
-				
+				orderID: ''
 			};
 		},
+		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
+			console.log(option); //打印出上个页面传递的参数。
+			this.orderID = option.id
+		},
 		methods:{
-			// 获取URL上的参数
-            getQueryVariable(variable){
-                var query = window.location.search.substring(1);
-                var vars = query.split("&");
-                for (var i=0;i<vars.length;i++) {
-                    var pair = vars[i].split("=");
-                    if(pair[0] == variable){return pair[1];}
-                }
-                return(false);
-            },
 			goToTransacteOrder() {
-				let id = this.getQueryVariable("cardNo");
+				// let id = this.getQueryVariable("cardNo");
 				uni.navigateTo({
-					url: 'https://wechat.daizhangfang.net/pages/appointmentSuccessful/submitSuccessful?modelId=0&id='+id
+					url: '/pages/getTraceableTransacteOrder/index?modelId=0&id='+this.orderID
 				});
 			}
 		}
