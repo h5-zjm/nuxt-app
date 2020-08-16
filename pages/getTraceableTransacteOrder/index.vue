@@ -133,27 +133,22 @@
 				tradingTime: '',
 				tradingSite: '',
 				orderNo: '',
-				status: ''
+				status: '',
+				orderID:'',
 			};
 		},
 		created() {
 			this.getData()
 		},
+		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
+			console.log(option); //打印出上个页面传递的参数。
+			this.orderID = option.id
+		},
 		methods:{
-			// 获取地址栏里的数据
-            getQueryVariable(variable){
-                var query = window.location.search.substring(1);
-                var vars = query.split("&");
-                for (var i=0;i<vars.length;i++) {
-                    var pair = vars[i].split("=");
-                    if(pair[0] == variable){return pair[1];}
-                }
-                return(false);
-            },
 			getData() {
-				let id = this.getQueryVariable("id");
 				uni.request({
-					url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId=' + '1',
+					url: 'http://192.168.100.215:18088/h5/order/selectMyOrderDetails?orderId='+this.orderID,
+					// url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId='this.orderID,
 					method:'GET',
 					success: (res) => {
 						console.log('查看溯源交易单数据',res)
