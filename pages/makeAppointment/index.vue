@@ -137,9 +137,8 @@
 			}
 		},
 		onLoad: function(data) {
-            data = data.data.replace(/""/g, "");
-            data=JSON.parse(data)
-            console.log('页面数据',data)
+			const item = JSON.parse(decodeURIComponent(data));
+            console.log('页面数据',item)
         },
 		created(){
 			// uni.navigateTo({
