@@ -369,7 +369,7 @@
 			return {
 				// 上传附件
 				action: 'https://wechat.daizhangfang.net/common/sysFile/upload',
-				supplier: {
+				supplierList: {
 					fileList: [],
 					businessList: []
 				},
@@ -756,6 +756,9 @@
 						// this.supplier.fileList = [{
 						// 	url: this.form.urlImg
 						// }]
+						this.supplierList.fileList.push({
+							url: res.data.info.urlImg
+						})
 
 						console.log(this.form, '111')
 
