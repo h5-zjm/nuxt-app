@@ -367,7 +367,7 @@
 		data() {
 			return {
 				// 上传附件
-				action: 'http://192.168.100.215:18088/common/sysFile/upload',
+				action: 'https://192.168.100.215:18088/common/sysFile/upload',
 				supplier: {
 					fileList: [],
 					businessList: []
@@ -377,15 +377,15 @@
 					fileList: []
 				},
 				ferry: {
-					action: 'http://192.168.100.215:18088/common/sysFile/upload',
+					action: 'https://192.168.100.215:18088/common/sysFile/upload',
 					fileList: [{
-						url: 'http://newlands.oss-cn-beijing.aliyuncs.com/IMAGE/43d02186-3ddf-45d2-abcf-9f5516bd931f.jpg',
+						url: 'https://newlands.oss-cn-beijing.aliyuncs.com/IMAGE/43d02186-3ddf-45d2-abcf-9f5516bd931f.jpg',
 					}]
 				},
 				partner: {
-					action: 'http://192.168.100.215:18088/common/sysFile/upload',
+					action: 'https://192.168.100.215:18088/common/sysFile/upload',
 					fileList: [{
-						url: 'http://newlands.oss-cn-beijing.aliyuncs.com/IMAGE/43d02186-3ddf-45d2-abcf-9f5516bd931f.jpg',
+						url: 'https://newlands.oss-cn-beijing.aliyuncs.com/IMAGE/43d02186-3ddf-45d2-abcf-9f5516bd931f.jpg',
 					}]
 				},
 				placeList: [],

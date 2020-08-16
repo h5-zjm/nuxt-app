@@ -126,7 +126,7 @@
 				if (i == void 0 || !src) return;
 				// #ifndef MP-ALIPAY || APP-PLUS
 				// 去重
-				if (src.indexOf('http') == 0 && this.includes(src)) {
+				if (src.indexOf('https') == 0 && this.includes(src)) {
 					var newSrc = src.split('://')[0];
 					for (var j = newSrc.length, c; c = src[j]; j++) {
 						if (c == '/' && src[j - 1] != '/' && src[j + 1] != '/') break;
@@ -328,7 +328,7 @@
 										id: href.substr(1)
 									})
 								}
-							} else if (href.indexOf('http') == 0 || href.indexOf('//') == 0)
+							} else if (href.indexOf('https') == 0 || href.indexOf('//') == 0)
 								return true;
 							else
 								uni.navigateTo({

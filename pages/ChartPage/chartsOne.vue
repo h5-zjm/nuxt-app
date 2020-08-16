@@ -246,7 +246,7 @@
 			// 表格数据请求
 			Table_Data() {
 				uni.request({
-					url: 'http://wechat.daizhangfang.net/statistics/carsAndPeopleNumber',
+					url: 'https://wechat.daizhangfang.net/statistics/carsAndPeopleNumber',
 					method: 'get',
 					success: (data) => {
 						if (data.data.code === 0) {

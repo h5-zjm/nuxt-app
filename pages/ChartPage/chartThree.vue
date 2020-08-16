@@ -215,7 +215,7 @@
 			getRingServerData() {
 				console.log('饼图2')
 				uni.request({
-					url: 'http://wechat.daizhangfang.net/statistics/transactionData',
+					url: 'https://wechat.daizhangfang.net/statistics/transactionData',
 					method: 'GET',
 					data: {
 						beginTime: this.startTime,

@@ -8,31 +8,31 @@
 					<u-form-item prop="time">
 						<view class="Con_box">
 							<text>姓&nbsp;&nbsp;&nbsp;名：</text>
-							<view>{{form.name | ''}}</view>
+							<view>{{form.name}}</view>
 						</view>
 					</u-form-item>
 					<u-form-item prop="time">
 						<view class="Con_box">
 							<text>手机号：</text>
-							<view>{{form.mobile | ''}}</view>
+							<view>{{form.mobile}}</view>
 						</view>
 					</u-form-item>
 					<u-form-item prop="time">
 						<view class="Con_box">
 							<text>性&nbsp;&nbsp;&nbsp;别：</text>
-							<view>{{form.gender | ''}}</view>
+							<view>{{form.gender}}</view>
 						</view>
 					</u-form-item>
 					<u-form-item prop="time">
 						<view class="Con_box">
 							<text>年&nbsp;&nbsp;&nbsp;龄：</text>
-							<view>{{form.age | ''}}</view>
+							<view>{{form.age}}</view>
 						</view>
 					</u-form-item>
 					<u-form-item prop="time">
 						<view class="Con_box">
 							<text>身份证号：</text>
-							<view>{{form.cardNo | ''}}</view>
+							<view>{{form.cardNo}}</view>
 						</view>
 					</u-form-item>
 				</u-form>
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+	import {Splice_url} from '../../common/common.js'
 	export default {
 		data() {
 			return {
@@ -97,10 +98,13 @@
 			},
 			// 登录权限
 			login() {
-				let url = window.location.href;
-				let res = url.split('?');
-				uni.request({
-					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code=' + res[1],
+				console.log(111)
+				let res = null;
+				Splice_url((data)=>{
+					res = data;
+				})
+				this.uniRequest({
+					url: 'accouninfo/getInfo?code=' + res,
 					success: (res) => {
 						if (res.code === 0) {
 							if (!res.data.account.cellphone) {

@@ -36,7 +36,7 @@
 			goToTransacteOrder() {
 				let id = this.getQueryVariable("cardNo");
 				uni.navigateTo({
-					url: 'http://192.168.100.215:18088/pages/appointmentSuccessful/submitSuccessful?modelId=0&id='+id
+					url: 'https://192.168.100.215:18088/pages/appointmentSuccessful/submitSuccessful?modelId=0&id='+id
 				});
 			}
 		}

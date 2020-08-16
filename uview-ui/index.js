@@ -3,7 +3,7 @@ import mixin from './libs/mixin/mixin.js'
 // 引入关于是否mixin集成小程序分享的配置
 // import wxshare from './libs/mixin/mpShare.js'
 // 全局挂载引入http相关请求拦截插件
-import http from './libs/request'
+import https from './libs/request'
 
 function wranning(str) {
 	// 开发环境进行信息输出,主要是一些报错信息
@@ -89,10 +89,10 @@ const $u = {
 	type2icon,
 	randomArray,
 	wranning,
-	get: http.get,
-	post: http.post,
-	put: http.put,
-	'delete': http.delete,
+	get: https.get,
+	post: https.post,
+	put: https.put,
+	'delete': https.delete,
 	hexToRgb: colorGradient.hexToRgb,
 	rgbToHex: colorGradient.rgbToHex,
 	test,
@@ -104,7 +104,7 @@ const $u = {
 	addUnit,
 	trim,
 	type: ['primary', 'success', 'error', 'warning', 'info'],
-	http,
+	https,
 	toast,
 	config, // uView配置信息相关，比如版本号
 	zIndex,
