@@ -62,7 +62,7 @@ export const uniRequest = function(obj) {
 			
 		},
 		fail: (error) => {
-			parm.error(error)
+			parm.error('注册失败')
 			// uni.hideLoading();
 		},
 		complete: (res) => {

@@ -157,7 +157,7 @@
 			getData() {
 				let id = this.getQueryVariable("id");
 				uni.request({
-					url: 'http://192.168.100.215:18088/h5/order/selectMyOrderDetails?orderId=' + '1',
+					url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId=' + '1',
 					method:'GET',
 					success: (res) => {
 						console.log('查看溯源交易单数据',res)

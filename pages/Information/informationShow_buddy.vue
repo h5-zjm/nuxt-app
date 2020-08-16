@@ -83,6 +83,7 @@
 </template>
 
 <script>
+	import {GetQueryValue} from '../../common/common.js'
 	export default {
 		data() {
 			return {
@@ -147,10 +148,9 @@
 			}
 		}, // 获取用户信息
 		onShow() {
-			let url = window.location.href;
-			let res = url.split('?');
+			let res = GetQueryValue('code');
 			this.uniRequest({
-				url: 'accouninfo/getInfo?code='+res[1],
+				url: 'accouninfo/getInfo?code='+res,
 				success: (res) => {
 					if (!res.data.account.cellphone) {
 						uni.navigateTo({

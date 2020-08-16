@@ -97,12 +97,9 @@
 								code: this.form.code
 							},
 							success: (res) => {
+								console.log(res,'res')
 								if (res.data === 'success') {
-									if (!res.data.info.name && !res.data.info.cardNo) {
-										uni.navigateTo({
-											url: '/pages/Information/Error'
-										})
-									}
+									this.Func_Con();
 								}
 							}
 						})

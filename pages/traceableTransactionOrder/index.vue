@@ -622,31 +622,28 @@
                     console.log(saveOrderList);
                     var json = JSON.stringify(saveOrderList);
                     console.log(json);
-				}
+				};
 				uni.request({
-					url: 'https://192.168.100.215:18088/h5/order/saveOrder',
+					url: 'https://wechat.daizhangfang.net/h5/order/saveOrder',
 					method: 'POST',
                     data:{
                         goodsJson:json,
                         sellerOpenId:this.sellerOpenId,
                         buyerOpenId:this.buyerOpenId,
-				}
-				this.uniRequest({
-					url: 'order/saveOrder',
-					method: 'POST',
-                    data:data,
-                    success: (res) =>{
-                        if(res.code === 0){
+					},
+					success: (res) =>{
+					    if(res.code === 0){
 								
-                            //跳转页面
+					        //跳转页面
 							uni.navigateTo({
 								url: '/pages/appointmentSuccessful/submitSuccessful?modelId=0&id='+res.id
 							});
-                        }else {
-                            alert('保存失败')
-                        }
-                    }
+					    }else {
+					        alert('保存失败')
+					    }
+					}
 				})
+				
 			}
 		}
 	}

@@ -550,7 +550,7 @@
 			getServerData(){
 				uni.request({
 					// url: 'https://www.ucharts.cn/data.json',
-					url:'http://192.168.100.215:18088/statistics/tradingVolume',
+					url:'https://wechat.daizhangfang.net/statistics/tradingVolume',
 					// url:'https://wechat.daizhangfang.net/statistics/tradingVolume',
 					data:{
 						goodsName:this.value,

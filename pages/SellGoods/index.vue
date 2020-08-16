@@ -250,12 +250,7 @@
 						}]
 					}
 				],
-<<<<<<< HEAD
-				action: 'http://192.168.100.215:18088/common/sysFile/upload',
-=======
-
-				action: 'https://192.168.100.215:18088/common/sysFile/upload',
->>>>>>> 602ce5eec6bc42ad76517e6c200af995c66cd883
+				action: 'https://wechat.daizhangfang.net/common/sysFile/upload',
 				supplier: {
 					fileList: [],
 					businessList: []

@@ -361,13 +361,14 @@
 	import CONFIG from '../../common/configs.js';
 	import citys from '../../common/citys.js'
 	import {
-		timeFormat
+		timeFormat,
+		GetQueryValue
 	} from '../../common/common.js'
 	export default {
 		data() {
 			return {
 				// 上传附件
-				action: 'https://192.168.100.215:18088/common/sysFile/upload',
+				action: 'https://wechat.daizhangfang.net/common/sysFile/upload',
 				supplier: {
 					fileList: [],
 					businessList: []
@@ -377,13 +378,13 @@
 					fileList: []
 				},
 				ferry: {
-					action: 'https://192.168.100.215:18088/common/sysFile/upload',
+					action: 'https://wechat.daizhangfang.net/common/sysFile/upload',
 					fileList: [{
 						url: 'https://newlands.oss-cn-beijing.aliyuncs.com/IMAGE/43d02186-3ddf-45d2-abcf-9f5516bd931f.jpg',
 					}]
 				},
 				partner: {
-					action: 'https://192.168.100.215:18088/common/sysFile/upload',
+					action: 'https://wechat.daizhangfang.net/common/sysFile/upload',
 					fileList: [{
 						url: 'https://newlands.oss-cn-beijing.aliyuncs.com/IMAGE/43d02186-3ddf-45d2-abcf-9f5516bd931f.jpg',
 					}]
@@ -702,10 +703,9 @@
 		},
 		// 获取数据
 		onShow() {
-			let url = window.location.href;
-			let res = url.split('?');
+			let res = GetQueryValue('code');
 			this.uniRequest({
-				url: 'accouninfo/getInfo?code='+res[1],
+				url: 'accouninfo/getInfo?code='+res,
 				success: (res) => {
 					console.log(res, 'res')
 					if (res.code === 0) {

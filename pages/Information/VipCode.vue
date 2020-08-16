@@ -2,7 +2,7 @@
 	<view id="BuyerCode">
 		<view class="VipCode_Con">
 			<view class="code">供应商</view>
-			<image :src="img_src" mode=""></image>
+			<image :src="form.img_src" mode="heightFix"></image>
 			<view class="scan">
 				<u-form :model="form" ref="uForm" label-width="auto">
 					<u-form-item prop="time">
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-	import {Splice_url} from '../../common/common.js'
+	import {GetQueryValue} from '../../common/common.js'
 	export default {
 		data() {
 			return {
@@ -71,13 +71,12 @@
 		},
 		methods: {
 			submit() {
+				this.form.img_src = 'data:image/png;base64,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'
 				this.uniRequest({
 					url: `accouninfo/getMyCode`,
 					method: 'get',
-					data: {},
 					success: (res) => {
-						console.log(res, 'res')
-						this.img_src = res.data ? res.data : '';
+						this.form.img_src = res.data ? ('data:image/png;base64,' + res.data) : '';
 					}
 				})
 			},
@@ -86,23 +85,17 @@
 				this.uniRequest({
 					url: 'accouninfo/getInfo',
 					success: (res) => {
-						this.form = {
-							name: res.data.info.name,
-							mobile: res.data.info.mobile,
-							gender: res.data.info.gender,
-							age: res.data.info.age,
-							cardNo: res.data.info.cardNo
-						}
+						this.form.name = res.data.info.name;
+						this.form.mobile = res.data.info.mobile;
+						this.form.gender = res.data.info.gender;
+						this.form.age = res.data.info.age;
+						this.form.cardNo = res.data.info.cardNo;
 					}
 				})
 			},
 			// 登录权限
 			login() {
-				console.log(111)
-				let res = null;
-				Splice_url((data)=>{
-					res = data;
-				})
+				let res = GetQueryValue('code');
 				this.uniRequest({
 					url: 'accouninfo/getInfo?code=' + res,
 					success: (res) => {
@@ -120,13 +113,13 @@
 								this.getCode()
 							}
 						}
-
 					}
 				})
 			}
 		},
 		onShow() {
 			this.login()
+			this.submit()
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
 		onReady() {
@@ -163,8 +156,8 @@
 			}
 
 			>image {
-				width: 386rpx;
-				height: 380rpx;
+				width: 400rpx;
+				height: 400rpx;
 			}
 
 			.scan {
