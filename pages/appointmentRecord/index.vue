@@ -177,6 +177,9 @@
 </template>
 
 <script>
+	import {
+	  GetQueryValue
+	 } from '../../common/common.js'
 	export default {
 		data() {
 			return {
@@ -188,14 +191,29 @@
 			}
 		},
 		created() {
-			this.getData()
+			this.getUser()
+			// this.getData()
 		},
-		
+		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
+			console.log('页面路径带的参数',option); //打印出上个页面传递的参数。
+		},
 
 		methods: {
+			// 获取code
+			getcode() {
+				
+			},
 			// 获取用户信息
 			getUser() {
-				
+				console.log('执行获取用户信息')
+				let res = GetQueryValue('code');
+				uni.request({
+					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
+					method: 'GET',
+					success: (res) => {
+						console.log('获取用户信息',res)
+					}
+				})
 			},
 			getData() {
 				
