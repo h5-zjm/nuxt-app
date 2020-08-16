@@ -184,7 +184,7 @@
 					if (valid) {
 						console.log('验证通过');
 						uni.navigateTo({
-							url:'/pages/Information/index?Active_radio='+this.Active_radio
+							url: '/pages/Information/index?Active_radio=' + this.Active_radio
 						})
 					} else {
 						console.log('验证失败');
@@ -197,47 +197,62 @@
 			this.$refs.uForm.setRules(this.rules);
 		},
 		// 获取参数
-		onLoad(res){
-			if(res.radio) {
+		onLoad(res) {
+			if (res.radio) {
 				this.Active_radio = parseInt(res.radio);
 			}
 		},
-		onShow(){
+		onShow() {
+			let url = window.location.href;
+			let res = url.split('?');
 			this.uniRequest({
-				url: 'accouninfo/getInfo',
-				success:(res)=>{
-					if(!res.data.account.cellphone) {
+				url: 'accouninfo/getInfo?code='+res[1],
+				success: (res) => {
+					if (!res.data.account.cellphone) {
 						uni.navigateTo({
 							url: '/pages/login/index'
 						})
-					} else if(!res.data.info.name || !res.data.info.cardNo){
+					} 
+					if (!res.data.info.name && !res.data.info.cardNo) {
 						uni.navigateTo({
-							url: '/pages/Information/index'
+							url: '/pages/Information/Error'
 						})
-					} else {
-						this.form = {
-							name: res.data.info.name,
-							phone: res.data.account.cellphone,
-							cardNo: res.data.info.cardNo,
-							gender: res.data.info.gender,
-							age: res.data.info.age,
-							// 原籍
-							registProvince: res.data.info.registProvince,
-							registCity: res.data.info.registCity,
-							registArea: res.data.info.registArea,
-							// 先居住地
-							curentProvince: res.data.info.curentProvince,
-							curentCity: res.data.info.curentCity,
-							curentArea: res.data.info.curentArea,
-							// 现居住地
-							currentPlace: res.data.info.currentPlace,
-							businessName: res.data.info.businessName,
-							businessCode: res.data.info.businessCode,
-							businessAddr: res.data.info.businessAddr,
-							purchaseArea: res.data.info.purchaseArea,
-							businessCatalog: res.data.info.businessCatalog,
-							// PartnerList: res.data.info.PartnerList
+					}
+					if(res.data.info.name && res.data.info.cardNo && res.data.account.cellphone){
+						let url = '';
+						if (res.data.info.businessType === '供应商') {
+							url = '/pages/Information/informationShow_supplier?radio=' + 1
+						} else if (res.data.info.businessType === '摆渡车') {
+							url = '/pages/Information/informationShow_ferry?radio=' + 3
+						} else if (res.data.info.businessType === '员工/伙计') {
+							url = '/pages/Information/informationShow_buddy?radio=' + 4
 						}
+						uni.navigateTo({
+							url: url
+						})
+					}
+					this.form = {
+						name: res.data.info.name,
+						phone: res.data.account.cellphone,
+						cardNo: res.data.info.cardNo,
+						gender: res.data.info.gender,
+						age: res.data.info.age,
+						// 原籍
+						registProvince: res.data.info.registProvince,
+						registCity: res.data.info.registCity,
+						registArea: res.data.info.registArea,
+						// 先居住地
+						curentProvince: res.data.info.curentProvince,
+						curentCity: res.data.info.curentCity,
+						curentArea: res.data.info.curentArea,
+						// 现居住地
+						currentPlace: res.data.info.currentPlace,
+						businessName: res.data.info.businessName,
+						businessCode: res.data.info.businessCode,
+						businessAddr: res.data.info.businessAddr,
+						purchaseArea: res.data.info.purchaseArea,
+						businessCatalog: res.data.info.businessCatalog,
+						// PartnerList: res.data.info.PartnerList
 					}
 				}
 			})
@@ -261,6 +276,7 @@
 			.Con_box {
 				display: flex;
 				width: 100%;
+
 				>text {
 					margin-right: 10rpx;
 					transform: translateX(-8rpx);
@@ -283,19 +299,20 @@
 				}
 
 				>view {
-					font-size:28rpx;
-					font-weight:400;
-					color:rgba(49,49,49,1);
+					font-size: 28rpx;
+					font-weight: 400;
+					color: rgba(49, 49, 49, 1);
 				}
-				
+
 				.Con_tit {
 					display: flex;
 					align-items: center;
 					margin-right: 30rpx;
+
 					>view {
-						width:24rpx;
-						height:24rpx;
-						background:rgba(0,158,255,1);
+						width: 24rpx;
+						height: 24rpx;
+						background: rgba(0, 158, 255, 1);
 						border-radius: 50%;
 					}
 				}
@@ -306,23 +323,27 @@
 		.Con_goods {
 			margin-top: 20rpx;
 		}
-		
+
 		.Uploader_box {
 			background-color: #fff;
 			margin-top: 20rpx;
 			display: flex;
 			padding: 0rpx 30rpx;
+
 			>view {
 				padding: 20rpx 0rpx;
+
 				>view {
-					font-size:32rpx;
-					font-weight:400;
-					color:rgba(49,49,49,1);
+					font-size: 32rpx;
+					font-weight: 400;
+					color: rgba(49, 49, 49, 1);
 					margin-bottom: 24rpx;
 				}
 			}
+
 			.Uploader_box_left {
 				margin-right: 186rpx;
+
 				>view::after {
 					content: '*';
 					color: #ff0000;
@@ -331,25 +352,26 @@
 				}
 			}
 		}
-		
+
 		.Checkbox {
 			margin-top: 20rpx;
 			background-color: #fff;
 			padding: 20rpx 30rpx;
 			display: flex;
+
 			>view {
-				font-size:24rpx;
-				font-weight:400;
-				color:rgba(228,39,39,1);
+				font-size: 24rpx;
+				font-weight: 400;
+				color: rgba(228, 39, 39, 1);
 			}
 		}
-		
+
 		.btn {
 			width: 100%;
 			display: flex;
 			justify-content: center;
 			padding: 28rpx 0rpx 34rpx 0rpx;
-		
+
 			.btn_box {
 				width: 690rpx;
 				height: 80rpx;

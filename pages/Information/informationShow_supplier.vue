@@ -204,18 +204,35 @@
 		},
 		// 获取数据
 		onShow() {
+			let url = window.location.href;
+			let res = url.split('?');
 			this.uniRequest({
-				url: 'accouninfo/getInfo',
+				url: 'accouninfo/getInfo?code='+res[1],
 				success: (res) => {
-					if (!res.data.account.cellphone) {
-						uni.navigateTo({
-							url: '/pages/login/index'
-						})
-					} else if (!res.data.info.name || !res.data.info.cardNo) {
-						uni.navigateTo({
-							url: '/pages/Information/index'
-						})
-					} else {
+					if (res.code === 0) {
+						if (!res.data.account.cellphone) {
+							uni.navigateTo({
+								url: '/pages/login/index'
+							})
+						} 
+						if (!res.data.info.name && !res.data.info.cardNo) {
+							uni.navigateTo({
+								url: '/pages/Information/Error'
+							})
+						}
+						if(res.data.info.name && res.data.info.cardNo && res.data.account.cellphone){
+							let url = '';
+							if (res.data.info.businessType === '采购商') {
+								url = '/pages/Information/informationShow_procurer?radio=' + 2
+							} else if (res.data.info.businessType === '摆渡车') {
+								url = '/pages/Information/informationShow_ferry?radio=' + 3
+							} else if (res.data.info.businessType === '员工/伙计') {
+								url = '/pages/Information/informationShow_buddy?radio=' + 4
+							}
+							uni.navigateTo({
+								url: url
+							})
+						}
 						this.form = {
 							name: res.data.info.name,
 							phone: res.data.account.cellphone,

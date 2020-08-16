@@ -19,73 +19,63 @@
 	export default {
 		data() {
 			return {
-				
+
 			};
 		},
 		methods: {
-			LocationInfo(){
+			LocationInfo() {
 				uni.navigateTo({
 					url: '/pages/Information/index'
 				})
 			}
 		},
-		onShow(){
-			this.uniRequest({
-				url: 'accouninfo/getInfo',
-				success:(res)=>{
-					if(!res.data.account.cellphone) {
-						uni.navigateTo({
-							url: '/pages/login/index'
-						})
-					} else if(!res.data.info.name || !res.data.info.cardNo){
-						uni.navigateTo({
-							url: '/pages/Information/index'
-						})
-					} else {
-						this.LocationInfo()
-					}
-				}
-			})
+		onShow() {
+			
 		}
 	}
 </script>
 
 <style lang="scss">
-#Error {
-	width: 100%;
-	height: 100vh;
-	box-sizing: border-box;
-	padding: 30rpx 40rpx 130rpx 40rpx;
-	.main {
+	#Error {
 		width: 100%;
-		height: 100%;
-		background-color: #fff;
-		border-radius: 20rpx;
-		background-color: #fff;
-		overflow: hidden;
-		text-align: center;
-		image {
-			display: inline-block;
-			width: 166rpx;
-			height: 166rpx;
-			margin-top: 260rpx;
-		}
-		.success {
-			margin-top: 40rpx;
-			font-size: 52rpx;
-			font-weight: 600;
-			color: #000;
-		}
-		.description {
-			margin-top: 34rpx;
-			font-size: 28rpx;
-			color: #959595;
-		}
-		.button {
-			width: 90%;
-			margin-left: 5%;
-			margin-top: 290rpx;
+		height: 100vh;
+		box-sizing: border-box;
+		padding: 30rpx 40rpx 130rpx 40rpx;
+
+		.main {
+			width: 100%;
+			height: 100%;
+			background-color: #fff;
+			border-radius: 20rpx;
+			background-color: #fff;
+			overflow: hidden;
+			text-align: center;
+
+			image {
+				display: inline-block;
+				width: 166rpx;
+				height: 166rpx;
+				margin-top: 260rpx;
+			}
+
+			.success {
+				margin-top: 40rpx;
+				font-size: 52rpx;
+				font-weight: 600;
+				color: #000;
+			}
+
+			.description {
+				margin-top: 34rpx;
+				font-size: 28rpx;
+				color: #959595;
+			}
+
+			.button {
+				width: 90%;
+				margin-left: 5%;
+				margin-top: 290rpx;
+			}
 		}
 	}
-}
 </style>
