@@ -24,7 +24,10 @@
 
 						<view class="tit" v-if="form.radio">必填信息</view>
 						<view class="uploaderBox" v-if="form.radio">
-							<u-upload :action="action" :max-count="1" :file-list="supplier.fileList" :show-progress="false" @on-success="Supplier_Upload">
+							<!-- <u-upload :action="action" :max-count="1" :file-list="supplier.fileList" :show-progress="false" @on-success="Supplier_Upload"> -->
+							<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Peoser.limitNum" :uploadFileUrl="UpImg_Peoser.uploadFileUrl"
+							 :header="UpImg_Peoser.header" :fileKeyName="UpImg_Peoser.name" :uImgList.sync="UpImg_Peoser.uImgList" @uploadSuccess="uploadSuccess"
+							 @upload="upFile" />
 
 							</u-upload>
 							<view class="Conbox">
@@ -82,12 +85,13 @@
 								<u-input v-model="form.address" input-align="right" placeholder="请输入居住地详细地址" />
 							</u-form-item>
 							<u-form-item label="营运区域" prop="region" class="place">
-								<view @click="openUpopup('居住地')" :class="{'place_box':!form.region}">{{form.region ? form.region : '请选择居住地'}}</view>
+								<view @click="openUpopup('营运区域')" :class="{'place_box':!form.manageArea }">{{form.manageArea ? form.manageArea  : '请选择居住地'}}</view>
 								<u-popup v-model="showUpopup" mode="bottom" :closeable="false" border-radius="14">
 									<view class="Upopup_Con">
 										<view class="Upopup_header">
 											<text class="tit">请选择计划经营区域</text>
-											<text class="submit">确定</text>
+											<text class="submit" @click="submitUpopup('确定','营运区域')">确定</text>
+											<text class="cancel" @click="submitUpopup('取消')">取消</text>
 										</view>
 										<view class="Upopup_box">
 											<u-checkbox-group>
@@ -102,7 +106,8 @@
 							</u-form-item>
 
 							<!-- select框 -->
-							<u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
+							<u-select v-model="showRegion" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
+							<!-- <u-select v-model="showRegion" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select> -->
 						</view>
 					</view>
 
@@ -129,7 +134,7 @@
 								</u-form-item>
 
 								<!-- select框 -->
-								<!-- <u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select> -->
+								<u-select v-model="showRegion" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
 							</view>
 
 							<!-- 企业信息 -->
@@ -142,7 +147,9 @@
 									<u-input v-model="form.businessCode" input-align="right" placeholder="请输入营业执照" />
 								</u-form-item>
 								<view class="uploaderBox">
-									<u-upload :action="action" @on-success="Procurer_Upload" :max-count="1" :file-list="procurer.fileList">
+									<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Run.limitNum" :uploadFileUrl="UpImg_Run.uploadFileUrl"
+									 :header="UpImg_Run.header" :fileKeyName="UpImg_Run.name" :uImgList.sync="UpImg_Run.uImgList" @uploadSuccess="uploadSuccess"
+									 @upload="upFile" />
 
 									</u-upload>
 									<view class="Conbox">
@@ -159,18 +166,19 @@
 									<u-input v-model="form.businessAddr" input-align="right" placeholder="请输入公司地址" />
 								</u-form-item>
 								<u-form-item label="采购区域" class="place">
-									<view @click="openUpopup('采购区域')" :class="{'place_box':!form.region}">{{form.region ? form.region : '请选择当前计划经营区域（可多选）'}}</view>
+									<view @click="openUpopup('采购区域')" :class="{'place_box':!form.purchaseArea}">{{form.purchaseArea ? form.purchaseArea : '请选择当前计划经营区域（可多选）'}}</view>
 									<u-popup v-model="showUpopup" mode="bottom" :closeable="false" border-radius="14">
 										<view class="Upopup_Con">
 											<view class="Upopup_header">
 												<text class="tit">请选择计划经营区域</text>
-												<text class="submit">确定</text>
+												<text class="submit" @click="submitUpopup('确定','采购区域')">确定</text>
+												<text class="cancel" @click="submitUpopup('取消')">取消</text>
 											</view>
 											<view class="Upopup_box">
 												<u-checkbox-group>
 													<view class="box" v-for="(item,index) in subcampList" :key="index">
 														<text>{{item.title}}</text>
-														<u-checkbox v-model="item.checked" :disabled="false"></u-checkbox>
+														<u-checkbox v-model="item.checked" :disabled="false" style="width: 38rpx;"></u-checkbox>
 													</view>
 												</u-checkbox-group>
 											</view>
@@ -180,34 +188,34 @@
 							</view>
 
 							<!-- 伙伴信息 -->
-							<view class="partner_box" v-for="(item,index) in PartnerList" :key="index">
+							<view class="partner_box">
 								<view class="partner">
-									<view class="tit_con">伙计{{index + 1}}信息</view>
-									<view class="add_con" @click="AddPartner" v-if="index === 0">继续添加</view>
+									<view class="tit_con">伙计1信息</view>
+									<!-- <view class="add_con" @click="AddPartner" v-if="index === 0">继续添加</view> -->
 								</view>
 								<view class="Active_box_sun">
 									<u-form-item prop="sex">
 										<view class="Con_box">
-											<text>伙计{{index + 1}}姓名</text>
-											<u-input style="flex: 1;text-align: right;" v-model="item.staffName" input-align="right" placeholder="请输入伙计姓名" />
+											<text>伙计1姓名</text>
+											<u-input style="flex: 1;text-align: right;" v-model="form.staffName1" input-align="right" placeholder="请输入伙计姓名" />
 										</view>
 									</u-form-item>
 									<u-form-item prop="sex">
 										<view class="Con_box">
-											<text>伙计{{index + 1}}身份证</text>
-											<u-input style="flex: 1;text-align: right;" v-model="form.staffCardNo" input-align="right" placeholder="请输入伙计身份证" />
+											<text>伙计1身份证</text>
+											<u-input style="flex: 1;text-align: right;" v-model="form.staffCardNo1" input-align="right" placeholder="请输入伙计身份证" />
 										</view>
 									</u-form-item>
 									<u-form-item prop="sex">
 										<view class="Con_box">
-											<text>伙计{{index + 1}}手机号</text>
-											<u-input style="flex: 1;text-align: right;" v-model="form.staffMobile" input-align="right" placeholder="请输入伙计手机号" />
+											<text>伙计1手机号</text>
+											<u-input style="flex: 1;text-align: right;" v-model="form.staffMobile1" input-align="right" placeholder="请输入伙计手机号" />
 										</view>
 									</u-form-item>
 									<u-form-item prop="sex">
 										<view class="Con_box">
-											<text>伙计{{index + 1}}现住址</text>
-											<u-input style="flex: 1;text-align: right;" v-model="form.staffAddr" input-align="right" placeholder="请输入伙计现住址" />
+											<text>伙计1现住址</text>
+											<u-input style="flex: 1;text-align: right;" v-model="form.staffAddr1" input-align="right" placeholder="请输入伙计现住址" />
 										</view>
 									</u-form-item>
 								</view>
@@ -238,7 +246,7 @@
 							</u-form-item>
 
 							<!-- select框 -->
-							<!-- <u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select> -->
+							<u-select v-model="showRegion" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
 						</view>
 
 						<!-- 企业信息 -->
@@ -251,7 +259,9 @@
 								<u-input v-model="form.businessCode" input-align="right" placeholder="请输入营业执照" />
 							</u-form-item>
 							<view class="uploaderBox">
-								<u-upload :action="action" :max-count="1" :file-list="supplier.businessList">
+								<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Run.limitNum" :uploadFileUrl="UpImg_Run.uploadFileUrl"
+								 :header="UpImg_Run.header" :fileKeyName="UpImg_Run.name" :uImgList.sync="UpImg_Run.uImgList" @uploadSuccess="uploadSuccess"
+								 @upload="upFile" />
 
 								</u-upload>
 								<view class="Conbox">
@@ -276,34 +286,34 @@
 						</view>
 
 						<!-- 伙伴信息 -->
-						<view class="partner_box" v-for="(item,index) in PartnerList" :key="index">
+						<view class="partner_box">
 							<view class="partner">
-								<view class="tit_con">伙计{{index + 1}}信息</view>
-								<view class="add_con" @click="AddPartner" v-if="index === 0">继续添加</view>
+								<view class="tit_con">伙计1信息</view>
+								<!-- <view class="add_con" @click="AddPartner" v-if="index === 0">继续添加</view> -->
 							</view>
 							<view class="Active_box_sun">
 								<u-form-item prop="sex">
 									<view class="Con_box">
-										<text>伙计{{index + 1}}姓名</text>
-										<u-input style="flex: 1;text-align: right;" v-model="item.staffName" input-align="right" placeholder="请输入伙计姓名" />
+										<text>伙计1姓名</text>
+										<u-input style="flex: 1;text-align: right;" v-model="form.staffName1" input-align="right" placeholder="请输入伙计姓名" />
 									</view>
 								</u-form-item>
 								<u-form-item prop="sex">
 									<view class="Con_box">
-										<text>伙计{{index + 1}}身份证</text>
-										<u-input style="flex: 1;text-align: right;" v-model="form.staffCardNo" input-align="right" placeholder="请输入伙计身份证" />
+										<text>伙计1身份证</text>
+										<u-input style="flex: 1;text-align: right;" v-model="form.staffCardNo1" input-align="right" placeholder="请输入伙计身份证" />
 									</view>
 								</u-form-item>
 								<u-form-item prop="sex">
 									<view class="Con_box">
-										<text>伙计{{index + 1}}手机号</text>
-										<u-input style="flex: 1;text-align: right;" v-model="form.staffMobile" input-align="right" placeholder="请输入伙计手机号" />
+										<text>伙计1手机号</text>
+										<u-input style="flex: 1;text-align: right;" v-model="form.staffMobile1" input-align="right" placeholder="请输入伙计手机号" />
 									</view>
 								</u-form-item>
 								<u-form-item prop="sex">
 									<view class="Con_box">
-										<text>伙计{{index + 1}}现住址</text>
-										<u-input style="flex: 1;text-align: right;" v-model="form.staffAddr" input-align="right" placeholder="请输入伙计现住址" />
+										<text>伙计1现住址</text>
+										<u-input style="flex: 1;text-align: right;" v-model="form.staffAddr1" input-align="right" placeholder="请输入伙计现住址" />
 									</view>
 								</u-form-item>
 							</view>
@@ -338,7 +348,7 @@
 							</u-form-item>
 
 							<!-- select框 -->
-							<!-- <u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select> -->
+							<u-select v-model="showRegion" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
 						</view>
 					</view>
 					<view class="state">
@@ -359,35 +369,42 @@
 
 <script>
 	import CONFIG from '../../common/configs.js';
-	import citys from '../../common/citys.js'
+	import citys from '../../common/citys.js';
 	import {
 		timeFormat,
 		GetQueryValue
-	} from '../../common/common.js'
+	} from '../../common/common.js';
+	import uImg from '@/components/zhtx-uploadImg/zhtx-uploadImg.vue';
 	export default {
+		components: {
+			uImg
+		},
 		data() {
 			return {
+				showRegion: false,
+				// 图片
 				// 上传附件
-				action: 'https://wechat.daizhangfang.net/common/sysFile/upload',
-				supplierList: {
-					fileList: [],
-					businessList: []
+				UpImg_Peoser: {
+					limitNum: 1,
+					uploadFileUrl: 'http://192.168.100.215:18088/common/sysFile/upload',
+					msg: '',
+					length: 140,
+					name: '用户', //上传的名字
+					header: { // 如果需要header，请上传
+					},
+					uImgList: []
+
 				},
-				supplier: '',
-				procurer: {
-					fileList: []
-				},
-				ferry: {
-					action: 'https://wechat.daizhangfang.net/common/sysFile/upload',
-					fileList: [{
-						url: 'https://newlands.oss-cn-beijing.aliyuncs.com/IMAGE/43d02186-3ddf-45d2-abcf-9f5516bd931f.jpg',
-					}]
-				},
-				partner: {
-					action: 'https://wechat.daizhangfang.net/common/sysFile/upload',
-					fileList: [{
-						url: 'https://newlands.oss-cn-beijing.aliyuncs.com/IMAGE/43d02186-3ddf-45d2-abcf-9f5516bd931f.jpg',
-					}]
+				UpImg_Run: {
+					limitNum: 1,
+					uploadFileUrl: 'http://192.168.100.215:18088/common/sysFile/upload',
+					msg: '',
+					length: 150,
+					name: '营业执照', //上传的名字
+					header: { // 如果需要header，请上传
+					},
+					uImgList: []
+				
 				},
 				placeList: [],
 				subcampList: [{
@@ -523,6 +540,7 @@
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
 						// debugger;
+
 						console.log(this.form.radio, '111')
 						if (this.form.radio === 1) {
 							this.form.businessType = '供应商'
@@ -533,6 +551,7 @@
 						} else if (this.form.radio === 4) {
 							this.form.businessType = '员工/伙计'
 						}
+
 						let params = {
 							// id: null,
 							name: this.form.name,
@@ -558,11 +577,13 @@
 							currentPlace: this.form.currentPlace,
 							businessLinkman: this.form.businessLinkman,
 							businessLinkmobile: this.form.businessLinkmobile,
-							inTime: this.form.inTime,
-							urlImg: this.supplier,
+							staffName1: this.form.staffName1,
+							staffCardNo1: this.form.staffCardNo1,
+							staffMobile1: this.form.staffMobile1,
+							staffAddr1: this.form.staffAddr1
 						}
 						let ImgIstrue = true;
-						if (!this.supplier) {
+						if (!this.form.checked) {
 							ImgIstrue = false;
 							uni.showToast({
 								title: '请上传用户头像',
@@ -631,12 +652,31 @@
 			},
 			// 打开多级联动
 			openSelect(v) {
-				this.show = true;
+				this.showRegion = true;
 				this.form.active = v;
 			},
 			// 打开u-popup
-			openUpopup() {
+			openUpopup(val) {
 				this.showUpopup = true;
+			},
+			// 关闭u-popup
+			submitUpopup(val,res) {
+				this.showUpopup = false;
+				if (val === '确定') {
+					let txt = '';
+					if (this.subcampList.length > 0) {
+						this.subcampList.forEach((item, index) => {
+							if (item.checked) {
+								txt += ',' + item.title;
+							}
+						})
+					}
+					if(res === '采购区域') {
+						this.form.purchaseArea = txt.substr(1);
+					} else if(res === '营运区域'){
+						this.form.manageArea = txt.substr(1);
+					}
+				}
 			},
 			// 点击下一步
 			nextClick() {
@@ -688,6 +728,26 @@
 				this.procurer = [{
 					url: data.url
 				}]
+			},
+			// 图片上传
+			uploadSuccess(result) {
+				if(result.data) {
+					let res = result.data;
+					if(result.name === '用户') {
+						this.form.urlImg = res.url;
+					} else if(result.name === '营业执照') {
+						this.form.businessUrl = res.url;
+					}
+				}
+			},
+			//上传方法的调用
+			upFile() {
+				this.$refs.upimg.upload()
+			}
+		},
+		computed: {
+			computeLength() {
+				return this.length = 140 - this.msg.length
 			}
 		},
 		onReady() {
@@ -736,7 +796,8 @@
 							inTime: res.data.info.inTime,
 							urlImg: res.data.info.urlImg,
 							// 自定义
-							radio: null
+							radio: null,
+							checked: false
 						}
 						// 身份
 						if (res.data.info.businessType === '供应商') {
@@ -753,14 +814,8 @@
 						// 居住地
 						this.form.residence = res.data.info.curentProvince + '-' + res.data.info.curentCity + '-' + res.data.info.curentArea;
 						// 图片
-						// this.supplier.fileList = [{
-						// 	url: this.form.urlImg
-						// }]
-						this.supplierList.fileList.push({
-							url: res.data.info.urlImg
-						})
-
-						console.log(this.form, '111')
+						this.UpImg_Peoser.uImgList = res.data.info.urlImg ? [res.data.info.urlImg] : [];
+						this.UpImg_Peoser.uImgList = res.data.info.businessUrl ? [res.data.info.businessUrl] : [];
 
 					}
 				}
@@ -794,7 +849,7 @@
 					display: flex;
 					flex-direction: column;
 					justify-content: center;
-					margin-left: 32rpx;
+					margin-left: 15rpx;
 
 					.photo {
 						font-size: 32rpx;
@@ -970,6 +1025,15 @@
 							.submit {
 								position: absolute;
 								right: 30rpx;
+								top: 30rpx;
+								font-size: 32rpx;
+								font-weight: 400;
+								color: rgba(61, 174, 255, 1);
+							}
+
+							.cancel {
+								position: absolute;
+								left: 30rpx;
 								top: 30rpx;
 								font-size: 32rpx;
 								font-weight: 400;
