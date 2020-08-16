@@ -1,6 +1,9 @@
 <template>
 	<view id="informationShow_ferry">
 		<u-form :model="form" ref="uForm" label-width="auto">
+			<view class="Img_box">
+				<image :src="form.img_src" mode="aspectFit"></image>
+			</view>
 			<view class="tit">基本信息</view>
 			<view class="Con">
 				<u-form-item prop="time">
@@ -77,7 +80,9 @@
 </template>
 
 <script>
-	import {GetQueryValue} from '../../common/common.js'
+	import {
+		GetQueryValue
+	} from '../../common/common.js'
 	export default {
 		data() {
 			return {
@@ -97,7 +102,8 @@
 					curentArea: null,
 					// 现居住地
 					currentPlace: '',
-					carNumber: ''
+					carNumber: '',
+					img_src: ''
 				},
 				rules: {
 					name: [{
@@ -143,19 +149,19 @@
 		onShow() {
 			let res = GetQueryValue('code');
 			this.uniRequest({
-				url: 'accouninfo/getInfo?code='+res,
+				url: 'accouninfo/getInfo?code=' + res,
 				success: (res) => {
 					if (!res.data.account.cellphone) {
 						uni.navigateTo({
 							url: '/pages/login/index'
 						})
-					} 
+					}
 					if (!res.data.info.name && !res.data.info.cardNo) {
 						uni.navigateTo({
 							url: '/pages/Information/Error'
 						})
 					}
-					if(res.data.info.name && res.data.info.cardNo && res.data.account.cellphone){
+					if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
 						let url = '';
 						if (res.data.info.businessType === '供应商') {
 							url = '/pages/Information/informationShow_supplier?radio=' + 1
@@ -184,7 +190,8 @@
 						curentArea: res.data.info.curentArea,
 						// 现居住地
 						currentPlace: res.data.info.currentPlace,
-						carNumber: res.data.info.carNumber
+						carNumber: res.data.info.carNumber,
+						img_src: res.data.info.urlImg
 					}
 
 				}
@@ -200,6 +207,12 @@
 			font-weight: 600;
 			color: rgba(49, 49, 49, 1);
 			padding: 20rpx 30rpx;
+		}
+
+		.Img_box {
+			display: flex;
+			justify-content: center;
+			padding: 100rpx 0rpx 150rpx 0rpx;
 		}
 
 		.Con {

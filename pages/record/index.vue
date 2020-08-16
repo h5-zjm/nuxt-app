@@ -26,12 +26,15 @@
 </template>
 
 <script>
+	import {
+		GetQueryValue
+	} from '../../common/common.js'
 	export default {
 		data() {
 			return {
 				List: [],
 				offset: 0,
-				identity: 1
+				identity: 0
 			};
 		},
 		methods: {
@@ -39,21 +42,46 @@
 				console.log(index,'index')
 				console.log(item,'item')
 				uni.navigateTo({
-					url: '/pages/SellGoods/index'
+					url: '/pages/getTraceableTransacteOrder/index'
+				})
+			},
+			getBuyGoods(){
+				this.uniRequest({
+					url: 'order/selectMyOrderList',
+					data: {
+						offset: this.offset,
+						identity: this.identity
+					},
+					success:(res)=>{
+						this.List = res.data.rows || [];
+					}
+				})
+			},
+			// 买货记录
+			BuyGoods(){
+				let res = GetQueryValue('code');
+				this.uniRequest({
+					url: 'accouninfo/getInfo?code=' + res,
+					success:(res)=>{
+						if (!res.data.account.cellphone) {
+							uni.navigateTo({
+								url: '/pages/login/index'
+							})
+						}
+						if (!res.data.info.name && !res.data.info.cardNo) {
+							uni.navigateTo({
+								url: '/pages/Information/Error'
+							})
+						}
+						if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
+							this.getBuyGoods()
+						}
+					}
 				})
 			}
 		},
 		onShow(){
-			this.uniRequest({
-				url: 'order/selectMyOrderList',
-				data: {
-					offset: this.offset,
-					identity: this.identity
-				},
-				success:(res)=>{
-					this.List = res.data.rows || [];
-				}
-			})
+			this.BuyGoods()
 		}
 	}
 </script>

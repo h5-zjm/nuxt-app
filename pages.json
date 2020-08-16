@@ -133,7 +133,7 @@
 	}, {
 		"path": "pages/Information/BuyerCode",
 		"style": {
-			"navigationBarTitleText": "会员二维码",
+			"navigationBarTitleText": "买家交易码",
 			"navigationBarBackgroundColor": "#37B3FF",
 			"navigationBarTextStyle": "white"
 		}
@@ -148,11 +148,7 @@
 	}, {
 		"path": "pages/Information/hint",
 		"style": {}
-	}    ,{
-            "path" : "pages/getTraceableTransacteOrder/getTraceableTransacteOrder",
-            "style" : {}
-        }
-    ],
+	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",

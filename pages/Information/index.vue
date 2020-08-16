@@ -571,7 +571,7 @@
 						}
 						// 是否点击阅读
 						let IsRead = true;
-						if(!this.form.checked) {
+						if (!this.form.checked) {
 							IsRead = false;
 							uni.showToast({
 								title: '请勾选我已阅读',
@@ -703,37 +703,11 @@
 		},
 		// 获取数据
 		onShow() {
-			let res = GetQueryValue('code');
 			this.uniRequest({
-				url: 'accouninfo/getInfo?code='+res,
+				url: 'accouninfo/getInfo',
 				success: (res) => {
 					console.log(res, 'res')
 					if (res.code === 0) {
-						if (!res.data.account.cellphone) {
-							uni.navigateTo({
-								url: '/pages/login/index'
-							})
-						} 
-						if (!res.data.info.name && !res.data.info.cardNo) {
-							uni.navigateTo({
-								url: '/pages/Information/Error'
-							})
-						}
-						if(res.data.info.name && res.data.info.cardNo && res.data.account.cellphone){
-							let url = '';
-							if (res.data.info.businessType === '供应商') {
-								url = '/pages/Information/informationShow_supplier?radio=' + 1
-							} else if (res.data.info.businessType === '采购商') {
-								url = '/pages/Information/informationShow_procurer?radio=' + 2
-							} else if (res.data.info.businessType === '摆渡车') {
-								url = '/pages/Information/informationShow_ferry?radio=' + 3
-							} else if (res.data.info.businessType === '员工/伙计') {
-								url = '/pages/Information/informationShow_buddy?radio=' + 4
-							}
-							uni.navigateTo({
-								url: url
-							})
-						}
 						this.form = {
 							id: res.data.info.id,
 							name: res.data.info.name,
@@ -782,10 +756,10 @@
 						// this.supplier.fileList = [{
 						// 	url: this.form.urlImg
 						// }]
-						
-						console.log(this.form,'111')
-					}
 
+						console.log(this.form, '111')
+
+					}
 				}
 			})
 		}
