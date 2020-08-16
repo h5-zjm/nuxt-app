@@ -242,10 +242,11 @@
 				  }
 			},
 			goDetail(item) {
+				console.log('传递额参数',item)
 				// let data = encodeURIComponent(JSON.stringify(item))
-				uni.navigateTo({
-					url:'/pages/makeAppointment/index?data='+ encodeURIComponent(JSON.stringify(item))
-				})
+				// uni.navigateTo({
+				// 	url:'/pages/makeAppointment/index?data='+ encodeURIComponent(JSON.stringify(item))
+				// })
 			}
 		}
 	}
