@@ -545,7 +545,7 @@
 			},
 			getInfo() {
 				uni.request({
-					url: 'http://192.168.100.215:18088/h5/accouninfo/getInfo',
+					url: 'https://192.168.100.215:18088/h5/accouninfo/getInfo',
 					method: 'GET',
 					success: (res) => {
 						console.log('获取的用户信息', res)
@@ -624,7 +624,7 @@
                     console.log(json);
 				}
 				uni.request({
-					url: 'http://192.168.100.215:18088/h5/order/saveOrder',
+					url: 'https://192.168.100.215:18088/h5/order/saveOrder',
 					method: 'POST',
                     data:{
                         goodsJson:json,

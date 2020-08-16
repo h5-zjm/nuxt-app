@@ -39,10 +39,7 @@
 
 <script>
 	import CONFIG from '../../common/configs.js'
-	// const base_url = 'https://wechat.daizhangfang.net/h5/wechat/#/' // 前端域名
-	// const appid = 'wxba0b19915d264d67';
-	// const wx_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + base_url +
-	// 	'&response_type=code&scope=snsapi_base&state=123#wechat_redirect'
+	import {GetQueryValue} from '../../common/common.js'
 	export default {
 		data() {
 			return {
@@ -146,10 +143,9 @@
 			},
 			// 授权
 			Func_Con() {
-				let url = window.location.href;
-				let res = url.split('?');
+				let res = GetQueryValue('code');
 				this.uniRequest({
-					url: 'accouninfo/getInfo?code=' + res[1],
+					url: 'accouninfo/getInfo?code=' + res,
 					success: (res) => {
 						if (res.code === 0) {
 							if (!res.data.info.name && !res.data.info.cardNo) {

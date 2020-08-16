@@ -18,7 +18,7 @@ function MpHtmlParser(data, options = {}) {
 	this.domain = options.domain;
 	this.DOM = [];
 	this.i = this.start = this.audioNum = this.imgNum = this.videoNum = 0;
-	options.prot = (this.domain || '').includes('://') ? this.domain.split('://')[0] : 'http';
+	options.prot = (this.domain || '').includes('://') ? this.domain.split('://')[0] : 'https';
 	this.options = options;
 	this.state = this.Text;
 	this.STACK = [];
@@ -308,7 +308,7 @@ MpHtmlParser.prototype.remove = function(node) {
 	// 处理 svg
 	var handleSvg = () => {
 		var src = this.data.substring(j, this.i + 1);
-		if (!node.attrs.xmlns) src = ' xmlns="http://www.w3.org/2000/svg"' + src;
+		if (!node.attrs.xmlns) src = ' xmlns="https://www.w3.org/2000/svg"' + src;
 		var i = j;
 		while (this.data[j] != '<') j--;
 		src = this.data.substring(j, i).replace("viewbox", "viewBox") + src;

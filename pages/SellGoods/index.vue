@@ -243,7 +243,7 @@
 					}
 				],
 
-				action: 'http://192.168.100.215:18088/common/sysFile/upload',
+				action: 'https://192.168.100.215:18088/common/sysFile/upload',
 				supplier: {
 					fileList: [],
 					businessList: []

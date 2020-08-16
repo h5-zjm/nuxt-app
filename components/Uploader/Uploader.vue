@@ -26,7 +26,7 @@
 	export default {
 		data() {
 			return {
-				action: 'http://www.example.com/upload', // 演示地址
+				action: 'https://www.example.com/upload', // 演示地址
 				showUploadList: false,
 				// 如果将某个ref的组件实例赋值给data中的变量，在小程序中会因为引用报错，这里仅做演示
 				// 实际中请通过事件监听来获得内部的文件列表

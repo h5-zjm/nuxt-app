@@ -383,7 +383,7 @@
 	var canvasToTempFilePath = wxPromise(uni.canvasToTempFilePath);
 
 	var base64 = createCommonjsModule(function(module, exports) {
-		/*! http://mths.be/base64 v0.1.0 by @mathias | MIT license */
+		/*! https://mths.be/base64 v0.1.0 by @mathias | MIT license */
 		(function(root) {
 
 			// Detect free variables `exports`.
@@ -415,11 +415,11 @@
 			};
 
 			var TABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-			// http://whatwg.org/html/common-microsyntaxes.html#space-character
+			// https://whatwg.org/html/common-microsyntaxes.html#space-character
 			var REGEX_SPACE_CHARACTERS = /[\t\n\f\r ]/g;
 
 			// `decode` is designed to be fully compatible with `atob` as described in the
-			// HTML Standard. http://whatwg.org/html/webappapis.html#dom-windowbase64-atob
+			// HTML Standard. https://whatwg.org/html/webappapis.html#dom-windowbase64-atob
 			// The optimized base64-decoding algorithm used is based on @atk’s excellent
 			// implementation. https://gist.github.com/atk/1020396
 			var decode = function(input) {
@@ -432,7 +432,7 @@
 				}
 				if (
 					length % 4 == 1 ||
-					// http://whatwg.org/C#alphanumeric-ascii-characters
+					// https://whatwg.org/C#alphanumeric-ascii-characters
 					/[^+a-zA-Z0-9/]/.test(input)
 				) {
 					error(
@@ -459,7 +459,7 @@
 			};
 
 			// `encode` is designed to be fully compatible with `btoa` as described in the
-			// HTML Standard: http://whatwg.org/html/webappapis.html#dom-windowbase64-btoa
+			// HTML Standard: https://whatwg.org/html/webappapis.html#dom-windowbase64-btoa
 			var encode = function(input) {
 				input = String(input);
 				if (/[^\0-\xFF]/.test(input)) {
@@ -604,8 +604,8 @@
 	 */
 	function genBitmapImage(oData) {
 		//
-		// BITMAPFILEHEADER: http://msdn.microsoft.com/en-us/library/windows/desktop/dd183374(v=vs.85).aspx
-		// BITMAPINFOHEADER: http://msdn.microsoft.com/en-us/library/dd183376.aspx
+		// BITMAPFILEHEADER: https://msdn.microsoft.com/en-us/library/windows/desktop/dd183374(v=vs.85).aspx
+		// BITMAPINFOHEADER: https://msdn.microsoft.com/en-us/library/dd183376.aspx
 		//
 		var biWidth = oData.width;
 		var biHeight = oData.height;

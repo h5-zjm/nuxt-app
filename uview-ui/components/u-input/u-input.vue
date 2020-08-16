@@ -75,7 +75,7 @@ import Emitter from '../../libs/util/emitter.js';
 /**
  * input 输入框
  * @description 此组件为一个输入框，默认没有边框和样式，是专门为配合表单组件u-form而设计的，利用它可以快速实现表单验证，输入内容，下拉选择等功能。
- * @tutorial http://uviewui.com/components/input.html
+ * @tutorial https://uviewui.com/components/input.html
  * @property {String} type 模式选择，见官网说明
  * @property {Boolean} clearable 是否显示右侧的清除图标(默认true)
  * @property {} v-model 用于双向绑定输入框的值

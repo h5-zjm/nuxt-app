@@ -81,7 +81,7 @@
 		data() {
 			return {
 				ctrl: [],
-				placeholder: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="225"/>',
+				placeholder: 'data:image/svg+xml;utf8,<svg xmlns="https://www.w3.org/2000/svg" width="300" height="225"/>',
 				errorImg,
 				loadVideo: typeof plus == 'undefined',
 				// #ifndef MP-ALIPAY
@@ -227,7 +227,7 @@
 								this.top.navigateTo({
 									id: attrs.href.substring(1)
 								})
-						} else if (attrs.href.indexOf('http') == 0 || attrs.href.indexOf('//') == 0) {
+						} else if (attrs.href.indexOf('https') == 0 || attrs.href.indexOf('//') == 0) {
 							// #ifdef APP-PLUS
 							plus.runtime.openWeb(attrs.href);
 							// #endif

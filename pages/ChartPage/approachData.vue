@@ -162,7 +162,7 @@
 			getServerData(){
 				uni.request({
 					url: 'https://wechat.daizhangfang.net/statistics/entryData',
-					// url: 'http://39.107.95.50/statistics/entryData',
+					// url: 'https://39.107.95.50/statistics/entryData',
 					method: 'GET',
 					data: {
 						beginTime: this.startTime,

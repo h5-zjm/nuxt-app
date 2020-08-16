@@ -23,14 +23,14 @@ export const timer = (t, fn) => {
  * 保留两位小数
  */
 export function reserveTwoDecimal(val) {
-  if (!val) {
-    return 0;
-  }
-  val = Number(val);
-  if (val.toString().indexOf('.') != -1) {
-    val = Number(val.toFixed(2));
-  }
-  return val;
+	if (!val) {
+		return 0;
+	}
+	val = Number(val);
+	if (val.toString().indexOf('.') != -1) {
+		val = Number(val.toFixed(2));
+	}
+	return val;
 }
 /**
  * 时间格式化
@@ -40,29 +40,29 @@ export function reserveTwoDecimal(val) {
  * @return {*}
  */
 export function timeFormat(date, fmt = 'yyyy-MM-dd', reduce = false) {
-  if (!date) {
-    return '-';
-  }
-  date = new Date(date);
-  if (date.toString().indexOf('T') != -1 && reduce) {
-    date.setHours(date.getHours() - 8);
-  }
-  let o = {
-    'M+': date.getMonth() + 1,
-    'd+': date.getDate(),
-    'h+': date.getHours(),
-    'm+': date.getMinutes(),
-    's+': date.getSeconds(),
-    'q+': Math.floor((date.getMonth() + 3) / 3),
-    'S': date.getMilliseconds()
-  };
-  if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
-  for (let k in o) {
-    if (new RegExp('(' + k + ')').test(fmt)) {
-      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
-    }
-  }
-  return fmt;
+	if (!date) {
+		return '-';
+	}
+	date = new Date(date);
+	if (date.toString().indexOf('T') != -1 && reduce) {
+		date.setHours(date.getHours() - 8);
+	}
+	let o = {
+		'M+': date.getMonth() + 1,
+		'd+': date.getDate(),
+		'h+': date.getHours(),
+		'm+': date.getMinutes(),
+		's+': date.getSeconds(),
+		'q+': Math.floor((date.getMonth() + 3) / 3),
+		'S': date.getMilliseconds()
+	};
+	if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+	for (let k in o) {
+		if (new RegExp('(' + k + ')').test(fmt)) {
+			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
+		}
+	}
+	return fmt;
 }
 // 根据一个类型计算开始时间和结束时间
 // 1 今日 2 昨日 3 近一周 4 近一月 5 近一年
@@ -362,10 +362,10 @@ export function formatTZtime(val) {
 	}
 }
 export function NewformatTZtime(val) {
-  if (val !== '') {
-    let txt = val.split(' ');
-    return txt[0] + 'T' + txt[1] + 'Z';
-  }
+	if (val !== '') {
+		let txt = val.split(' ');
+		return txt[0] + 'T' + txt[1] + 'Z';
+	}
 }
 /**
  * 剔除重复商品
@@ -690,48 +690,50 @@ export function Operation(arr, index1, item, direction) {
  * 过滤支付设置
  */
 export function payMethodFilters(val) {
-	if(val === 'WECHAT_SMALL_PROGRAM_PAY') {
+	if (val === 'WECHAT_SMALL_PROGRAM_PAY') {
 		return '微信小程序支付'
-	} else if(val === 'BALANCE_PAY') {
+	} else if (val === 'BALANCE_PAY') {
 		return '余额支付'
-	} else if(val === 'OFFICIAL_PAY') {
+	} else if (val === 'OFFICIAL_PAY') {
 		return '官方支付'
-	} else if(val === 'MOBILE_PHONE_TRANSFER') {
+	} else if (val === 'MOBILE_PHONE_TRANSFER') {
 		return '手机转账'
-	} else if(val === 'BANK_TRANSFER') {
+	} else if (val === 'BANK_TRANSFER') {
 		return '银行转账'
-	} else if(val === 'CASH_PAYMENT') {
+	} else if (val === 'CASH_PAYMENT') {
 		return '现金支付'
 	}
 }
 /**
  * 树状图过滤
  */
-export function Array_Func_Filter(list,callback) {
- let arr1 = [],arr2 = [],arr3 = [];
- list.forEach((item,index)=>{
-  item.data.forEach((i,j)=>{
-   if(j === 0) {
-    arr1.push(i)
-   } else if(j === 1) {
-    arr2.push(i)
-   } else if(j === 2) {
-    arr3.push(i)
-   }
-  })
- })
- 
- list.forEach((item,index)=>{
-  if(index === 0){
-   item.data = arr1
-  } else if(index === 1) {
-   item.data = arr2
-  } else if(index === 2) {
-   item.data = arr3
-  }
- })
- 
- callback(list)
+export function Array_Func_Filter(list, callback) {
+	let arr1 = [],
+		arr2 = [],
+		arr3 = [];
+	list.forEach((item, index) => {
+		item.data.forEach((i, j) => {
+			if (j === 0) {
+				arr1.push(i)
+			} else if (j === 1) {
+				arr2.push(i)
+			} else if (j === 2) {
+				arr3.push(i)
+			}
+		})
+	})
+
+	list.forEach((item, index) => {
+		if (index === 0) {
+			item.data = arr1
+		} else if (index === 1) {
+			item.data = arr2
+		} else if (index === 2) {
+			item.data = arr3
+		}
+	})
+
+	callback(list)
 }
 /**
  * 截取code
@@ -741,13 +743,26 @@ export function Splice_url(callback) {
 	let res = url.split('?');
 	let txt = res[1].split('&');
 	let Con = null;
-	if(txt.length > 0) {
-		txt.forEach((item,index) => {
-			if(item.indexOf('code') !== -1) {
-				Con = item;
-			}
-		})
+	if (txt.length > 0) {
+		// txt.forEach((item,index) => {
+		// 	if(item.indexOf('code') !== -1) {
+		// 		Con = item;
+		// 	}
+		// })
+
 	}
 	let num = Con.split('=');
 	callback(num[1]);
+}
+
+export function GetQueryValue(queryName) {
+	var query = decodeURI(window.location.search.substring(1));
+	var vars = query.split("&");
+	for (var i = 0; i < vars.length; i++) {
+		var pair = vars[i].split("=");
+		if (pair[0] == queryName) {
+			return pair[1];
+		}
+	}
+	return null;
 }

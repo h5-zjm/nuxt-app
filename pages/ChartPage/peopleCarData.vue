@@ -150,7 +150,7 @@
 			},
 			getServerData(){
 				uni.request({
-					url: 'http://wechat.daizhangfang.net/statistics/humanTraffic',
+					url: 'https://wechat.daizhangfang.net/statistics/humanTraffic',
 					data:{
 					},
 					success: function(res) {
