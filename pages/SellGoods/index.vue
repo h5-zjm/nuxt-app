@@ -831,10 +831,6 @@
 							uni.navigateTo({
 								url: '/pages/Information/audit'
 							})
-						} else if(res.data.data.info.businessType != '供应商') {
-							uni.navigateTo({
-								url: '/pages/appointmentSuccessful/accessDenied'
-							})
 						} else {
 							this.getList()
 						}
