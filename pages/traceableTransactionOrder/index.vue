@@ -540,7 +540,6 @@
 		created() {
 			this.getInfo()
 			this.getUser()
-			this.getBuyerInfo()
 		},
 		mounted() {
 
@@ -590,6 +589,7 @@
 								url: '/pages/appointmentSuccessful/accessDenied'
 							})
 						} else {
+							this.getBuyerInfo()
 							let data = res.data.data
 							this.sellerOpenId = data.account.openid
 						}
