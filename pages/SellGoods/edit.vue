@@ -67,11 +67,15 @@
 			<view class="Uploader_box">
 				<view class="Uploader_box_left">
 					<view>货物照片</view>
-					<u-upload :action="action" @on-success="Procurer_Upload" :max-count="1" :file-list="procurer.fileList" />
+					<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Peoser.limitNum" :uploadFileUrl="UpImg_Peoser.uploadFileUrl"
+					 :header="UpImg_Peoser.header" :fileKeyName="UpImg_Peoser.name" :uImgList.sync="UpImg_Peoser.uImgList"
+					 @uploadSuccess="uploadSuccess" @upload="upFile" />
 				</view>
 				<view class="Uploader_box_right">
 					<view>检测证明</view>
-					<u-upload :action="action" @on-success="Procurer_UploadTwo" :max-count="1" :file-list="procurer.fileList" />
+					<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Peoser2.limitNum" :uploadFileUrl="UpImg_Peoser2.uploadFileUrl"
+					 :header="UpImg_Peoser2.header" :fileKeyName="UpImg_Peoser2.name" :uImgList.sync="UpImg_Peoser2.uImgList"
+					 @uploadSuccess="uploadSuccess" @upload="upFile" />
 				</view>
 			</view>
 
@@ -142,12 +146,11 @@
 <script>
 	import Uploader from '@/components/Uploader/Uploader.vue'
 	import citys from '../../common/citys.js'
-	import {
-	  GetQueryValue
-	 } from '../../common/common.js'
+	import uImg from '@/components/zhtx-uploadImg/zhtx-uploadImg.vue';
 	export default {
 		components: {
-			Uploader
+			Uploader,
+			uImg
 		},
 		data() {
 			return {
@@ -168,6 +171,7 @@
 					phone: '',
 					carCardNum: '',
 				},
+				id: '',
 				procurer: {
 					fileList: []
 				},
@@ -200,37 +204,37 @@
 				// 多级联动
 				showRegion: false,
 				activeRegion: '',
-					list: [{
-							value: 1,
-							name: '中国',
-							children: [{
-									value: 2,
-									name: '广东',
-									children: [{
-											value: 3,
-											label: '深圳'
-										},
-										{
-											value: 4,
-											label: '广州'
-										}
-									]
-								},
-								{
-									value: 5,
-									label: '广西',
-									children: [{
-											value: 6,
-											label: '南宁'
-										},
-										{
-											value: 7,
-											label: '桂林'
-										}
-									]
-								}
-							]
-						},
+				list: [{
+						value: 1,
+						label: '中国',
+						children: [{
+								value: 2,
+								label: '广东',
+								children: [{
+										value: 3,
+										label: '深圳'
+									},
+									{
+										value: 4,
+										label: '广州'
+									}
+								]
+							},
+							{
+								value: 5,
+								label: '广西',
+								children: [{
+										value: 6,
+										label: '南宁'
+									},
+									{
+										value: 7,
+										label: '桂林'
+									}
+								]
+							}
+						]
+					},
 					{
 						value: 8,
 						label: '美国',
@@ -658,15 +662,85 @@
 					name: '金瓜'
 				}],
 				showCategory: false,
-				area:'',
-				code:''
-			}
+				UpImg_Peoser: {
+					limitNum: 1,
+					uploadFileUrl: 'http://39.107.95.50/common/sysFile/uploadBase64',
+					msg: '',
+					length: 140,
+					name: '用户', //上传的名字
+					header: { // 如果需要header，请上传
+					},
+					uImgList: []
 
+				},
+				UpImg_Peoser2: {
+					limitNum: 1,
+					uploadFileUrl: 'http://39.107.95.50/common/sysFile/uploadBase64',
+					msg: '',
+					length: 140,
+					name: '用户', //上传的名字
+					header: { // 如果需要header，请上传
+					},
+					uImgList: []
+
+				},
+				area: ''
+			}
+		},
+		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
+			console.log(option); //打印出上个页面传递的参数。
+			this.id = option.id
 		},
 		created() {
-			this.getUser()
+			this.getData()
+			this.getList()
 		},
 		methods: {
+			getList() {
+				uni.request({
+					// url: 'http://39.107.95.50/statistics/getLane',
+					url:'https://wechat.daizhangfang.net/h5/statistics/getLane',
+					method:'GET',
+					success: (res) => {
+						console.log('园区列表',res)
+						for(let i = 0;i<res.data.data.length;i++) {
+							res.data.data[i].label = res.data.data[i].name
+							for(let j = 0;j<res.data.data[i].children.length;j++) {
+								res.data.data[i].children[j].label = res.data.data[i].children[j].name
+							}
+						}
+						this.area = res.data.data
+					}
+				})
+			},
+			getData() {
+				if (this.id != '') {
+					uni.request({
+						url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getById/' + this.id,
+						// url: 'http://39.107.95.50:80/h5/carSubscribe/getById/' + this.id,
+						method: 'GET',
+						success: (res) => {
+							console.log('参数', res)
+							let data = res.data.data
+							this.form.time = data.subscribeTime
+							this.form.deal = data.tradeSector
+							this.form.enter = data.enterDoorNum
+							this.form.name = data.certificateName
+							this.form.region = data.itemPlace
+							this.form.certificateNum = data.certificateName
+							this.form.CarNum = data.carNum
+							this.UpImg_Peoser.uImgList = [data.itemImg]
+							this.form.weight = data.itemNum
+							this.form.starTime = data.certificateTime
+							this.form.producer = data.certificateUser
+							this.form.adress = data.certificateAddress
+							this.form.phone = data.certificatePhone
+							this.form.carCardNum = data.certificateCarNum
+							this.UpImg_Peoser2.uImgList = [data.checkImg]
+						}
+					})
+				}
+			},
 			submit() {
 				console.log(this.procurer.fileList)
 				this.$refs.uForm.validate(valid => {
@@ -690,8 +764,8 @@
 							checkImg: this.imgUrlTwo
 						}
 						uni.request({
-							// url: 'http://39.107.95.50/h5/carSubscribe/save',
-							url:'https://wechat.daizhangfang.net/h5/carSubscribe/save',
+							// url: 'http://39.107.95.50/h5/carSubscribe/update?id='+this.id,
+							url:'https://wechat.daizhangfang.net/h5/carSubscribe/update?id='+this.id,
 							header: {
 								'content-type': 'application/x-www-form-urlencoded'
 							},
@@ -712,7 +786,7 @@
 			},
 			// select框确认
 			confirm(e) {
-				console.log(e);
+				console.log('进场区',e);
 				this.show = false;
 				if (this.SelectCon === '交易区') {
 					this.form.deal = e[0].label
@@ -726,23 +800,6 @@
 			categorySelect() {
 				this.showCategory = true
 			},
-			getList() {
-				uni.request({
-					// url: 'http://39.107.95.50/statistics/getLane',
-					url:'https://wechat.daizhangfang.net/h5/statistics/getLane',
-					method:'GET',
-					success: (res) => {
-						console.log('园区列表',res)
-						for(let i = 0;i<res.data.data.length;i++) {
-							res.data.data[i].label = res.data.data[i].name
-							for(let j = 0;j<res.data.data[i].children.length;j++) {
-								res.data.data[i].children[j].label = res.data.data[i].children[j].name
-							}
-						}
-						this.area = res.data.data
-					}
-				})
-			},
 			// 弹窗框
 			openSelect(v) {
 				this.SelectCon = v;
@@ -750,9 +807,8 @@
 				console.log('选中的类别', v)
 				if (v === '交易区') {
 					this.list = this.area;
-					console.log('选择框',this.list)
 				} else if (v === '进厂门') {
-					this.list = this.area;
+					this.list = this.area;;
 				}
 
 			},
@@ -807,42 +863,27 @@
 				console.log('图片是否成功上传', e)
 				this.imgUrlTwo = e.url
 			},
-			
-			getUser() {
-				console.log('执行获取用户信息')
-				console.log(this.code)
-				let res = GetQueryValue('code');
-				uni.request({
-					// url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=' + this.code,
-					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
-					method: 'GET',
-					success: (res) => {
-						console.log('获取用户信息', res)
-						// this.getData()
-						if (!res.data.data.account.cellphone) {
-							uni.navigateTo({
-								url: '/pages/login/index'
-							})
-						} else if (!res.data.data.info.name && !res.data.data.info.cardNo) {
-							uni.navigateTo({
-								url: '/pages/Information/Error'
-							})
-						} else if (res.data.data.account.cellphone !== '' && Number(res.data.data.info.status) === 0) {
-							uni.navigateTo({
-								url: '/pages/Information/audit'
-							})
-						} else if(res.data.data.info.businessType != '供应商') {
-							uni.navigateTo({
-								url: '/pages/appointmentSuccessful/accessDenied'
-							})
-						} else {
-							this.getList()
-						}
-
-
-
+			uploadSuccess(result) {
+				console.log(result, 'result')
+				if (result.res.confirm) {
+					if (result.name === '用户') {
+						this.form.urlImg = '';
+						this.UpImg_Peoser.uImgList = []
+					} else if (result.name === '营业执照') {
+						this.form.businessUrl = '';
+						this.UpImg_Run.uImgList = []
 					}
-				})
+				} else if (result.res.data) {
+					let res = result.res.data;
+					if (result.name === '用户') {
+						this.form.urlImg = res.url;
+						this.UpImg_Peoser.uImgList = [res.url]
+					} else if (result.name === '营业执照') {
+						this.form.businessUrl = res.url;
+						this.UpImg_Run.uImgList = [res.url]
+					}
+				}
+				console.log(this.form.urlImg, 'urlImg')
 			},
 
 		},

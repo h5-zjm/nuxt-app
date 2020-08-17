@@ -6,36 +6,36 @@
 	
 		<view class="appoint-content">
 			<view>
-				姓名：{{info.account_name}}
+				姓名：{{info.accountName}}
 			</view>
 			<view>
-				身份证号：{{info.account_name}}
+				身份证号：{{info.cardNo}}
 			</view>
 			<view>
-				预约进门时间：{{info.subscribe_time}}
+				预约进门时间：{{info.subscribeTime}}
 			</view>
 			<view>
-				交易区：{{info.trade_sector}}
+				交易区：{{info.tradeSector}}
 			</view>
 		</view>
 		<view class="appoint-content">
 			<view>
-				货品品类：{{info.item_variety}}
+				货品品类：{{info.itemVariety}}
 			</view>
 			<view>
-				产地：{{info.item_source==1?'国产':'进口'}}
+				产地：{{info.itemSource==1?'国产':'进口'}}
 			</view>
 			<view>
-				具体产地：{{info.item_place}}
+				具体产地：{{info.itemPlace}}
 			</view>
 			<view>
-				数量：{{info.item_num}}吨
+				数量：{{info.itemNum}}吨
 			</view>
 			<view>
-				车型：{{info.car_type}}
+				车型：{{info.carType}}
 			</view>
 			<view>
-				车牌号：{{info.car_num}}
+				车牌号：{{info.carNum}}
 			</view>
 			<view class="appoint-img">
 				<view>
@@ -43,13 +43,13 @@
 						货物照片
 					</view>
 					
-						<image :src="info.item_img" mode=""></image>
+						<image :src="info.itemImg" mode=""></image>
 				</view>
 				<view>
 					<view>
 						检测证明
 					</view>
-					<image :src="info.check_img" mode=""></image>
+					<image :src="info.checkImg" mode=""></image>
 				</view>
 			</view>
 			<view class="appoint-tip">
@@ -83,21 +83,22 @@
 			};
 		},
 		onLoad(option) {
-			this.info.id=option.info.id
+			this.id=option.id
 			
 			
 		},
 		created(){
-			// this.getData()
+			this.getData()
 		},
 		methods:{
 			cancelAction(){
 				uni.request({
-					url: 'http://39.107.95.50:80/h5/carSubscribe/update',
+					url: 'https://wechat.daizhangfang.net/h5/carSubscribe/update',
 					method: 'post',
 					data: {
-						id: this.info.id,
-						status:3
+						id: '',
+						status:3,
+						info:'',
 					},
 					success: (res) => {
 							uni.navigateTo({
@@ -122,15 +123,23 @@
 				});
 				
 			},
+			showPopUp() {
+				console.log('跳转')
+				uni.navigateTo({
+					url: '/pages/SellGoods/edit?modelId=0&id='+this.id
+				});
+			},
 			getData(){
 				// 获取页面数据
 				uni.request({
-					url: 'http://39.107.95.50:80/h5/carSubscribe/getById/'+115,
+					// url: 'http://39.107.95.50:80/h5/carSubscribe/getById/'+this.id,
+					url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getById/'+this.id,
 					method: 'GET',
 					data: {
 						
 					},
 					success: (res) => {
+						console.log('返回数据',res)
 						this.info=res.data.data
 						if(this.info.status==1){
 							this.info.status_cn='未进场'

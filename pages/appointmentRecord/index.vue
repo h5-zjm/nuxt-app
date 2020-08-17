@@ -59,120 +59,7 @@
           <view v-show="isLoadMore">
                 <uni-load-more :status="loadStatus" ></uni-load-more>
           </view>
-<!-- 			<view class="sellGoods">
-				<view class="time">
-					2020.07.21
-				</view>
-				<view class="tradingArea">
-					周转一区
-				</view>
-				<view class="licensePlate">
-					京A12345
-				</view>
-				<view class="type">
-					卖货
-				</view>
-				<view class="status">
-					<view class="mode">
-						已进场
-					</view>
-					<view class="icon">
-						<u-icon name="arrow-right"></u-icon>
-					</view>
-				</view>
-			</view>
-			<view class="sellGoods">
-				<view class="time">
-					2020.07.21
-				</view>
-				<view class="tradingArea">
-					周转一区
-				</view>
-				<view class="licensePlate">
-					京A12345
-				</view>
-				<view class="type">
-					卖货
-				</view>
-				<view class="status">
-					<view class="mode">
-						已作废
-					</view>
-					<view class="icon">
-						<u-icon name="arrow-right"></u-icon>
-					</view>
-				</view>
-			</view> -->
 		</view>
-		<!-- 上货 -->
-<!-- 		<view class="shipment loadGoods">
-			<view class="sellGoods seleceted">
-				<view class="time">
-					2020.07.21
-				</view>
-				<view class="tradingArea">
-					周转一区
-				</view>
-				<view class="licensePlate">
-					京A12345
-				</view>
-				<view class="type">
-					上货
-				</view>
-				<view class="status">
-					<view class="mode">
-						未进场
-					</view>
-					<view class="icon">
-						<u-icon name="arrow-right"></u-icon>
-					</view>
-				</view>
-			</view>
-			<view class="sellGoods">
-				<view class="time">
-					2020.07.21
-				</view>
-				<view class="tradingArea">
-					周转一区
-				</view>
-				<view class="licensePlate">
-					京A12345
-				</view>
-				<view class="type">
-					上货
-				</view>
-				<view class="status">
-					<view class="mode">
-						已进场
-					</view>
-					<view class="icon">
-						<u-icon name="arrow-right"></u-icon>
-					</view>
-				</view>
-			</view>
-			<view class="sellGoods">
-				<view class="time">
-					2020.07.21
-				</view>
-				<view class="tradingArea">
-					周转一区
-				</view>
-				<view class="licensePlate">
-					京A12345
-				</view>
-				<view class="type">
-					上货
-				</view>
-				<view class="status">
-					<view class="mode">
-						已作废
-					</view>
-					<view class="icon">
-						<u-icon name="arrow-right"></u-icon>
-					</view>
-				</view>
-			</view>
-		</view> -->
 	</view>
 </template>
 
@@ -187,7 +74,8 @@
                 isLoadMore:false,  //是否加载中
 				offset: 0,
 				// list:[],
-				list: []
+				list: [],
+				code: ''
 			}
 		},
 		created() {
@@ -196,6 +84,8 @@
 		},
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
 			console.log('页面路径带的参数',option); //打印出上个页面传递的参数。
+			this.code = option.code
+			
 		},
 
 		methods: {
@@ -208,12 +98,32 @@
 				console.log('执行获取用户信息')
 				let res = GetQueryValue('code');
 				uni.request({
-					url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=081AnO000jHa7K19RI200kXKlt2AnO0H',
-					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
+					// url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=081AnO000jHa7K19RI200kXKlt2AnO0H',
+					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
 					method: 'GET',
 					success: (res) => {
 						console.log('获取用户信息',res)
-						this.getData()
+						if (!res.data.data.account.cellphone) {
+							uni.navigateTo({
+								url: '/pages/login/index'
+							})
+						} else if (!res.data.data.info.name && !res.data.data.info.cardNo) {
+							uni.navigateTo({
+								url: '/pages/Information/Error'
+							})
+						} else if (res.data.data.account.cellphone !== '' && Number(res.data.data.info.status) === 0) {
+							uni.navigateTo({
+								url: '/pages/Information/audit'
+							})
+						} else if(res.data.data.info.businessType != '供应商') {
+							uni.navigateTo({
+								url: '/pages/appointmentSuccessful/accessDenied'
+							})
+						} else {
+							this.getData()
+						}
+						
+						
 					}
 				})
 			},
@@ -221,8 +131,8 @@
 				
 				// 获取页面数据
 				uni.request({
-					// url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getList',
-					url: 'http://39.107.95.50:80/h5/carSubscribe/getList',
+					url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getList',
+					// url: 'http://39.107.95.50:80/h5/carSubscribe/getList',
 					method: 'GET',
 					data: {
 						offset: this.offset
@@ -245,7 +155,7 @@
 				console.log('传递额参数',item)
 				// let data = encodeURIComponent(JSON.stringify(item))
 				uni.navigateTo({
-					url:'/pages/appointmentRecord/appointDetail?info='+item
+					url:'/pages/appointmentRecord/appointDetail?info='+item.id
 				})
 			}
 		}
