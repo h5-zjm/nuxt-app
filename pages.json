@@ -3,156 +3,176 @@
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [{
-		"path": "pages/login/index",
-		"style": {
-			"navigationStyle": "custom"
-		}
-	}, {
-		"path": "pages/ChartPage/chartsOne",
-		"style": {
-			"navigationBarTitleText": "数据统计"
-		}
-	}, {
-		"path": "pages/Information/index",
-		"style": {
-			// "enablePullDownRefresh": true,
-			"navigationBarTitleText": "个人信息"
-		}
-	}, {
-		"path": "pages/makeAppointment/index",
-		"style": {
-			"navigationBarTitleText": "进门预约（卖货）"
-		}
-	}, {
-		"path": "pages/appointmentRecord/index",
-		"style": {
-			"navigationBarTitleText": "预约记录"
-		}
-	}, {
-		"path": "pages/traceableTransactionOrder/index",
-		"style": {
-			"navigationBarTitleText": "溯源交易单"
-		}
-	}, {
-		"path": "pages/appointmentSuccessful/index",
-		"style": {
-			"navigationBarTitleText": "系统提示"
-		}
-	}, {
-		"path": "pages/getTraceableTransacteOrder/index",
-		"style": {
-			"navigationBarTitleText": "溯源交易单"
-		}
-	}, {
-		"path": "pages/ChartPage/index",
-		"style": {
-			"navigationBarTitleText": "数据统计"
-		}
-	}, {
-		"path": "pages/ChartPage/chartThree",
-		"style": {
-			"navigationBarTitleText": "数据统计"
-		}
-	}, {
-		"path": "pages/SellGoods/index",
-		"style": {
-			"navigationBarTitleText": "预约进门（卖货）"
-		}
-	}, {
-		"path": "pages/SellGoods/visit",
-		"style": {
-			"navigationBarTitleText": "预约进门（上货）"
-		}
-	}, {
-		"path": "pages/record/index",
-		"style": {
-			"navigationBarTitleText": "卖货记录"
-		}
-	}, {
-		"path": "pages/checkOrder/index",
-		"style": {
-			"navigationBarTitleText": "溯源交易单"
-		}
-	}, {
-		"path": "pages/certificateConformity/index",
-		"style": {
-			"navigationBarTitleText": "食用农产品合格证"
-		}
-	}, {
-		"path": "pages/ChartPage/approachData",
-		"style": {
-			"navigationBarTitleText": "数据统计"
-		}
-	}, {
-		"path": "pages/ChartPage/quantity",
-		"style": {
-			"navigationBarTitleText": "数据统计"
-		}
-	}, {
-		"path": "pages/ChartPage/peopleCarData",
-		"style": {
-			"navigationBarTitleText": "数据统计"
-		}
-	}, {
-		"path": "pages/Information/informationShow_ferry",
-		"style": {
-			"navigationBarTitleText": "个人信息"
-		}
-	}, {
-		"path": "pages/Information/informationShow_procurer",
-		"style": {
-			"navigationBarTitleText": "个人信息"
-		}
-	}, {
-		"path": "pages/Information/informationShow_supplier",
-		"style": {
-			"navigationBarTitleText": "个人信息"
-		}
-	}, {
-		"path": "pages/Information/informationShow_buddy",
-		"style": {
-			"navigationBarTitleText": "个人信息"
-		}
-	}, {
-		"path": "pages/Information/Error",
-		"style": {
-			"navigationBarTitleText": "系统提示"
-		}
-	}, {
-		"path": "pages/Information/Success",
-		"style": {
-			"navigationBarTitleText": "系统提示"
-		}
-	}, {
-		"path": "pages/Information/VipCode",
-		"style": {
-			"navigationBarTitleText": "会员二维码",
-			"navigationBarBackgroundColor": "#37B3FF",
-			"navigationBarTextStyle": "white"
-		}
-	}, {
-		"path": "pages/Information/BuyerCode",
-		"style": {
-			"navigationBarTitleText": "买家交易码",
-			"navigationBarBackgroundColor": "#37B3FF",
-			"navigationBarTextStyle": "white"
-		}
-	}, {
-		"path": "pages/record/visit",
-		"style": {
-			"navigationBarTitleText": "上货记录"
-		}
-	}, {
-		"path": "pages/appointmentSuccessful/submitSuccessful",
-		"style": {}
-	}, {
-		"path": "pages/Information/hint",
-		"style": {}
-	}    ,{
-            "path" : "pages/Information/audit",
-            "style" : {
+			"path": "pages/login/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/ChartPage/chartsOne",
+			"style": {
+				"navigationBarTitleText": "数据统计"
+			}
+		}, {
+			"path": "pages/Information/index",
+			"style": {
+				// "enablePullDownRefresh": true,
+				"navigationBarTitleText": "个人信息"
+			}
+		}, {
+			"path": "pages/makeAppointment/index",
+			"style": {
+				"navigationBarTitleText": "进门预约（卖货）"
+			}
+		},
+		{
+			"path": "pages/appointmentRecord/index",
+			"style": {
+				"navigationBarTitleText": "预约记录"
+			}
+		}, {
+			"path": "pages/traceableTransactionOrder/index",
+			"style": {
+				"navigationBarTitleText": "溯源交易单"
+			}
+		},
+		{
+			"path": "pages/traceableTransactionOrder/checkError",
+			"style": {
 				"navigationBarTitleText": "系统提示"
 			}
+		},
+		{
+			"path": "pages/appointmentSuccessful/index",
+			"style": {
+				"navigationBarTitleText": "系统提示"
+			}
+		}, {
+			"path": "pages/getTraceableTransacteOrder/index",
+			"style": {
+				"navigationBarTitleText": "溯源交易单"
+			}
+		}, {
+			"path": "pages/ChartPage/index",
+			"style": {
+				"navigationBarTitleText": "数据统计"
+			}
+		}, {
+			"path": "pages/ChartPage/chartThree",
+			"style": {
+				"navigationBarTitleText": "数据统计"
+			}
+		}, {
+			"path": "pages/SellGoods/index",
+			"style": {
+				"navigationBarTitleText": "预约进门（卖货）"
+			}
+		}, {
+			"path": "pages/SellGoods/visit",
+			"style": {
+				"navigationBarTitleText": "预约进门（上货）"
+			}
+		}, {
+			"path": "pages/record/index",
+			"style": {
+				"navigationBarTitleText": "卖货记录"
+			}
+		}, {
+			"path": "pages/checkOrder/index",
+			"style": {
+				"navigationBarTitleText": "溯源交易单"
+			}
+		}, {
+			"path": "pages/certificateConformity/index",
+			"style": {
+				"navigationBarTitleText": "食用农产品合格证"
+			}
+		}, {
+			"path": "pages/ChartPage/approachData",
+			"style": {
+				"navigationBarTitleText": "数据统计"
+			}
+		}, {
+			"path": "pages/ChartPage/quantity",
+			"style": {
+				"navigationBarTitleText": "数据统计"
+			}
+		}, {
+			"path": "pages/ChartPage/peopleCarData",
+			"style": {
+				"navigationBarTitleText": "数据统计"
+			}
+		}, {
+			"path": "pages/Information/informationShow_ferry",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		}, {
+			"path": "pages/Information/informationShow_procurer",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		}, {
+			"path": "pages/Information/informationShow_supplier",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		}, {
+			"path": "pages/Information/informationShow_buddy",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		}, {
+			"path": "pages/Information/Error",
+			"style": {
+				"navigationBarTitleText": "系统提示"
+			}
+		}, {
+			"path": "pages/Information/Success",
+			"style": {
+				"navigationBarTitleText": "系统提示"
+			}
+		}, {
+			"path": "pages/Information/VipCode",
+			"style": {
+				"navigationBarTitleText": "会员二维码",
+				"navigationBarBackgroundColor": "#37B3FF",
+				"navigationBarTextStyle": "white"
+			}
+		}, {
+			"path": "pages/Information/BuyerCode",
+			"style": {
+				"navigationBarTitleText": "买家交易码",
+				"navigationBarBackgroundColor": "#37B3FF",
+				"navigationBarTextStyle": "white"
+			}
+		}, {
+			"path": "pages/record/visit",
+			"style": {
+				"navigationBarTitleText": "上货记录"
+			}
+		}, {
+			"path": "pages/appointmentSuccessful/submitSuccessful",
+			"style": {}
+		}, {
+			"path": "pages/Information/hint",
+			"style": {}
+		}, {
+			"path": "pages/Information/audit",
+			"style": {
+				"navigationBarTitleText": "系统提示"
+			}
+		}, {
+			"path": "pages/appointmentRecord/appointDetail",
+			"style": {
+				"navigationBarTitleText": "进门预约(卖货)"
+			}
+		},
+		{
+			"path": "pages/appointmentRecord/cancelSuccess",
+			"style": {
+				"navigationBarTitleText": "系统提示"
+			}
+<<<<<<< HEAD
         }
         ,{
             "path" : "pages/Information/informationShow_xfd",
@@ -161,6 +181,16 @@
 			}
         }
     ],
+=======
+		},
+		{
+			"path": "pages/Information/informationShow_xfd",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		}
+	],
+>>>>>>> 2493af1e52541c68338a4b2605be5b7d24429f30
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",

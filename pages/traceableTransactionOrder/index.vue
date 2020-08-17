@@ -7,19 +7,20 @@
 			<view class="title">
 				买家信息：{{buyerName}} {{buyerPhoneNumber}}
 			</view>
-			<view class="list" v-for="(item,index) in dataList">
+			<view class="list" v-for="(item,index) in dataList" :key="index">
 				<view class="line">
 					<view class="keyLabel">
 						品类：
 					</view>
+
 					<view class="valueLabel">
 						<view class="valueWorth">
 							<!-- <u-input v-model="value" :type="type" style="height: 90rpx;line-height: 90rpx;" placeholder="请选择品类" :border="border" @click="show = true" /> -->
-							<u-input v-model="item.goodsName" :type="type" style="height: 90rpx;line-height: 90rpx;" placeholder="请选择品类" :border="border"
-							 @click="editType(index)" />
+							<u-input v-model="item.goodsName" :type="type" style="height: 90rpx;line-height: 90rpx;" placeholder="请选择品类"
+							 :border="border" @click="editType(index)" />
 							<!-- <u-action-sheet :list="actionSheetList" v-model="show" @click="actionSheetCallback"></u-action-sheet> -->
 						</view>
-						<view class="unit">
+						<view class="unit" @click="deleteItem(index)">
 							清空
 						</view>
 					</view>
@@ -73,11 +74,11 @@
 			</view>
 			<view class="bottom">
 				<view class="addGoods">
-					
+
 					<u-button type="primary" @click="savePersonInformation">确认提交</u-button>
 				</view>
 				<view class="sureAdd">
-					<u-button  @click="showPopUp">添加商品</u-button>
+					<u-button @click="showPopUp">添加商品</u-button>
 				</view>
 			</view>
 		</view>
@@ -99,6 +100,9 @@
 	export default {
 		data() {
 			return {
+				pair:{},//url上面的数据
+				code: '', //url获取的code
+				cardNo: '', //url获取的cardNo
 				show: false,
 				value: '',
 				weight: '',
@@ -106,13 +110,13 @@
 				origin: '',
 				producer: '',
 				showPop: false,
-				type:'text',
+				type: 'text',
 				keyword: '',
 				valueIndex: '', // 修改的数据index
-				sellerOpenId:"",
-				buyerOpenId:"",
+				sellerOpenId: "",
+				buyerOpenId: "",
 				buyerName: '',
-				buyerPhoneNumber:"",
+				buyerPhoneNumber: "",
 				dataList: [{
 					id: "",
 					goodsName: "",
@@ -121,7 +125,8 @@
 					placeOfOrigin: "",
 					producers: "",
 				}],
-				list: [{
+				list: [
+					{
 					name: '白萝卜'
 				}, {
 					name: '散玉米'
@@ -525,52 +530,77 @@
 					name: '国光'
 				}, {
 					name: '金瓜'
-				}]
+				},
+				]
 			};
 		},
 		created() {
 			this.getUser()
 			this.getBuyerInfo()
 		},
-        mounted() {
-            this.load();
-        },
+		mounted() {
+			
+		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
-			console.log('买家信息',option)
+		this.load();
+			console.log('买家信息', option)
 			// console.log(option.id); //打印出上个页面传递的参数。
 			// console.log(option.name); //打印出上个页面传递的参数。
 		},
 		methods: {
-			// 获取用户信息
+			// 获取卖家用户信息
 			getUser() {
 				console.log('执行获取用户信息')
+				console.log(this.code)
 				// let res = GetQueryValue('code');
 				uni.request({
-					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo',
+					url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code='+this.code,
 					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
 					method: 'GET',
 					success: (res) => {
-						console.log('获取用户信息',res)
+						console.log('获取用户信息', res)
 						// this.getData()
-						this.sellerOpenId = res.data.data.account.openid
-						
+						let data=res.data.data
+						this.sellerOpenId = data.account.openid
+						// if (!data.account.cellphone) {
+						// 	uni.navigateTo({
+						// 		url: '/pages/login/index'
+						// 	})
+						// }
+						// if (!data.info.name && !data.info.cardNo) {
+						// 	uni.navigateTo({
+						// 		url: '/pages/Information/Error'
+						// 	})
+						// }
+						// if (Number(data.info.status) === 0) {
+						// 	uni.navigateTo({
+						// 		url: '/pages/Information/audit'
+						// 	})
+						// }
+						//新增是否为供应商的判断
+						// if (data.info.businessType != '供应商') {
+						// 	uni.navigateTo({
+						// 		url: '/pages/traceableTransactionOrder/checkError'
+						// 	})
+						// }
+
 					}
 				})
 			},
-			getBuyerInfo(){
+			getBuyerInfo() {
 				uni.request({
-					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfoById?cardNo=511321199001177837' ,
+					url: 'http://39.107.95.50:80/h5/accouninfo/getInfoById?cardNo='+this.cardNo,
 					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
 					method: 'GET',
 					success: (res) => {
-						console.log('获取买家信息',res)
+						console.log('获取买家信息', res)
 						// this.getData()
-						this.buyerName = res.data.data.info.name.substr(0,1)+"**"
-				
+						this.buyerName = res.data.data.info.name.substr(0, 1) + "**"
+
 						let phone = res.data.data.account.cellphone;
-						this.buyerPhoneNumber = phone.substr(0,3) + "****" + phone.substr((phone.length - 3));
+						this.buyerPhoneNumber = phone.substr(0, 3) + "****" + phone.substr((phone.length - 3));
 						this.buyerOpenId = res.data.data.account.openid;
-					
+
 					}
 				})
 			},
@@ -578,14 +608,25 @@
 				this.dataList[this.valueIndex].goodsName = e[0].value
 			},
 			showPopUp() {
-				this.showPop = true
+				// this.showPop = true
+				this.dataList.push({
+					id: "",
+					goodsName: "",
+					weight: "",
+					price: "",
+					placeOfOrigin: "",
+					producers: "",
+				})
+			},
+			deleteItem(idx){
+				this.dataList.splice(idx,1)
 			},
 			editType(i) {
 				this.show = true
 				this.valueIndex = i
 			},
 			add(e) {
-				console.log('选中的菜品',e)
+				console.log('选中的菜品', e)
 				let item = {
 					id: '',
 					goodsName: e,
@@ -596,89 +637,92 @@
 				}
 				this.dataList.push(item)
 			},
-            getQueryVariable(variable){
-                var query = window.location.search.substring(1);
-                var vars = query.split("&");
-                for (var i=0;i<vars.length;i++) {
-                    var pair = vars[i].split("=");
-                    if(pair[0] == variable){return pair[1];}
-                }
-                return(false);
-            },
-            load() {
-                console.log("aaaaa");
-                //拿到url上的id值
-                var id = this.getQueryVariable("cardNo");
-                //alert(id);
-                //请求订单数据
-                // uni.request({
-                //     method: "post",
-                //     url: "https://wechat.daizhangfang.net/h5/order/selectUserInfo?cardNo=" + id,
-                //     success: (res) =>{
-                //         if (res.rows != '') {
-                //             //循环回显 菜品数据
-                //             console.log(res);
-                //             this.phoneNumber = res.phoneNumber?res.phoneNumber:"";
-                //             this.buyName = res.buyName?res.buyName:"";
-                //             this.sellerOpenId = res.sellerOpenId?res.sellerOpenId:"";
-                //             this.buyerOpenId = res.buyerOpenId?res.buyerOpenId:"";
-                //         }
-                //     }
-                // });
-            },
+			getQueryVariable(variable) {
+				var query = window.location.href.split('&');
+				for (var i = 0; i < query.length; i++) {
+					let arr=query[i].split('?')[1]
+						let arr2=arr.split('=')
+						let key=arr2[0]
+						this.pair[key]=arr2[1]
+				}
+				console.log(this.pair)
+			},
+			load() {
+				//拿到url上的id值
+				// this.cardNo = this.getQueryVariable("cardNo");
+				this.cardNo = "511321199001177837";
+				// this.code = this.getQueryVariable("code");
+				this.code = "0810VC000JL37K1CXX100MFGog10VC05";
+				//alert(id);
+				//请求订单数据
+				// uni.request({
+				//     method: "post",
+				//     url: "https://wechat.daizhangfang.net/h5/order/selectUserInfo?cardNo=" + id,
+				//     success: (res) =>{
+				//         if (res.rows != '') {
+				//             //循环回显 菜品数据
+				//             console.log(res);
+				//             this.phoneNumber = res.phoneNumber?res.phoneNumber:"";
+				//             this.buyName = res.buyName?res.buyName:"";
+				//             this.sellerOpenId = res.sellerOpenId?res.sellerOpenId:"";
+				//             this.buyerOpenId = res.buyerOpenId?res.buyerOpenId:"";
+				//         }
+				//     }
+				// });
+			},
 			savePersonInformation() {
-                let saveOrderList = this.dataList;
-                let flags = true;
-                saveOrderList.forEach(item=>{
-                    if(!item.goodsName ){
-                        alert("商品名称不能为空");
-                        flags = false;
-                        return false;
-                    }
-                    if(!item.weight){
+				let saveOrderList = this.dataList;
+				let flags = true;
+				saveOrderList.forEach(item => {
+					if (!item.goodsName) {
+						alert("商品名称不能为空");
+						flags = false;
+						return false;
+					}
+					if (!item.weight) {
 						alert("重量不能为空");
-                        flags = false;
-                        return false;
-                    }
-                    if(!item.price){
-                        alert("价格不能为空");
-                        flags = false;
-                        return false;
-                    }
-                });
-				if(flags) {
-                    console.log(saveOrderList);
-                    let json = JSON.stringify(saveOrderList);
+						flags = false;
+						return false;
+					}
+					if (!item.price) {
+						alert("价格不能为空");
+						flags = false;
+						return false;
+					}
+				});
+				if (flags) {
+					console.log(saveOrderList);
+					let json = JSON.stringify(saveOrderList);
 					// let data = {
 					// 	sellerOpenId:this.sellerOpenId,
 					// 	buyerOpenId:this.buyerOpenId,
 					// 	goodsJson:json
 					// }
-                    console.log(json);
+					console.log(json);
 					uni.request({
 						// url: 'https://wechat.daizhangfang.net/h5/order/saveOrder',
-						url: 'https://wechat.daizhangfang.net/h5/order/saveOrder',
-						method: 'GET',
+						url: 'http://39.107.95.50:80/h5/order/saveOrder',
+						method: 'post',
 						data: {
-							sellerOpenId:this.sellerOpenId,
-							buyerOpenId:this.buyerOpenId,
-							goodsJson:json
+							sellerOpenId: this.sellerOpenId,
+							buyerOpenId: this.buyerOpenId,
+							goodsJson: json
 						},
-						success: (res) =>{
-							if(res.data.code === 0){
-								console.log('是否保存成功',res)	
+						success: (res) => {
+							if (res.data.code === 0) {
+								console.log('是否保存成功', res)
 								// 跳转页面
 								uni.navigateTo({
-									url: '/pages/appointmentSuccessful/submitSuccessful?modelId=0&id='+res.data.id
+									url: '/pages/appointmentSuccessful/submitSuccessful?modelId=0&id=' + res.data.id
 								});
-							}else {
+							} else {
 								alert('保存失败')
 							}
 						}
 					})
 				};
 
-				
+
 			}
 		}
 	}

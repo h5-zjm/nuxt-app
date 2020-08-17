@@ -15,7 +15,11 @@
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>手机号：</text>
+<<<<<<< HEAD
 						<view>{{form.phone}}</view>
+=======
+						<view>{{form.mobile}}</view>
+>>>>>>> 2493af1e52541c68338a4b2605be5b7d24429f30
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
@@ -212,7 +216,10 @@
 			display: flex;
 			justify-content: center;
 			padding: 100rpx 0rpx 150rpx 0rpx;
+<<<<<<< HEAD
 			background-color: #fff;
+=======
+>>>>>>> 2493af1e52541c68338a4b2605be5b7d24429f30
 		}
 
 		.Con {

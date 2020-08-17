@@ -618,11 +618,14 @@
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
+<<<<<<< HEAD
 						if(this.form.gender === '1') {
 							this.form.gender = '男'
 						} else if(this.form.gender === '2') {
 							this.form.gender = '女'
 						}
+=======
+>>>>>>> 2493af1e52541c68338a4b2605be5b7d24429f30
 						if (this.form.radio === 1) {
 							this.form.businessType = '供应商'
 						} else if (this.form.radio === 2) {

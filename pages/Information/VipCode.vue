@@ -108,7 +108,11 @@
 								uni.navigateTo({
 									url: '/pages/Information/Error'
 								})
+<<<<<<< HEAD
 							} else if(res.data.account.cellphone !== '' && Number(res.data.info.status) === 0) {
+=======
+							} else if(Number(res.data.info.status) === 0) {
+>>>>>>> 2493af1e52541c68338a4b2605be5b7d24429f30
 								uni.navigateTo({
 									url: '/pages/Information/audit'
 								})
