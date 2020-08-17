@@ -151,7 +151,7 @@
 				console.log('传递额参数',item)
 				// let data = encodeURIComponent(JSON.stringify(item))
 				uni.navigateTo({
-					url:'/pages/appointmentRecord/appointDetail?info='+item.id
+					url:'/pages/appointmentRecord/appointDetail?id='+item.id
 				})
 			}
 		}

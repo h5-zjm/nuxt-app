@@ -805,9 +805,9 @@
 			},
 			submit() {
 				if (this.form.id) {
-					this.submit_http()
-				} else {
 					this.update_http()
+				} else {
+					this.submit_http()
 				}
 			},
 			submit_http() {
@@ -846,7 +846,8 @@
 							certificateNum: this.form.certificateNum,
 							certificateAddress: this.form.certificateAddress,
 							itemImg: this.form.itemImg,
-							checkImg: this.form.checkImg
+							checkImg: this.form.checkImg,
+							type:1,
 						}
 						if (IsImg && IsChecked) {
 							this.uniRequest({
@@ -911,7 +912,8 @@
 							certificateNum: this.form.certificateNum,
 							certificateAddress: this.form.certificateAddress,
 							itemImg: this.form.itemImg,
-							checkImg: this.form.checkImg
+							checkImg: this.form.checkImg,
+							type:1,
 						}
 						if (IsImg && IsChecked) {
 							this.uniRequest({
