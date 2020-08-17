@@ -148,7 +148,13 @@
 	}, {
 		"path": "pages/Information/hint",
 		"style": {}
-	}],
+	}    ,{
+            "path" : "pages/Information/audit",
+            "style" : {
+				"navigationBarTitleText": "系统提示"
+			}
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",

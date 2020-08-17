@@ -2,18 +2,18 @@
 	<view>
 		<view class="zhtx-imgs">
 			<view class="zhtx-single" v-for="(item, index) in list" :key="index">
-				<image :src="item" :data-src="item" mode="aspectFit" @tap="previewImg" />
+				<image :src="item" :data-src="item" mode="heightFix" @tap="previewImg" />
 				<view class="zhtx-del" @tap="deleteItem(index)">x</view>
 			</view>
 			<view v-if="limit>list.length" class="zhtx-single zhtx-addNew" @tap="chooseFile">
 				<text class="zhtx-add">+</text>
 			</view>
 		</view>
-		<view class="num">
+		<!-- <view class="num">
 			<text style="color: #007AFF;font-size: 14px;">{{list.length}}</text>
 
 			/{{limit}}
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -71,6 +71,7 @@
 		methods: {
 			//预览
 			previewImg(e) {
+				console.log(this.list,'list')
 				console.log(...this.list);
 				uni.previewImage({
 					current: e.target.dataset.src,
@@ -87,6 +88,8 @@
 					},
 					urls: this.list //this.imageList,保持删除了的不在
 				});
+				console.log(this.list,'111')
+				console.log(this.imageList,'222')
 			},
 			//删除
 			deleteItem(index) {
@@ -99,6 +102,7 @@
 							this.list.splice(index, 1); //已经达到了数据更新的状态
 							// this.$forceUpdate(); //强制更新
 							this.$emit('update:uImgList', this.list); //类似双向数据绑定
+							this.$emit('@uploadSuccess',res)
 						}
 					}
 				});
@@ -109,7 +113,7 @@
 				// console.log(this.list);
 				if (this.list.length >= this.limit) {
 					// toast('已达到最大上传数量')
-					// return; 
+					return; 
 				}
 
 				let canUploadFile = this.canUploadFile;
@@ -126,9 +130,7 @@
 							tempFiles = res.tempFilePaths;
 
 							this.imageList = this.imageList.concat(tempFiles)
-							console.log(res,'图片地址')
 							this.urlTobase64(res.tempFilePaths[0]);
-							console.log(this.imageList);
 							// this.upload();
 							this.list.push(...tempFiles) //如果图片一次性就超过这个值怎么使他赋的值回退
 
@@ -159,28 +161,28 @@
 					success: res => {
 						let base64 = wx.arrayBufferToBase64(res.data); //把arraybuffer转成base64
 						base64 = 'data:image/jpeg;base64,' + base64; //不加上这串字符，在页面无法显示
-						console.log(base64);
 						this.uploadImg(base64)
 					}
 				});
 			},
 			uploadImg(base64){
-				// uni.showLoading({
-				// 	title: '上传中...',
-				// 	mask: false
-				// });
 				var formData = new FormData();
 				formData.append("base64",base64);
 				console.log(formData,'formData')
-				this.uniRequest({
+				uni.request({
 					url: this.uploadFileUrl,
 					method: 'POST',
 					data: {
 						base64: base64
 					},
-					// data: formData,
+					header: {
+						'content-type':'application/x-www-form-urlencoded'
+					},
 					success:(res)=>{
-						console.log(res,'res')
+						this.$emit('uploadSuccess', {
+							res: res,
+							name: this.fileKeyName
+						});
 					}
 				})
 			},

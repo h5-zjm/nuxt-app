@@ -169,6 +169,11 @@
 							url: '/pages/Information/Error'
 						})
 					}
+					if(Number(res.data.info.status) === 0){
+						uni.navigateTo({
+							url: '/pages/Information/audit'
+						})
+					}
 					if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
 						let url = '';
 						if (res.data.info.businessType === '供应商') {

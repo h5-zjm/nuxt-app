@@ -99,18 +99,24 @@
 					url: 'accouninfo/getInfo?code=' + res,
 					success: (res) => {
 						if (res.code === 0) {
-							if (!res.data.account.cellphone) {
-								uni.navigateTo({
-									url: '/pages/login/index'
-								})
-							} else if (!res.data.info.name && !res.data.info.cardNo) {
-								uni.navigateTo({
-									url: '/pages/Information/Error'
-								})
+							console.log(Number(res.data.info.status,'Number'))
+							if(res.data.info.status === Number(1)) {
+								if (!res.data.account.cellphone) {
+									uni.navigateTo({
+										url: '/pages/login/index'
+									})
+								} else if (!res.data.info.name && !res.data.info.cardNo) {
+									uni.navigateTo({
+										url: '/pages/Information/Error'
+									})
+								} else {
+									this.submit()
+									this.getCode()
+								}
 							} else {
-								this.submit()
-								this.getCode()
+								
 							}
+							
 						}
 					}
 				})

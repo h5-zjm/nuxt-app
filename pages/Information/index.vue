@@ -48,10 +48,10 @@
 									<view :class="{'place_box':!form.mobile}">{{form.mobile ? form.mobile : '注册登录带过来的数据不可修改'}}</view>
 								</view>
 							</u-form-item>
-							<u-form-item prop="carNumber" v-if="form.radio === 3">
+							<u-form-item prop="carNumber">
 								<view class="Con_box">
 									<text class="star">车牌号</text>
-									<u-input v-model="form.carNumber" input-align="right" style="flex: 1;" placeholder="请输入车牌号" />
+									<u-input v-model="form.carNumber" input-align="right" style="flex: 1;" @input="CaseInput" placeholder="请输入车牌号" />
 								</view>
 							</u-form-item>
 							<u-form-item prop="cardNo">
@@ -147,9 +147,9 @@
 									<u-input v-model="form.businessCode" input-align="right" placeholder="请输入营业执照" />
 								</u-form-item>
 								<view class="uploaderBox">
-									<!-- <uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Run.limitNum" :uploadFileUrl="UpImg_Run.uploadFileUrl"
+									<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Run.limitNum" :uploadFileUrl="UpImg_Run.uploadFileUrl"
 									 :header="UpImg_Run.header" :fileKeyName="UpImg_Run.name" :uImgList.sync="UpImg_Run.uImgList" @uploadSuccess="uploadSuccess"
-									 @upload="upFile" /> -->
+									 @upload="upFile" />
 
 									<!-- </u-upload> -->
 									<view class="Conbox">
@@ -259,9 +259,9 @@
 								<u-input v-model="form.businessCode" input-align="right" placeholder="请输入营业执照" />
 							</u-form-item>
 							<view class="uploaderBox">
-								<!-- <uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Run.limitNum" :uploadFileUrl="UpImg_Run.uploadFileUrl"
+								<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Run.limitNum" :uploadFileUrl="UpImg_Run.uploadFileUrl"
 								 :header="UpImg_Run.header" :fileKeyName="UpImg_Run.name" :uImgList.sync="UpImg_Run.uImgList" @uploadSuccess="uploadSuccess"
-								 @upload="upFile" /> -->
+								 @upload="upFile" />
 
 								<!-- </u-upload> -->
 								<view class="Conbox">
@@ -395,17 +395,17 @@
 					uImgList: []
 
 				},
-				// UpImg_Run: {
-				// 	limitNum: 1,
-				// 	uploadFileUrl: 'https://wechat.daizhangfang.net/common/sysFile/upload',
-				// 	msg: '',
-				// 	length: 150,
-				// 	name: '营业执照', //上传的名字
-				// 	header: { // 如果需要header，请上传
-				// 	},
-				// 	uImgList: []
+				UpImg_Run: {
+					limitNum: 1,
+					uploadFileUrl: 'http://39.107.95.50/common/sysFile/uploadBase64',
+					msg: '',
+					length: 150,
+					name: '营业执照', //上传的名字
+					header: { // 如果需要header，请上传
+					},
+					uImgList: []
 				
-				// },
+				},
 				placeList: [],
 				subcampList: [{
 					title: "水果区",
@@ -493,6 +493,14 @@
 						message: '请输入车牌号',
 						// 可以单个或者同时写两个触发验证方式 
 						trigger: ['change', 'blur'],
+					},{
+						pattern: /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$)/,
+						// 正则检验前先将值转为字符串
+						transform(value) {
+							return String(value);
+						},
+						message: '请输入正确的车牌号',
+						trigger: ['change', 'blur']
 					}],
 					inTime: [{
 						required: true,
@@ -536,11 +544,13 @@
 
 		},
 		methods: {
+			CaseInput(val){
+				this.form.carNumber = val.toUpperCase()
+			},
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						// debugger;
-
+						console.log(this.form.urlImg,'urlImg')
 						console.log(this.form.radio, '111')
 						if (this.form.radio === 1) {
 							this.form.businessType = '供应商'
@@ -553,7 +563,7 @@
 						}
 
 						let params = {
-							// id: null,
+							id: this.form.id,
 							name: this.form.name,
 							businessType: this.form.businessType,
 							carNumber: this.form.carNumber,
@@ -571,7 +581,8 @@
 							businessUrl: this.form.businessUrl,
 							businessCode: this.form.businessCode,
 							businessName: this.form.businessName,
-							birthday: this.form.birthday,
+							// birthday: this.form.birthday,
+							urlImg: this.form.urlImg,
 							gender: this.form.gender,
 							age: this.form.age,
 							currentPlace: this.form.currentPlace,
@@ -583,7 +594,7 @@
 							staffAddr1: this.form.staffAddr1
 						}
 						let ImgIstrue = true;
-						if (!this.form.checked) {
+						if (!this.form.urlImg) {
 							ImgIstrue = false;
 							uni.showToast({
 								title: '请上传用户头像',
@@ -601,7 +612,7 @@
 						}
 						if (ImgIstrue && IsRead) {
 							this.uniRequest({
-								url: 'accouninfo/save',
+								url: 'accouninfo/save1',
 								method: 'get',
 								data: params,
 								success: (res) => {
@@ -731,14 +742,18 @@
 			},
 			// 图片上传
 			uploadSuccess(result) {
-				if(result.data) {
-					let res = result.data;
+				console.log(result,'result')
+				if(result.res.data) {
+					let res = result.res.data;
 					if(result.name === '用户') {
 						this.form.urlImg = res.url;
+						this.UpImg_Peoser.uImgList = [res.url]
 					} else if(result.name === '营业执照') {
 						this.form.businessUrl = res.url;
+						this.UpImg_Run.uImgList = [res.url]
 					}
 				}
+				console.log(this.form.urlImg,'urlImg')
 			},
 			//上传方法的调用
 			upFile() {
@@ -815,7 +830,7 @@
 						this.form.residence = res.data.info.curentProvince + '-' + res.data.info.curentCity + '-' + res.data.info.curentArea;
 						// 图片
 						this.UpImg_Peoser.uImgList = res.data.info.urlImg ? [res.data.info.urlImg] : [];
-						this.UpImg_Peoser.uImgList = res.data.info.businessUrl ? [res.data.info.businessUrl] : [];
+						this.UpImg_Run.uImgList = res.data.info.businessUrl ? [res.data.info.businessUrl] : [];
 
 					}
 				}
