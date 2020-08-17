@@ -29,7 +29,8 @@ export const uniRequest = function(obj) {
 		'store-id': shopInfn.id || '',
 		'store-name': encodeURI(shopInfn.name) || '',
 		'Access-Control-Allow-Origin': '*',
-		"Cache-Control":"no-cache"
+		"Cache-Control":"no-cache",
+		'content-type':'application/x-www-form-urlencoded'
 	}
 	if (XSRFTOKEN) {
 		header['X-XSRF-TOKEN'] = XSRFTOKEN;

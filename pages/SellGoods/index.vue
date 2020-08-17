@@ -3,33 +3,34 @@
 		<u-form :model="form" ref="uForm" label-width="auto">
 			<view class="tit">进门信息</view>
 			<view class="Con">
-				<u-form-item prop="time">
+				<u-form-item prop="subscribeTimeStr">
 					<view class="Con_box">
 						<text class="star">预约时间</text>
-						<view @click="openLipicker('预约时间')" :class="{'place_box':!form.time}">{{form.time ? form.time : '请选择预约时间'}}</view>
+						<view @click="openLipicker('预约时间')" :class="{'place_box':!form.subscribeTimeStr}">{{form.subscribeTimeStr ? form.subscribeTimeStr : '请选择预约时间'}}</view>
 					</view>
 				</u-form-item>
-				<u-form-item prop="deal">
+				<u-form-item prop="tradeSector">
 					<view class="Con_box">
 						<text class="star">交易区</text>
-						<view @click="openSelect('交易区')" :class="{'place_box':!form.deal}">{{form.deal ? form.deal : '请选择进场交易区'}}</view>
+						<view @click="openSelect('交易区')" :class="{'place_box':!form.tradeSector}">{{form.tradeSector ? form.tradeSector : '请选择进场交易区'}}</view>
 					</view>
 				</u-form-item>
-				<u-form-item prop="enter">
+				<u-form-item prop="enterDoorNum">
 					<view class="Con_box">
 						<text class="star">进场门</text>
-						<view @click="openSelect('进场门')" :class="{'place_box':!form.enter}">{{form.enter ? form.enter : '请选择进场门'}}</view>
+						<view @click="openSelect('进场门')" :class="{'place_box':!form.enterDoorNum}">{{form.enterDoorNum ? form.enterDoorNum : '请选择进场门'}}</view>
 					</view>
 				</u-form-item>
-				<u-form-item prop="goods">
+				<u-form-item>
 					<view class="Con_box">
 						<text>货品品类</text>
-						<view @click="categorySelect('货品品类')" :class="{'place_box':!form.goods}">{{form.goods ? form.goods : '请选择货品品类'}}</view>
+						<view @click="categorySelect('货品品类')" :class="{'place_box':!form.itemVariety}">{{form.itemVariety ? form.itemVariety : '请选择货品品类'}}</view>
 					</view>
 				</u-form-item>
 				<u-select v-model="showCategory" value-name="name" label-name="name" :list="listCategory" @confirm="comfirmCategory"></u-select>
 				<!-- select框 -->
-				<u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
+				<u-select v-model="show" mode="mutil-column-auto" :list="List_Con" @confirm="confirm"></u-select>
+				<!-- <u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select> -->
 				<!-- 日期框-(设置不了默认时间) -->
 				<u-picker mode="time" v-model="showTime" default-time="2020-08-03" :params="params" @confirm="sureTime"></u-picker>
 			</view>
@@ -41,22 +42,22 @@
 						<!-- <u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入产品" /> -->
 					</view>
 				</u-form-item>
-				<u-form-item prop="region">
+				<u-form-item prop="itemPlace">
 					<view class="Con_box">
 						<text class="star">具体产地</text>
-						<view @click="openSelectMore('具体产地')" :class="{'place_box':!form.region}">{{form.region ? form.region : '请选择具体产地'}}</view>
+						<view @click="openSelectMore('具体产地')" :class="{'place_box':!form.itemPlace}">{{form.itemPlace ? form.itemPlace : '请选择具体产地'}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="name">
 					<view class="Con_box">
 						<text>数量</text>
-						<u-input v-model="form.certificateNum" type="number" style="flex: 1;text-align: right;" placeholder="请输入货品重量" />KG
+						<u-input v-model="form.itemNum" style="flex: 1;" input-align="right" placeholder="请输入货品重量" />KG
 					</view>
 				</u-form-item>
-				<u-form-item prop="name">
+				<u-form-item prop="CarNum">
 					<view class="Con_box">
 						<text class="star">车牌号</text>
-						<u-input v-model="form.CarNum" style="flex: 1;text-align: right;" placeholder="请输入车牌号" />
+						<u-input v-model="form.CarNum" style="flex: 1;" input-align="right" @input="CaseInput" placeholder="请输入车牌号" />
 					</view>
 				</u-form-item>
 
@@ -66,12 +67,16 @@
 
 			<view class="Uploader_box">
 				<view class="Uploader_box_left">
-					<view>货物照片</view>
-					<u-upload :action="action" @on-success="Procurer_Upload" :max-count="1" :file-list="procurer.fileList" />
+					<view class="star">货物照片</view>
+					<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Peoser.limitNum" :uploadFileUrl="UpImg_Peoser.uploadFileUrl"
+					 :header="UpImg_Peoser.header" :fileKeyName="UpImg_Peoser.name" :uImgList.sync="UpImg_Peoser.uImgList" @uploadSuccess="uploadSuccess"
+					 @upload="upFile" />
 				</view>
 				<view class="Uploader_box_right">
 					<view>检测证明</view>
-					<u-upload :action="action" @on-success="Procurer_UploadTwo" :max-count="1" :file-list="procurer.fileList" />
+					<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Run.limitNum" :uploadFileUrl="UpImg_Run.uploadFileUrl"
+					 :header="UpImg_Run.header" :fileKeyName="UpImg_Run.name" :uImgList.sync="UpImg_Run.uImgList" @uploadSuccess="uploadSuccess"
+					 @upload="upFile" />
 				</view>
 			</view>
 
@@ -81,43 +86,43 @@
 				<u-form-item prop="name">
 					<view class="Con_box">
 						<text>食用农产品名称</text>
-						<u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入食用农产品名称" />
+						<u-input v-model="form.certificateName" style="flex: 1;" input-align="right" placeholder="请输入食用农产品名称" />
 					</view>
 				</u-form-item>
 				<u-form-item prop="name">
 					<view class="Con_box">
 						<text>数量（重量）</text>
-						<u-input v-model="form.weight" type="number" style="flex: 1;text-align: right;" placeholder="请输入请输入货品重量" />KG
+						<u-input v-model="form.certificateNum" style="flex: 1;" input-align="right" placeholder="请输入请输入货品重量" />KG
 					</view>
 				</u-form-item>
-				<u-form-item prop="starTime">
+				<u-form-item>
 					<view class="Con_box">
 						<text>开具时间</text>
-						<view @click="openLipicker('开具时间')" :class="{'place_box':!form.starTime}">{{form.starTime ? form.starTime : '请选择开具时间'}}</view>
+						<view @click="openLipicker('开具时间')" :class="{'place_box':!form.certificateTime}">{{form.certificateTime ? form.certificateTime : '请选择开具时间'}}</view>
 					</view>
 				</u-form-item>
-				<u-form-item prop="name">
+				<u-form-item prop="certificateUser">
 					<view class="Con_box">
 						<text class="star">生产者</text>
-						<u-input v-model="form.producer" style="flex: 1;text-align: right;" placeholder="请输入生产者" />
+						<u-input v-model="form.certificateUser" style="flex: 1;" input-align="right" placeholder="请输入生产者" />
 					</view>
 				</u-form-item>
-				<u-form-item prop="name">
+				<u-form-item>
 					<view class="Con_box">
 						<text>产地地址</text>
-						<u-input v-model="form.adress" style="flex: 1;text-align: right;" placeholder="请输入产地地址具体到村" />
+						<u-input v-model="form.certificateAddress" style="flex: 1;" input-align="right" placeholder="请输入产地地址具体到村" />
 					</view>
 				</u-form-item>
-				<u-form-item prop="name">
+				<u-form-item>
 					<view class="Con_box">
 						<text>联系方式</text>
-						<u-input v-model="form.phone" type="number" style="flex: 1;text-align: right;" placeholder="请输入联系电话" />
+						<u-input v-model="form.certificatePhone" style="flex: 1;" input-align="right" placeholder="请输入联系电话" />
 					</view>
 				</u-form-item>
-				<u-form-item prop="name">
+				<u-form-item>
 					<view class="Con_box">
 						<text>运输车辆车牌</text>
-						<u-input v-model="form.carCardNum" style="flex: 1;text-align: right;" placeholder="请输入车牌号" />
+						<u-input v-model="form.certificateCarNum" style="flex: 1;" input-align="right" @input="CaseInputCopy" placeholder="请输入车牌号" />
 					</view>
 				</u-form-item>
 			</view>
@@ -140,53 +145,200 @@
 </template>
 
 <script>
-	import Uploader from '@/components/Uploader/Uploader.vue'
 	import citys from '../../common/citys.js'
+	import uImg from '@/components/zhtx-uploadImg/zhtx-uploadImg.vue';
 	import {
-	  GetQueryValue
-	 } from '../../common/common.js'
+		GetQueryValue
+	} from '../../common/common.js'
 	export default {
 		components: {
-			Uploader
+			uImg
 		},
 		data() {
 			return {
+				id: null,
+				UpImg_Peoser: {
+					limitNum: 1,
+					uploadFileUrl: 'https://wechat.daizhangfang.net/common/sysFile/uploadBase64',
+					msg: '',
+					length: 140,
+					name: '货物照片', //上传的名字
+					header: { // 如果需要header，请上传
+					},
+					uImgList: []
+				
+				},
+				UpImg_Run: {
+					limitNum: 1,
+					uploadFileUrl: 'https://wechat.daizhangfang.net/common/sysFile/uploadBase64',
+					msg: '',
+					length: 150,
+					name: '检测证明', //上传的名字
+					header: { // 如果需要header，请上传
+					},
+					uImgList: []
+				
+				},
 				form: {
-					time: '',
-					name: '',
-					deal: '',
-					enter: '',
-					goods: '',
-					region: '',
-					starTime: '',
-					certificateNum: '',
-					weight: '',
+					subscribeTimeStr: '',
+					tradeSector: '',
+					enterDoorNum: '',
+					itemVariety: '',
+					itemPlace: '',
 					CarNum: '',
-					checked: false,
-					producer: '',
-					adress: '',
-					phone: '',
-					carCardNum: '',
+					certificateName: '',
+					certificateTime: '',
+					certificateUser: '',
+					certificatePhone: '',
+					certificateCarNum: '',
+					itemNum: '',
+					certificateNum: '',
+					certificateAddress: '',
+					itemImg: '',
+					checkImg: ''
 				},
 				procurer: {
 					fileList: []
 				},
 				rules: {
-					name: [{
+					time: [{
 						required: true,
-						message: '请输入姓名',
+						message: '请选择预约时间',
 						// 可以单个或者同时写两个触发验证方式 
 						trigger: ['change', 'blur'],
 					}],
-					intro: [{
-						min: 5,
-						message: '简介不能少于5个字',
-						trigger: 'change'
+					deal: [{
+						required: true,
+						message: '请选择进场交易区',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
+					}],
+					enter: [{
+						required: true,
+						message: '请选择进场门',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
+					}],
+					region: [{
+						required: true,
+						message: '请选择具体产地',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
+					}],
+					CarNum: [{
+						required: true,
+						message: '请输入车牌号',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
+					}],
+					producer: [{
+						required: true,
+						message: '请输入生产者',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
 					}]
 				},
 				// 定义select框
 				show: false,
 				SelectCon: '',
+				list: [{
+					
+					label: "芒果交易区",
+					value: 1,
+					children: [{
+						label: "芒果交易区正门",
+						value: 2,
+					}, {
+						label: "芒果员工通道",
+						value: 3,
+					}]
+				}, {
+					label: "周转一区",
+					value: 4,
+					children: [{
+						label: "周转一区1门",
+						value: 5,
+					}, {
+						label: "周转一区2门",
+						value: 6,
+					}, {
+						label: "周转一区3门",
+						value: 7,
+					}],
+					
+				}, {
+					children: [],
+					label: "水果区",
+					value: 8,
+				}],
+				List_Con: [
+					{
+						value: '芒果交易区',
+						label: '芒果交易区',
+						children: [
+							{
+								value: '芒果交易区正门',
+								label: '芒果交易区正门'
+							},
+							{
+								value: '芒果员工通道',
+								label: '芒果员工通道'
+							}
+						]
+					},
+					{
+						value: '周转一区',
+						label: '周转一区',
+						children: [
+							{
+								value: '周转一区1门',
+								label: '周转一区1门'
+							},
+							{
+								value: '周转一区2门',
+								label: '周转一区2门'
+							},
+							{
+								value: '周转一区3门',
+								label: '周转一区3门'
+							}
+						]
+					},
+					{
+						value: '水果区',
+						label: '水果区',
+						children: [
+							{
+								value: '大农门',
+								label: '大农门'
+							},
+							{
+								value: '富农门',
+								label: '富农门'
+							},
+							{
+								value: '强农门',
+								label: '强农门'
+							},
+							{
+								value: '裕农门',
+								label: '裕农门'
+							},
+							{
+								value: '三农门',
+								label: '三农门'
+							},
+							{
+								value: '水果区',
+								label: '水果区'
+							},
+							{
+								value: '大农门车场',
+								label: '大农门车场'
+							}
+						]
+					},
+				],
 				// 定义lb-picker
 				showTime: false,
 				params: {
@@ -200,50 +352,7 @@
 				// 多级联动
 				showRegion: false,
 				activeRegion: '',
-					list: [{
-							value: 1,
-							name: '中国',
-							children: [{
-									value: 2,
-									name: '广东',
-									children: [{
-											value: 3,
-											label: '深圳'
-										},
-										{
-											value: 4,
-											label: '广州'
-										}
-									]
-								},
-								{
-									value: 5,
-									label: '广西',
-									children: [{
-											value: 6,
-											label: '南宁'
-										},
-										{
-											value: 7,
-											label: '桂林'
-										}
-									]
-								}
-							]
-						},
-					{
-						value: 8,
-						label: '美国',
-						children: [{
-							value: 9,
-							label: '纽约',
-							children: [{
-								value: 10,
-								label: '皇后街区'
-							}]
-						}]
-					}
-				],
+				list: [],
 				action: 'https://wechat.daizhangfang.net/common/sysFile/upload',
 				supplier: {
 					fileList: [],
@@ -657,54 +766,80 @@
 				}, {
 					name: '金瓜'
 				}],
-				showCategory: false,
-				area:'',
-				code:''
+				showCategory: false
 			}
 
 		},
-		created() {
-			this.getUser()
-		},
 		methods: {
+			// 车牌号大写
+			CaseInput(val){
+				console.log(val,'val')
+				this.form.CarNum = val.toUpperCase()
+			},
+			CaseInputCopy(val){
+				console.log(val,'val')
+				this.form.certificateCarNum = val.toUpperCase()
+			},
 			submit() {
 				console.log(this.procurer.fileList)
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
 						console.log('验证通过');
-						let data = {
-							subscribeTimeStr: this.form.time,
-							tradeSector: this.form.deal,
-							enterDoorNum: this.form.enter,
-							certificateName: this.form.name,
-							itemPlace: this.form.region,
-							certificateName: this.form.certificateNum,
-							carNum: this.form.CarNum,
-							itemImg: this.imgUrlFirst,
-							itemNum: this.form.weight,
-							certificateTime: this.form.starTime,
-							certificateUser: this.form.producer,
-							certificateAddress: this.form.adress,
-							certificatePhone: this.form.phone,
-							certificateCarNum: this.form.carCardNum,
-							checkImg: this.imgUrlTwo
+						let IsImg = true;
+						if(!this.form.itemImg) {
+							IsImg = false;
+							uni.showToast({
+								title: '请上传货物照片',
+								icon: 'none'
+							})
 						}
-						uni.request({
-							url: 'http://39.107.95.50/h5/carSubscribe/save',
-							// url:'https://wechat.daizhangfang.net/h5/carSubscribe/save',
-							header: {
-								'content-type': 'application/x-www-form-urlencoded'
-							},
-							method: 'POST',
-							data: data,
-							success: (res) => {
-								console.log('卖货是否成功', res)
-								alert(res.data.msg)
-								uni.navigateTo({
-									url: '/pages/appointmentSuccessful/successful?id=' + res.data.msg
-								})
-							}
-						})
+						let IsChecked = true;
+						if(!this.form.checked) {
+							IsChecked = false;
+							uni.showToast({
+								title: '请勾选我已阅读',
+								icon: 'none'
+							})
+						}
+						let data = {
+							subscribeTimeStr: this.form.subscribeTimeStr,
+							tradeSector: this.form.tradeSector,
+							enterDoorNum: this.form.enterDoorNum,
+							itemVariety: this.form.itemVariety,
+							itemPlace: this.form.itemPlace,
+							CarNum: this.form.CarNum,
+							certificateName: this.form.certificateName,
+							certificateTime: this.form.certificateTime,
+							certificateUser: this.form.certificateUser,
+							certificatePhone: this.form.certificatePhone,
+							certificateCarNum: this.form.certificateCarNum,
+							itemNum: this.form.itemNum,
+							certificateNum: this.form.certificateNum,
+							certificateAddress: this.form.certificateAddress,
+							itemImg: this.form.itemImg,
+							checkImg: this.form.checkImg,
+							checked: false
+						}
+						if(IsImg && IsChecked) {
+							this.uniRequest({
+								url: 'carSubscribe/save',
+								method: 'post',
+								data: data,
+								success: (res) => {
+									console.log(res,'res11')
+									if(res.data.code === 0) {
+										uni.navigateTo({
+											url: '/pages/appointmentSuccessful/successful?id=' + res.data.msg
+										})
+									} else {
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none'
+										})
+									}
+								}
+							})
+						}
 					} else {
 						console.log('验证失败');
 					}
@@ -714,47 +849,41 @@
 			confirm(e) {
 				console.log(e);
 				this.show = false;
+				console.log(e, 'ee')
 				if (this.SelectCon === '交易区') {
-					this.form.deal = e[0].label
-					this.form.enter = e[1].label;
+					this.form.tradeSector = e[0].label
 				} else if (this.SelectCon === '进场门') {
-					this.form.enter = e[1].label;
-				} else if (this.SelectCon === '货品品类') {
-					this.form.goods = e[0].label;
+					this.form.enterDoorNum = e[1].label;
 				}
 			},
-			categorySelect() {
-				this.showCategory = true
-			},
-			getList() {
-				uni.request({
-					// url: 'http://39.107.95.50/statistics/getLane',
-					url:'https://wechat.daizhangfang.net/h5/statistics/getLane',
-					method:'GET',
-					success: (res) => {
-						console.log('园区列表',res)
-						for(let i = 0;i<res.data.data.length;i++) {
-							res.data.data[i].label = res.data.data[i].name
-							for(let j = 0;j<res.data.data[i].children.length;j++) {
-								res.data.data[i].children[j].label = res.data.data[i].children[j].name
-							}
-						}
-						this.area = res.data.data
-					}
-				})
+			categorySelect(v) {
+				console.log(v, 'v')
+				this.showCategory = true;
 			},
 			// 弹窗框
 			openSelect(v) {
 				this.SelectCon = v;
 				this.show = true;
-				console.log('选中的类别', v)
-				if (v === '交易区') {
-					this.list = this.area;
-					console.log('选择框',this.list)
-				} else if (v === '进厂门') {
-					this.list = this.area;
-				}
-
+			},
+			// 获取交易区-进场区数据
+			getDistrict(){
+				uni.request({
+					url: 'https://wechat.daizhangfang.net/statistics/getLane',
+					success:(res)=>{
+						if(res.data.code === 0) {
+							console.log(res.data.data,'data')
+							if(res.data.data.length > 0) {
+								res.data.data.forEach((item,index)=>{
+									item.label = item.name;
+									item.children.forEach((i,j)=>{
+										i.label = i.name;
+									})
+								})
+							}
+							this.List_Con = res.data.data;
+						}
+					}
+				})
 			},
 			// 打开日期框
 			openLipicker(v) {
@@ -764,18 +893,12 @@
 			},
 			// 地区多级联动
 			confirmRegion(e) {
-				console.log(e, 'e');
-				console.log('城市列表', citys)
 				let val = '';
-				// e.forEach((item, index) => {
-				// 	console.log(item, 'item')
-				// 	val += item.label;
-				// })
 				for (let i = 0; i < e.length; i++) {
 					val += e[i].label
 				}
 				if (this.activeRegion === '具体产地') {
-					this.form.region = val;
+					this.form.itemPlace = val;
 				}
 			},
 			openSelectMore(v) {
@@ -790,61 +913,104 @@
 			sureTime(date) {
 				console.log('选中日期', date)
 				if (this.openTime == '预约时间') {
-					this.form.time = date.year + '-' + date.month + '-' + date.day
+					this.form.subscribeTimeStr = date.year + '-' + date.month + '-' + date.day
 				} else if (this.openTime == '开具时间') {
-					this.form.starTime = date.year + '-' + date.month + '-' + date.day
+					this.form.certificateTime = date.year + '-' + date.month + '-' + date.day
 				}
 			},
 			comfirmCategory(e) {
-				console.log('选中的数据', e)
-				this.form.goods = e[0].label
+				this.form.itemVariety = e[0].label
 			},
-			Procurer_Upload(e) {
-				console.log('图片是否成功上传', e)
-				this.imgUrlFirst = e.url
+			// 图片上传
+			uploadSuccess(result) {
+				console.log(result,'result')
+				if(result.res.confirm) {
+					if(result.name === '货物照片'){
+						this.form.itemImg = '';
+						this.UpImg_Peoser.uImgList = []
+					} else if(result.name === '检测证明') {
+						this.form.checkImg = '';
+						this.UpImg_Run.uImgList = []
+					}
+				} else if(result.res.data) {
+					let res = result.res.data;
+					if(result.name === '货物照片') {
+						this.form.itemImg = res.url;
+						this.UpImg_Peoser.uImgList = [res.url]
+					} else if(result.name === '检测证明') {
+						this.form.checkImg = res.url;
+						this.UpImg_Run.uImgList = [res.url]
+					}
+				}
 			},
-			Procurer_UploadTwo(e) {
-				console.log('图片是否成功上传', e)
-				this.imgUrlTwo = e.url
-			},
-			
-			getUser() {
-				console.log('执行获取用户信息')
-				console.log(this.code)
+			jurisdiction(){
 				let res = GetQueryValue('code');
-				uni.request({
-					// url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=' + this.code,
-					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
-					method: 'GET',
+				this.uniRequest({
+					url: 'accouninfo/getInfo?code=' + res,
 					success: (res) => {
-						console.log('获取用户信息', res)
-						// this.getData()
-						if (!res.data.data.account.cellphone) {
+						if (!res.data.account.cellphone) {
 							uni.navigateTo({
 								url: '/pages/login/index'
 							})
-						} else if (!res.data.data.info.name && !res.data.data.info.cardNo) {
+						}
+						if (!res.data.info.name && !res.data.info.cardNo) {
 							uni.navigateTo({
 								url: '/pages/Information/Error'
 							})
-						} else if (res.data.data.account.cellphone !== '' && Number(res.data.data.info.status) === 0) {
+						}
+						if(Number(res.data.info.status) === 0){
 							uni.navigateTo({
 								url: '/pages/Information/audit'
 							})
-						} else {
-							this.getList()
 						}
-
-
-
 					}
 				})
 			},
-
+			getInfo(){
+				this.uniRequest({
+					url: 'carSubscribe/getById/' + this.id,
+					success:(res)=>{
+						console.log(res,'res')
+						if(res.code === 0) {
+							this.form = {
+								subscribeTimeStr: res.data.subscribeTimeStr,
+								tradeSector: res.data.tradeSector,
+								enterDoorNum: res.data.enterDoorNum,
+								itemVariety: res.data.itemVariety,
+								itemPlace: res.data.itemPlace,
+								CarNum: res.data.CarNum,
+								certificateName: res.data.certificateName,
+								certificateTime: res.data.certificateTime,
+								certificateUser: res.data.certificateUser,
+								certificatePhone: res.data.certificatePhone,
+								certificateCarNum: res.data.certificateCarNum,
+								itemNum: res.data.itemNum,
+								certificateNum: res.data.certificateNum,
+								certificateAddress: res.data.certificateAddress,
+								itemImg: res.data.itemImg,
+								checkImg: res.data.checkImg
+							}
+							
+							this.UpImg_Peoser.uImgList = [res.data.itemImg];
+							this.UpImg_Run.uImgList = [res.data.checkImg];
+						}
+					}
+				})
+			}
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
+		},
+		onShow(){
+			this.getDistrict()
+			this.jurisdiction()
+		},
+		created(){
+			this.getInfo()
+		},
+		onLoad(options){
+			this.id = options.id;
 		}
 	}
 </script>
@@ -902,6 +1068,18 @@
 				}
 			}
 
+			// .Good_box {
+			// 	width: 100%;
+			// 	.Con_box {
+			// 		display: flex;
+			// 		justify-content: space-between;
+			// 		width: 100%;
+			// 		>view {
+			// 			flex: 1;
+			// 			text-align: right;
+			// 		}
+			// 	}
+			// }
 		}
 
 		.Con_goods {
@@ -928,7 +1106,7 @@
 			.Uploader_box_left {
 				margin-right: 186rpx;
 
-				>view::after {
+				>view.star:after {
 					content: '*';
 					color: #ff0000;
 					font-weight: 600;

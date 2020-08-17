@@ -149,9 +149,8 @@
 		methods:{
 			getData() {
 				uni.request({
-					url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId='+this.orderID,
-					// url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId='this.orderID,
-					method:'GET',
+					// url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId='+this.orderID,
+					url: 'http://39.107.95.50/h5/order/selectMyOrderDetails?orderId=' + this.orderID,
 					success: (res) => {
 						this.listData = res.data.orderListVos
 						console.log('查看溯源交易单数据',res)

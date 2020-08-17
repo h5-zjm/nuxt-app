@@ -172,36 +172,40 @@
 			"style": {
 				"navigationBarTitleText": "系统提示"
 			}
-        }
-        ,{
-            "path" : "pages/Information/informationShow_xfd",
-            "style" : {
+		}, {
+			"path": "pages/Information/informationShow_xfd",
+			"style": {
 				"navigationBarTitleText": "个人信息"
 			}
 		},
-        {
-            "path" : "pages/appointmentSuccessful/successful",
-            "style" : {
-				"navigationBarTitleText":"预约成功"
+		{
+			"path": "pages/appointmentSuccessful/successful",
+			"style": {
+				"navigationBarTitleText": "预约成功"
 			}
-        }
-        ,{
-            "path" : "pages/appointmentSuccessful/cancelSuccessful",
-            "style" : {
-				"navigationBarTitleText":"取消成功"
+		}, {
+			"path": "pages/appointmentSuccessful/cancelSuccessful",
+			"style": {
+				"navigationBarTitleText": "取消成功"
 			}
-        }
-	    ,{
-            "path" : "pages/SellGoods/edit",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/appointmentSuccessful/accessDenied",
-            "style" : {
-				"navigationBarTitleText":"拒绝访问"
+		}, {
+			"path": "pages/SellGoods/edit",
+			"style": {}
+		}, {
+			"path": "pages/appointmentSuccessful/accessDenied",
+			"style": {
+				"navigationBarTitleText": "拒绝访问"
 			}
-        }
-    ]
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "",
+		"navigationBarBackgroundColor": "#ffffff",
+		// "backgroundColor": "#ffffff",
+		"onReachBottomDistance": 300
+		// "navigationStyle": "custom"
+	}
 
 	// "tabBar": {
 	// 	"color": "#DCDCDC",

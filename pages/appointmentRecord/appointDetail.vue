@@ -53,8 +53,8 @@
 				</view>
 			</view>
 			<view class="appoint-tip">
-				<u-button @click="showPopUp" type="success" class="mb20">修改预约</u-button>
-				<u-button @click="cancelApponint" type="error">取消预约</u-button>
+				<u-button @click="showPopUp" type="success" class="mb20" v-if="ActiveStutas === 1">修改预约</u-button>
+				<u-button @click="cancelApponint" type="error" v-if="ActiveStutas === 1">取消预约</u-button>
 			</view>
 		</view>
 	</view>
@@ -78,8 +78,8 @@
 					car_num:'',
 					item_img:'',
 					check_img:''
-					
-				}//url上面的数据
+				},//url上面的数据
+				ActiveStutas: null
 			};
 		},
 		onLoad(option) {
@@ -93,6 +93,7 @@
 		methods:{
 			cancelAction(){
 				uni.request({
+					// url: 'http://39.107.95.50/h5/carSubscribe/update',
 					url: 'https://wechat.daizhangfang.net/h5/carSubscribe/update',
 					method: 'post',
 					data: {
@@ -102,7 +103,7 @@
 					},
 					success: (res) => {
 							uni.navigateTo({
-								url: 'pages/appointmentRecord/cancelSuccess'
+								url: '/pages/appointmentRecord/cancelSuccess'
 							})
 					},
 					
@@ -126,13 +127,13 @@
 			showPopUp() {
 				console.log('跳转')
 				uni.navigateTo({
-					url: '/pages/SellGoods/edit?modelId=0&id='+this.id
+					url: '/pages/SellGoods/index?modelId=0&id='+this.id
 				});
 			},
 			getData(){
 				// 获取页面数据
 				uni.request({
-					// url: 'http://39.107.95.50:80/h5/carSubscribe/getById/'+this.id,
+					// url: 'http://39.107.95.50/h5/carSubscribe/getById/'+this.id,
 					url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getById/'+this.id,
 					method: 'GET',
 					data: {
@@ -148,6 +149,8 @@
 						}else if(this.info.status==3){
 							this.info.status_cn='已作废'
 						}
+						
+						this.ActiveStutas = Number(this.info.status);
 					}
 				})
 			},

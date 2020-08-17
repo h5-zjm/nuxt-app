@@ -62,7 +62,7 @@
 						<view class="Con_tit">
 							<view></view>
 						</view>
-						<view>伙计/员工</view>
+						<view>司机/伙计</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">

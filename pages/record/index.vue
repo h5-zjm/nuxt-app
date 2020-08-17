@@ -39,10 +39,8 @@
 		},
 		methods: {
 			Clickbox(item,index){
-				console.log(index,'index')
-				console.log(item,'item')
 				uni.navigateTo({
-					url: '/pages/getTraceableTransacteOrder/index'
+					url: '/pages/getTraceableTransacteOrder/index?id=' + item.id
 				})
 			},
 			getBuyGoods(){
@@ -73,7 +71,7 @@
 								url: '/pages/Information/Error'
 							})
 						}
-						if(Number(res.data.info.status) === 0){
+						if(res.data.account.cellphone && Number(res.data.info.status) === 0){
 							uni.navigateTo({
 								url: '/pages/Information/audit'
 							})
@@ -120,7 +118,9 @@
 		
 		.table_box {
 			background-color: #fff;
-			
+			height: 700rpx;
+			overflow: hidden;
+			overflow-y: scroll;
 			.u-table {
 				border: none;
 				.theader {
