@@ -182,6 +182,8 @@
 							url = '/pages/Information/informationShow_procurer?radio=' + 2
 						} else if (res.data.info.businessType === '摆渡车') {
 							url = '/pages/Information/informationShow_ferry?radio=' + 3
+						} else if (res.data.info.businessType === '新发地办公和临时人员') {
+							url = '/pages/Information/informationShow_xfd?radio=' + 5
 						}
 						uni.navigateTo({
 							url: url

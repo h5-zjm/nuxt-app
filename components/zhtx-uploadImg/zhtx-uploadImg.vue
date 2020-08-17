@@ -102,7 +102,10 @@
 							this.list.splice(index, 1); //已经达到了数据更新的状态
 							// this.$forceUpdate(); //强制更新
 							this.$emit('update:uImgList', this.list); //类似双向数据绑定
-							this.$emit('@uploadSuccess',res)
+							this.$emit('uploadSuccess', {
+								res: res,
+								name: this.fileKeyName
+							});
 						}
 					}
 				});
@@ -245,6 +248,9 @@
 
 			},
 
+		},
+		onShow(){
+			console.log(this.refreshAsync,'this.refreshAsync')
 		}
 	};
 </script>

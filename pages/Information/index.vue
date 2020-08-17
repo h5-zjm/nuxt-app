@@ -17,7 +17,10 @@
 									<u-radio :name="3">摆渡车（场内运货）</u-radio>
 								</view>
 								<view class="status_radio">
-									<u-radio :name="4">员工/伙计</u-radio>
+									<u-radio :name="4">司机/伙计</u-radio>
+								</view>
+								<view class="status_radio">
+									<u-radio :name="5">新发地办公和临时人员</u-radio>
 								</view>
 							</u-radio-group>
 						</view>
@@ -50,8 +53,8 @@
 							</u-form-item>
 							<u-form-item prop="carNumber">
 								<view class="Con_box">
-									<text class="star">车牌号</text>
-									<u-input v-model="form.carNumber" input-align="right" style="flex: 1;" @input="CaseInput" placeholder="请输入车牌号" />
+									<text>车牌号</text>
+									<u-input v-model="form.carNumber" input-align="right" style="flex: 1;" @input="CaseInput" placeholder="车牌不必填（如有车辆必须登记）" />
 								</view>
 							</u-form-item>
 							<u-form-item prop="cardNo">
@@ -69,7 +72,7 @@
 						<view class="tit">个人信息</view>
 						<view class="Active_box_sun">
 							<u-form-item label="性别">
-								<u-input v-model="form.gender" input-align="right" placeholder="请输入性别" />
+								<view @click="openSelect('性别')" :class="{'place_box':!form.gender}" style="text-align: right;flex: 1;">{{form.gender ? form.gender : '请选择性别'}}</view>
 							</u-form-item>
 							<u-form-item label="年龄">
 								<u-input v-model="form.age" input-align="right" placeholder="请输入年龄" />
@@ -117,7 +120,8 @@
 							<view class="tit">个人信息</view>
 							<view class="Active_box_sun">
 								<u-form-item label="性别">
-									<u-input v-model="form.gender" input-align="right" placeholder="请输入性别" />
+									<!-- <u-input v-model="form.gender" input-align="right" placeholder="请输入性别" /> -->
+									<view @click="openSelect('性别')" :class="{'place_box':!form.gender}" style="text-align: right;flex: 1;">{{form.gender ? form.gender : '请选择性别'}}</view>
 								</u-form-item>
 								<u-form-item label="年龄">
 									<u-input v-model="form.age" input-align="right" placeholder="请输入年龄" />
@@ -187,7 +191,7 @@
 								</u-form-item>
 							</view>
 
-							<!-- 伙伴信息 -->
+							<!-- 伙计1信息 -->
 							<view class="partner_box">
 								<view class="partner">
 									<view class="tit_con">伙计1信息</view>
@@ -229,7 +233,7 @@
 						<view class="tit">个人信息</view>
 						<view class="Active_box_sun">
 							<u-form-item label="性别">
-								<u-input v-model="form.sex" input-align="right" placeholder="请输入性别" />
+								<view @click="openSelect('性别')" :class="{'place_box':!form.gender}" style="text-align: right;flex: 1;">{{form.gender ? form.gender : '请选择性别'}}</view>
 							</u-form-item>
 							<u-form-item label="年龄">
 								<u-input v-model="form.age" input-align="right" placeholder="请输入年龄" />
@@ -285,7 +289,7 @@
 							<u-picker mode="time" v-model="showTime" :default-time="form.NowTime" :params="params" @confirm="PickerConfirm"></u-picker>
 						</view>
 
-						<!-- 伙伴信息 -->
+						<!-- 伙计信息 -->
 						<view class="partner_box">
 							<view class="partner">
 								<view class="tit_con">伙计1信息</view>
@@ -325,7 +329,7 @@
 						<view class="tit">个人信息</view>
 						<view class="Active_box_sun">
 							<u-form-item label="性别">
-								<u-input v-model="form.gender" input-align="right" placeholder="请输入性别" />
+								<view @click="openSelect('性别')" :class="{'place_box':!form.gender}" style="text-align: right;flex: 1;">{{form.gender ? form.gender : '请选择性别'}}</view>
 							</u-form-item>
 							<u-form-item label="年龄">
 								<u-input v-model="form.age" input-align="right" placeholder="请输入年龄" />
@@ -351,12 +355,40 @@
 							<u-select v-model="showRegion" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
 						</view>
 					</view>
-					<view class="state">
+					
+					<!-- 新发地办公和临时人员 -->
+					<view class="Active_box" v-if="active_copy === 5">
+						<view class="tit">个人信息</view>
+						<view class="Active_box_sun">
+							<u-form-item label="性别">
+								<view @click="openSelect('性别')" :class="{'place_box':!form.gender}" style="text-align: right;flex: 1;">{{form.gender ? form.gender : '请选择性别'}}</view>
+							</u-form-item>
+							<u-form-item label="年龄">
+								<u-input v-model="form.age" input-align="right" placeholder="请输入年龄" />
+							</u-form-item>
+							<u-form-item label="籍贯" prop="place" class="place">
+								<view @click="openSelect('籍贯')" :class="{'place_box':!form.place}">{{form.place ? form.place : '请选择籍贯'}}</view>
+						
+							</u-form-item>
+							<u-form-item label="居住地" prop="residence" class="place">
+								<view @click="openSelect('居住地')" :class="{'place_box':!form.residence}">{{form.residence ? form.residence : '请选择居住地'}}</view>
+							</u-form-item>
+							<u-form-item label="详细地址">
+								<u-input v-model="form.currentPlace" input-align="right" placeholder="请输入居住地详细地址" />
+							</u-form-item>
+						
+							<!-- select框 -->
+							<u-select v-model="showRegion" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
+						</view>
+					</view>
+					
+					
+					<view class="state" v-if="form.radio">
 						<u-checkbox v-model="form.checked"></u-checkbox>
 						<text>我已阅读并知晓本申报所列事项，并保证以上申报内容正确属实，如因错误填报产生的法律责任后果自负。</text>
 					</view>
 
-					<view class="next">
+					<view class="next" v-if="form.radio">
 						<view class="nextBtn" @click="nextClick" v-if="!show_back_btn">下一步</view>
 						<view class="nextBtn" @click="backClick" v-if="show_back_btn">上一步</view>
 						<view class="btn_submit" @click="submit">提交</view>
@@ -444,6 +476,10 @@
 					businessLinkmobile: '',
 					inTime: '',
 					urlImg: '',
+					staffName1: '',
+					staffCardNo1: '',
+					staffMobile1: '',
+					staffAddr1: '',
 
 					// 自定义
 					NowTime: timeFormat(new Date()),
@@ -489,7 +525,7 @@
 						trigger: ['change', 'blur']
 					}],
 					carNumber: [{
-						required: true,
+						//  required: true,
 						message: '请输入车牌号',
 						// 可以单个或者同时写两个触发验证方式 
 						trigger: ['change', 'blur'],
@@ -513,6 +549,36 @@
 						message: '请输入主营业务',
 						// 可以单个或者同时写两个触发验证方式 
 						trigger: ['change', 'blur'],
+					}],
+					staffCardNo1: [{
+						required: false,
+						message: '请输入伙计1身份证',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
+					},
+					{
+						pattern: CONFIG.ID_CODE,
+						// 正则检验前先将值转为字符串
+						transform(value) {
+							return String(value);
+						},
+						message: '请输入18位身份证号',
+						trigger: ['change', 'blur']
+					}],
+					staffMobile1: [{
+						required: false,
+						message: '请输入伙计1手机号',
+						// 可以单个或者同时写两个触发验证方式 
+						trigger: ['change', 'blur'],
+					},
+					{
+						pattern: CONFIG.MOBILE_REGEXP,
+						// 正则检验前先将值转为字符串
+						transform(value) {
+							return String(value);
+						},
+						message: '请输入11位手机号',
+						trigger: ['change', 'blur']
 					}]
 				},
 				// 模拟多级联动
@@ -544,14 +610,14 @@
 
 		},
 		methods: {
+			// 车牌号大写
 			CaseInput(val){
 				this.form.carNumber = val.toUpperCase()
 			},
+			// 提交
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						console.log(this.form.urlImg,'urlImg')
-						console.log(this.form.radio, '111')
 						if (this.form.radio === 1) {
 							this.form.businessType = '供应商'
 						} else if (this.form.radio === 2) {
@@ -559,9 +625,10 @@
 						} else if (this.form.radio === 3) {
 							this.form.businessType = '摆渡车'
 						} else if (this.form.radio === 4) {
-							this.form.businessType = '员工/伙计'
+							this.form.businessType = '司机/伙计'
+						} else if (this.form.radio === 5) {
+							this.form.businessType = '新发地办公和临时人员'
 						}
-
 						let params = {
 							id: this.form.id,
 							name: this.form.name,
@@ -583,9 +650,12 @@
 							businessName: this.form.businessName,
 							// birthday: this.form.birthday,
 							urlImg: this.form.urlImg,
+							inTime: this.form.inTime,
 							gender: this.form.gender,
 							age: this.form.age,
 							currentPlace: this.form.currentPlace,
+							purchaseArea: this.form.purchaseArea,
+							manageArea: this.form.manageArea,
 							businessLinkman: this.form.businessLinkman,
 							businessLinkmobile: this.form.businessLinkmobile,
 							staffName1: this.form.staffName1,
@@ -616,9 +686,12 @@
 								method: 'get',
 								data: params,
 								success: (res) => {
-									uni.navigateTo({
-										url: '/pages/Information/Success?radio=' + this.form.radio
-									})
+									console.log(res,'000')
+									if(res.data.code === 0) {
+										uni.navigateTo({
+											url: '/pages/Information/Success?radio=' + this.form.radio
+										})
+									}
 								}
 							})
 						}
@@ -652,6 +725,8 @@
 						this.form.curentProvince = e[0] ? e[0].label : '';
 						this.form.curentCity = e[1] ? e[1].label : '';
 						this.form.curentArea = e[2] ? e[2].label : '';
+					} else if (this.form.active === '性别'){
+						this.form.gender = e[0] ? e[0].label : ''
 					}
 				}
 
@@ -662,9 +737,23 @@
 				this.form.inTime = e.year + '-' + e.month + '-' + e.day
 			},
 			// 打开多级联动
-			openSelect(v) {
+			openSelect(val) {
 				this.showRegion = true;
-				this.form.active = v;
+				this.form.active = val;
+				if(val === '性别') {
+					this.list = [
+						{
+							value: '1',
+							label: '男'
+						},
+						{
+							value: '2',
+							label: '女'
+						}
+					]
+				} else {
+					this.list = citys;
+				}
 			},
 			// 打开u-popup
 			openUpopup(val) {
@@ -743,7 +832,15 @@
 			// 图片上传
 			uploadSuccess(result) {
 				console.log(result,'result')
-				if(result.res.data) {
+				if(result.res.confirm) {
+					if(result.name === '用户'){
+						this.form.urlImg = '';
+						this.UpImg_Peoser.uImgList = []
+					} else if(result.name === '营业执照') {
+						this.form.businessUrl = '';
+						this.UpImg_Run.uImgList = []
+					}
+				} else if(result.res.data) {
 					let res = result.res.data;
 					if(result.name === '用户') {
 						this.form.urlImg = res.url;
@@ -777,7 +874,7 @@
 			}
 		},
 		// 获取数据
-		onShow() {
+		created() {
 			this.uniRequest({
 				url: 'accouninfo/getInfo',
 				success: (res) => {
@@ -806,9 +903,15 @@
 							gender: res.data.info.gender,
 							age: res.data.info.age,
 							currentPlace: res.data.info.currentPlace,
+							purchaseArea: res.data.info.purchaseArea,
+							manageArea: res.data.info.manageArea,
 							businessLinkman: res.data.info.businessLinkman,
 							businessLinkmobile: res.data.info.businessLinkmobile,
-							inTime: res.data.info.inTime,
+							staffName1: res.data.info.staffName1,
+							staffCardNo1: res.data.info.staffCardNo1,
+							staffMobile1: res.data.info.staffMobile1,
+							staffAddr1: res.data.info.staffAddr1,
+							inTime: res.data.info.inTime ? timeFormat(res.data.info.inTime,'yyyy-MM-dd',false) : '',
 							urlImg: res.data.info.urlImg,
 							// 自定义
 							radio: null,
@@ -821,13 +924,17 @@
 							this.form.radio = 2;
 						} else if (res.data.info.businessType === '摆渡车') {
 							this.form.radio = 3;
-						} else if (res.data.info.businessType === '员工/伙计') {
+						} else if (res.data.info.businessType === '司机/伙计') {
 							this.form.radio = 4;
+						} else if (res.data.info.businessType === '新发地办公和临时人员') {
+							this.form.radio = 5;
 						}
 						// 户籍
-						this.form.place = res.data.info.registProvince + '-' + res.data.info.registCity + '-' + res.data.info.registArea;
+						let userInfo = res.data.info;
+						
+						this.form.place = userInfo.registProvince ? userInfo.registProvince : '' + '-' + userInfo.registCity ? userInfo.registCity : '' + '-' + userInfo.registArea ? userInfo.registArea : '';
 						// 居住地
-						this.form.residence = res.data.info.curentProvince + '-' + res.data.info.curentCity + '-' + res.data.info.curentArea;
+						this.form.residence = userInfo.curentProvince ? userInfo.curentProvince : '' + '-' + userInfo.curentCity ? userInfo.curentCity : '' + '-' + userInfo.curentArea ? userInfo.curentArea : '';
 						// 图片
 						this.UpImg_Peoser.uImgList = res.data.info.urlImg ? [res.data.info.urlImg] : [];
 						this.UpImg_Run.uImgList = res.data.info.businessUrl ? [res.data.info.businessUrl] : [];
@@ -908,6 +1015,13 @@
 						font-size: 28rpx;
 						font-weight: 400;
 						color: #C0C4CC;
+					}
+					
+					.place_box {
+						font-size: 28rpx;
+						color: #C0C4CC;
+						// cursor: pointer;
+						// background: rgba(0,0,0,0);
 					}
 				}
 

@@ -1,5 +1,5 @@
 <template>
-	<view id="informationShow_ferry">
+	<view id="informationShow_xfd">
 		<u-form :model="form" ref="uForm" label-width="auto">
 			<view class="Img_box">
 				<image :src="form.img_src" mode="aspectFit"></image>
@@ -15,7 +15,7 @@
 				<u-form-item prop="time">
 					<view class="Con_box">
 						<text>手机号：</text>
-						<view>{{form.phone}}</view>
+						<view>{{form.mobile}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
@@ -62,13 +62,7 @@
 						<view class="Con_tit">
 							<view></view>
 						</view>
-						<view>摆渡车（场内运货）</view>
-					</view>
-				</u-form-item>
-				<u-form-item prop="time">
-					<view class="Con_box">
-						<text>车牌号：</text>
-						<view>{{form.carNumber}}</view>
+						<view>新发地办公和临时人员</view>
 					</view>
 				</u-form-item>
 			</view>
@@ -93,16 +87,16 @@
 					gender: '',
 					age: '',
 					// 原籍
-					registProvince: null,
-					registCity: null,
-					registArea: null,
+					registProvince: '',
+					registCity: '',
+					registArea: '',
 					// 先居住地
-					curentProvince: null,
-					curentCity: null,
-					curentArea: null,
+					curentProvince: '',
+					curentCity: '',
+					curentArea: '',
 					// 现居住地
 					currentPlace: '',
-					carNumber: '',
+					// 图片
 					img_src: ''
 				},
 				rules: {
@@ -126,6 +120,7 @@
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
+						console.log('验证通过');
 						uni.navigateTo({
 							url: '/pages/Information/index?Active_radio=' + this.Active_radio
 						})
@@ -144,8 +139,7 @@
 			if (res.radio) {
 				this.Active_radio = parseInt(res.radio);
 			}
-		},
-		// 获取用户信息
+		}, // 获取用户信息
 		onShow() {
 			let res = GetQueryValue('code');
 			this.uniRequest({
@@ -172,10 +166,10 @@
 							url = '/pages/Information/informationShow_supplier?radio=' + 1
 						} else if (res.data.info.businessType === '采购商') {
 							url = '/pages/Information/informationShow_procurer?radio=' + 2
+						} else if (res.data.info.businessType === '摆渡车') {
+							url = '/pages/Information/informationShow_ferry?radio=' + 3
 						} else if (res.data.info.businessType === '司机/伙计') {
 							url = '/pages/Information/informationShow_buddy?radio=' + 4
-						} else if (res.data.info.businessType === '新发地办公和临时人员') {
-							url = '/pages/Information/informationShow_xfd?radio=' + 5
 						}
 						uni.navigateTo({
 							url: url
@@ -197,10 +191,8 @@
 						curentArea: res.data.info.curentArea,
 						// 现居住地
 						currentPlace: res.data.info.currentPlace,
-						carNumber: res.data.info.carNumber,
 						img_src: res.data.info.urlImg
 					}
-
 				}
 			})
 		}
@@ -208,7 +200,7 @@
 </script>
 
 <style lang="scss">
-	#informationShow_ferry {
+	#informationShow_xfd {
 		.tit {
 			font-size: 32rpx;
 			font-weight: 600;

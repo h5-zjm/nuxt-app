@@ -100,21 +100,21 @@
 					success: (res) => {
 						if (res.code === 0) {
 							console.log(Number(res.data.info.status,'Number'))
-							if(res.data.info.status === Number(1)) {
-								if (!res.data.account.cellphone) {
-									uni.navigateTo({
-										url: '/pages/login/index'
-									})
-								} else if (!res.data.info.name && !res.data.info.cardNo) {
-									uni.navigateTo({
-										url: '/pages/Information/Error'
-									})
-								} else {
-									this.submit()
-									this.getCode()
-								}
+							if (!res.data.account.cellphone) {
+								uni.navigateTo({
+									url: '/pages/login/index'
+								})
+							} else if (!res.data.info.name && !res.data.info.cardNo) {
+								uni.navigateTo({
+									url: '/pages/Information/Error'
+								})
+							} else if(Number(res.data.info.status) === 0) {
+								uni.navigateTo({
+									url: '/pages/Information/audit'
+								})
 							} else {
-								
+								this.submit()
+								this.getCode()
 							}
 							
 						}

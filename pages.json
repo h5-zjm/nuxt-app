@@ -23,7 +23,7 @@
 			"style": {
 				"navigationBarTitleText": "进门预约（卖货）"
 			}
-		}, 
+		},
 		{
 			"path": "pages/appointmentRecord/index",
 			"style": {
@@ -171,6 +171,12 @@
 			"path": "pages/appointmentRecord/cancelSuccess",
 			"style": {
 				"navigationBarTitleText": "系统提示"
+			}
+		},
+		{
+			"path": "pages/Information/informationShow_xfd",
+			"style": {
+				"navigationBarTitleText": "个人信息"
 			}
 		}
 	],

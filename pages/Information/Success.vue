@@ -42,6 +42,8 @@
 					url = '/pages/Information/informationShow_ferry?radio=' + this.radio
 				} else if (this.radio === 4) {
 					url = '/pages/Information/informationShow_buddy?radio=' + this.radio
+				} else if (this.radio === 5) {
+					url = '/pages/Information/informationShow_xfd?radio=' + this.radio
 				}
 
 				uni.navigateTo({

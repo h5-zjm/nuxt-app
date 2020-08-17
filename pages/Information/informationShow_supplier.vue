@@ -134,7 +134,8 @@
 
 <script>
 	import {
-		GetQueryValue
+		GetQueryValue,
+		timeFormat
 	} from '../../common/common.js'
 	export default {
 		data() {
@@ -226,14 +227,21 @@
 								url: '/pages/Information/Error'
 							})
 						}
+						if(Number(res.data.info.status) === 0){
+							uni.navigateTo({
+								url: '/pages/Information/audit'
+							})
+						}
 						if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
 							let url = '';
 							if (res.data.info.businessType === '采购商') {
 								url = '/pages/Information/informationShow_procurer?radio=' + 2
 							} else if (res.data.info.businessType === '摆渡车') {
 								url = '/pages/Information/informationShow_ferry?radio=' + 3
-							} else if (res.data.info.businessType === '员工/伙计') {
-								url = '/pages/Information/informationShow_buddy?radio=' + 4
+							} else if (res.data.info.businessType === '司机/伙计') {
+								url = '/pages/Information/informationShow_supplier?radio=' + 4
+							} else if (res.data.info.businessType === '新发地办公和临时人员') {
+								url = '/pages/Information/informationShow_buddy?radio=' + 5
 							}
 							uni.navigateTo({
 								url: url
@@ -258,7 +266,7 @@
 							businessName: res.data.info.businessName,
 							businessCode: res.data.info.businessCode,
 							businessCatalog: res.data.info.businessCatalog,
-							inTime: res.data.info.inTime,
+							inTime: res.data.info.inTime ? timeFormat(res.data.info.inTime,'yyyy-MMdd',false) : '',
 							manageArea: res.data.info.manageArea,
 							PartnerList: res.data.info.PartnerList,
 							img_src: res.data.info.urlImg
