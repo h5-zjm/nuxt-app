@@ -172,7 +172,6 @@
 			"style": {
 				"navigationBarTitleText": "系统提示"
 			}
-<<<<<<< HEAD
         }
         ,{
             "path" : "pages/Information/informationShow_xfd",
@@ -181,16 +180,6 @@
 			}
         }
     ],
-=======
-		},
-		{
-			"path": "pages/Information/informationShow_xfd",
-			"style": {
-				"navigationBarTitleText": "个人信息"
-			}
-		}
-	],
->>>>>>> 2493af1e52541c68338a4b2605be5b7d24429f30
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",
