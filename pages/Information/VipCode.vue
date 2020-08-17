@@ -1,7 +1,7 @@
 <template>
 	<view id="BuyerCode">
 		<view class="VipCode_Con">
-			<view class="code">供应商</view>
+			<view class="code">{{form.radio}}</view>
 			<image :src="form.img_src" mode="aspectFit"></image>
 			<view class="scan">
 				<u-form :model="form" ref="uForm" label-width="auto">
@@ -52,7 +52,8 @@
 					mobile: '',
 					gender: '',
 					age: '',
-					cardNo: ''
+					cardNo: '',
+					radio: ''
 				},
 				rules: {
 					// name: [{
@@ -80,7 +81,7 @@
 				})
 			},
 			// 获取数据
-			getCode() {
+			getCode(radioCon) {
 				this.uniRequest({
 					url: 'accouninfo/getInfo',
 					success: (res) => {
@@ -89,6 +90,7 @@
 						this.form.gender = res.data.info.gender;
 						this.form.age = res.data.info.age;
 						this.form.cardNo = res.data.info.cardNo;
+						this.form.radio = radioCon;
 					}
 				})
 			},
@@ -114,7 +116,7 @@
 								})
 							} else {
 								this.submit()
-								this.getCode()
+								this.getCode(res.data.info.businessType)
 							}
 							
 						}
