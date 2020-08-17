@@ -69,8 +69,8 @@
 				<view class="Uploader_box_left">
 					<view class="star">货物照片</view>
 					<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Peoser.limitNum" :uploadFileUrl="UpImg_Peoser.uploadFileUrl"
-					 :header="UpImg_Peoser.header" :fileKeyName="UpImg_Peoser.name" :uImgList.sync="UpImg_Peoser.uImgList" @uploadSuccess="uploadSuccess"
-					 @upload="upFile" />
+					 :header="UpImg_Peoser.header" :fileKeyName="UpImg_Peoser.name" :uImgList.sync="UpImg_Peoser.uImgList"
+					 @uploadSuccess="uploadSuccess" @upload="upFile" />
 				</view>
 				<view class="Uploader_box_right">
 					<view>检测证明</view>
@@ -166,7 +166,7 @@
 					header: { // 如果需要header，请上传
 					},
 					uImgList: []
-				
+
 				},
 				UpImg_Run: {
 					limitNum: 1,
@@ -177,7 +177,7 @@
 					header: { // 如果需要header，请上传
 					},
 					uImgList: []
-				
+
 				},
 				form: {
 					id: null,
@@ -262,7 +262,7 @@
 				show: false,
 				SelectCon: '',
 				list: [{
-					
+
 					label: "芒果交易区",
 					value: 1,
 					children: [{
@@ -285,18 +285,16 @@
 						label: "周转一区3门",
 						value: 7,
 					}],
-					
+
 				}, {
 					children: [],
 					label: "水果区",
 					value: 8,
 				}],
-				List_Con: [
-					{
+				List_Con: [{
 						value: '芒果交易区',
 						label: '芒果交易区',
-						children: [
-							{
+						children: [{
 								value: '芒果交易区正门',
 								label: '芒果交易区正门'
 							},
@@ -309,8 +307,7 @@
 					{
 						value: '周转一区',
 						label: '周转一区',
-						children: [
-							{
+						children: [{
 								value: '周转一区1门',
 								label: '周转一区1门'
 							},
@@ -327,8 +324,7 @@
 					{
 						value: '水果区',
 						label: '水果区',
-						children: [
-							{
+						children: [{
 								value: '大农门',
 								label: '大农门'
 							},
@@ -792,28 +788,36 @@
 		},
 		methods: {
 			// 效验输入数字
-			efficacy(val){
+			efficacy(val) {
 				let regPos = /[^\d]/g;
-				if(!regPos.test(this.form.itemNum)) {
-					
+				if (!regPos.test(this.form.itemNum)) {
+
 				}
 			},
 			// 车牌号大写
-			CaseInput(val){
-				console.log(val,'val')
+			CaseInput(val) {
+				console.log(val, 'val')
 				this.form.CarNum = val.toUpperCase()
 			},
-			CaseInputCopy(val){
-				console.log(val,'val')
+			CaseInputCopy(val) {
+				console.log(val, 'val')
 				this.form.certificateCarNum = val.toUpperCase()
 			},
 			submit() {
 				console.log(this.procurer.fileList)
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						console.log('验证通过');
-						let IsImg = true;
-						if(!this.form.itemImg) {
+						if(!this.form.id) {
+							this.submit_http()
+						} else {
+							this.update_http()
+						}
+					}
+				});
+			},
+			submit_http(){
+				let IsImg = true;
+						if (!this.form.itemImg) {
 							IsImg = false;
 							uni.showToast({
 								title: '请上传货物照片',
@@ -821,7 +825,71 @@
 							})
 						}
 						let IsChecked = true;
-						if(!this.form.checked) {
+						if (!this.form.checked) {
+							IsChecked = false;
+							uni.showToast({
+								title: '请勾选我已阅读',
+								icon: 'none'
+							})
+						}
+						let data = {
+							subscribeTimeStr: this.form.subscribeTimeStr,
+							tradeSector: this.form.tradeSector,
+							enterDoorNum: this.form.enterDoorNum,
+							itemVariety: this.form.itemVariety,
+							itemPlace: this.form.itemPlace,
+							CarNum: this.form.CarNum,
+							certificateName: this.form.certificateName,
+							certificateTime: this.form.certificateTime,
+							certificateUser: this.form.certificateUser,
+							certificatePhone: this.form.certificatePhone,
+							certificateCarNum: this.form.certificateCarNum,
+							itemNum: this.form.itemNum,
+							certificateNum: this.form.certificateNum,
+							certificateAddress: this.form.certificateAddress,
+							itemImg: this.form.itemImg,
+							checkImg: this.form.checkImg
+						}
+						if (IsImg && IsChecked) {
+							this.uniRequest({
+								url: 'carSubscribe/save',
+								method: 'post',
+								data: data,
+								success: (res) => {
+									console.log(res, 'res11')
+									if (res.data.code === 0) {
+										uni.navigateTo({
+											url: '/pages/appointmentSuccessful/successful?id=' + res.data.msg
+										})
+									} else {
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none'
+										})
+									}
+								}
+							})
+						}
+					} else {
+						console.log('验证失败');
+					}
+				});
+			},
+			update_http() {
+				console.log(this.procurer.fileList)
+				this.$refs.uForm.validate(valid => {
+					if (valid) {
+						console.log('验证通过');
+						let IsImg = true;
+						if (!this.form.itemImg) {
+							IsImg = false;
+							uni.showToast({
+								title: '请上传货物照片',
+								icon: 'none'
+							})
+						}
+						let IsChecked = true;
+						if (!this.form.checked) {
 							IsChecked = false;
 							uni.showToast({
 								title: '请勾选我已阅读',
@@ -847,14 +915,14 @@
 							itemImg: this.form.itemImg,
 							checkImg: this.form.checkImg
 						}
-						if(IsImg && IsChecked) {
+						if (IsImg && IsChecked) {
 							this.uniRequest({
-								url: 'carSubscribe/save',
+								url: 'carSubscribe/update',
 								method: 'post',
 								data: data,
 								success: (res) => {
-									console.log(res,'res11')
-									if(res.data.code === 0) {
+									console.log(res, 'res11')
+									if (res.data.code === 0) {
 										uni.navigateTo({
 											url: '/pages/appointmentSuccessful/successful?id=' + res.data.msg
 										})
@@ -893,16 +961,16 @@
 				this.show = true;
 			},
 			// 获取交易区-进场区数据
-			getDistrict(){
+			getDistrict() {
 				uni.request({
 					url: 'https://wechat.daizhangfang.net/statistics/getLane',
-					success:(res)=>{
-						if(res.data.code === 0) {
-							console.log(res.data.data,'data')
-							if(res.data.data.length > 0) {
-								res.data.data.forEach((item,index)=>{
+					success: (res) => {
+						if (res.data.code === 0) {
+							console.log(res.data.data, 'data')
+							if (res.data.data.length > 0) {
+								res.data.data.forEach((item, index) => {
 									item.label = item.name;
-									item.children.forEach((i,j)=>{
+									item.children.forEach((i, j) => {
 										i.label = i.name;
 									})
 								})
@@ -950,27 +1018,27 @@
 			},
 			// 图片上传
 			uploadSuccess(result) {
-				console.log(result,'result')
-				if(result.res.confirm) {
-					if(result.name === '货物照片'){
+				console.log(result, 'result')
+				if (result.res.confirm) {
+					if (result.name === '货物照片') {
 						this.form.itemImg = '';
 						this.UpImg_Peoser.uImgList = []
-					} else if(result.name === '检测证明') {
+					} else if (result.name === '检测证明') {
 						this.form.checkImg = '';
 						this.UpImg_Run.uImgList = []
 					}
-				} else if(result.res.data) {
+				} else if (result.res.data) {
 					let res = result.res.data;
-					if(result.name === '货物照片') {
+					if (result.name === '货物照片') {
 						this.form.itemImg = res.url;
 						this.UpImg_Peoser.uImgList = [res.url]
-					} else if(result.name === '检测证明') {
+					} else if (result.name === '检测证明') {
 						this.form.checkImg = res.url;
 						this.UpImg_Run.uImgList = [res.url]
 					}
 				}
 			},
-			jurisdiction(){
+			jurisdiction() {
 				let res = GetQueryValue('code');
 				this.uniRequest({
 					url: 'accouninfo/getInfo?code=' + res,
@@ -985,7 +1053,7 @@
 								url: '/pages/Information/Error'
 							})
 						}
-						if(Number(res.data.info.status) === 0){
+						if (res.data.account.cellphone && Number(res.data.info.status) === 0) {
 							uni.navigateTo({
 								url: '/pages/Information/audit'
 							})
@@ -993,12 +1061,12 @@
 					}
 				})
 			},
-			getInfo(){
+			getInfo() {
 				this.uniRequest({
 					url: 'carSubscribe/getById/' + this.id,
-					success:(res)=>{
-						console.log(res,'res')
-						if(res.code === 0) {
+					success: (res) => {
+						console.log(res, 'res')
+						if (res.code === 0) {
 							this.form = {
 								id: res.data.id,
 								subscribeTimeStr: res.data.subscribeTime,
@@ -1018,11 +1086,11 @@
 								itemImg: res.data.itemImg,
 								checkImg: res.data.checkImg
 							}
-							
+
 							this.UpImg_Peoser.uImgList = res.data.itemImg ? [res.data.itemImg] : [];
 							this.UpImg_Run.uImgList = res.data.checkImg ? [res.data.checkImg] : '';
-							
-							return console.log(this.form,'111')
+
+							return console.log(this.form, '111')
 						}
 					}
 				})
@@ -1032,18 +1100,18 @@
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
 		},
-		onShow(){
+		onShow() {
 			this.getDistrict()
 			this.jurisdiction()
 		},
-		created(){
-			if(this.id) {
+		created() {
+			if (this.id) {
 				this.getInfo()
 			}
 		},
-		onLoad(options){
-			console.log(options,'options')
-			if(options.id) {
+		onLoad(options) {
+			console.log(options, 'options')
+			if (options.id) {
 				this.id = options.id;
 			}
 		}
