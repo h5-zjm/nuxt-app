@@ -208,7 +208,7 @@
 				console.log('执行获取用户信息')
 				let res = GetQueryValue('code');
 				uni.request({
-					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
+					url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=081AnO000jHa7K19RI200kXKlt2AnO0H',
 					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
 					method: 'GET',
 					success: (res) => {
@@ -222,7 +222,7 @@
 				// 获取页面数据
 				uni.request({
 					// url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getList',
-					url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getList',
+					url: 'http://39.107.95.50:80/h5/carSubscribe/getList',
 					method: 'GET',
 					data: {
 						offset: this.offset
@@ -244,9 +244,9 @@
 			goDetail(item) {
 				console.log('传递额参数',item)
 				// let data = encodeURIComponent(JSON.stringify(item))
-				// uni.navigateTo({
-				// 	url:'/pages/makeAppointment/index?data='+ encodeURIComponent(JSON.stringify(item))
-				// })
+				uni.navigateTo({
+					url:'/pages/appointmentRecord/appointDetail?info='+item
+				})
 			}
 		}
 	}
