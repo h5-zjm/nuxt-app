@@ -66,6 +66,7 @@
 		data() {
 			return {
 				imageList: [],
+				image: ''
 			};
 		},
 		methods: {
@@ -102,7 +103,10 @@
 							this.list.splice(index, 1); //已经达到了数据更新的状态
 							// this.$forceUpdate(); //强制更新
 							this.$emit('update:uImgList', this.list); //类似双向数据绑定
-							this.$emit('@uploadSuccess',res)
+							this.$emit('uploadSuccess', {
+								res: res,
+								name: this.fileKeyName
+							});
 						}
 					}
 				});
@@ -126,21 +130,36 @@
 						sizeType: ['original', 'compressed'],
 						sourceType: ['album', '	'],
 						success: (res) => {
-							// console.log(res.tempFilePaths);
+							console.log(res,'res');
 							tempFiles = res.tempFilePaths;
 
 							this.imageList = this.imageList.concat(tempFiles)
+							
+							if(res.tempFiles) {
+								if(res.tempFiles[0].size > 1000000) {
+									uni.showModal({
+										content: '图片太大,请重新选择图片上传',
+										showCancel: false,
+									});
+									return false;
+								}
+							}
 							this.urlTobase64(res.tempFilePaths[0]);
 							// this.upload();
 							this.list.push(...tempFiles) //如果图片一次性就超过这个值怎么使他赋的值回退
 
 							// #ifdef H5
-							if (this.list.length >= this.limit) {
-								this.list.splice(this.limit)
-								// toast('已达到最大上传数量')
-								// return; 
-							}
+							// if (this.list.length >= this.limit) {
+							// 	this.list.splice(this.limit)
+							// 	toast('已达到最大上传数量')
+							// 	return; 
+							// }
+							// this.image = res.tempFilePaths[0];
+							// this.image = this.compress()
+							
+							
 							// #endif
+							
 
 							this.$emit('update:uImgList', this.list); //类似双向数据绑定,更新数据, 使用.sync修饰
 							this.$forceUpdate();
@@ -152,6 +171,9 @@
 					});
 
 				}
+			},
+			compress(){
+				
 			},
 			urlTobase64(url) {
 				uni.request({
@@ -245,6 +267,9 @@
 
 			},
 
+		},
+		onShow(){
+			console.log(this.refreshAsync,'this.refreshAsync')
 		}
 	};
 </script>

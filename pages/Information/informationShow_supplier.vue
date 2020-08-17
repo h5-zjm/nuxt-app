@@ -89,38 +89,38 @@
 						<view>{{form.inTime}}</view>
 					</view>
 				</u-form-item>
-				<u-form-item prop="time">
+				<!-- <u-form-item prop="time">
 					<view class="Con_box">
 						<text>经营区域：</text>
 						<view>{{form.manageArea}}</view>
 					</view>
-				</u-form-item>
+				</u-form-item> -->
 			</view>
-			<view class="Con_box" v-for="(item,index) in PartnerList" :key="index">
+			<view class="Con_box">
 				<view class="tit">伙计1信息</view>
 				<view class="Con">
 					<u-form-item prop="time">
 						<view class="Con_box">
 							<text>伙计1姓名：</text>
-							<view>{{item.staffName}}</view>
+							<view>{{form.staffName1}}</view>
 						</view>
 					</u-form-item>
 					<u-form-item prop="time">
 						<view class="Con_box">
 							<text>伙计1身份证：</text>
-							<view>{{item.staffCardNo}}</view>
+							<view>{{form.staffCardNo1}}</view>
 						</view>
 					</u-form-item>
 					<u-form-item prop="time">
 						<view class="Con_box">
 							<text>伙计1手机号：</text>
-							<view>{{item.staffMobile}}</view>
+							<view>{{form.staffMobile1}}</view>
 						</view>
 					</u-form-item>
 					<u-form-item prop="time">
 						<view class="Con_box">
 							<text>伙计1现住址：</text>
-							<view>{{item.staffAddr}}</view>
+							<view>{{form.staffAddr1}}</view>
 						</view>
 					</u-form-item>
 				</view>
@@ -134,7 +134,8 @@
 
 <script>
 	import {
-		GetQueryValue
+		GetQueryValue,
+		timeFormat
 	} from '../../common/common.js'
 	export default {
 		data() {
@@ -160,12 +161,10 @@
 					businessCatalog: '',
 					inTime: '',
 					manageArea: '',
-					PartnerList: [{
-						staffName: '',
-						staffCardNo: '',
-						staffMobile: '',
-						staffAddr: ''
-					}],
+					staffName1: '',
+					staffCardNo1: '',
+					staffMobile1: '',
+					staffAddr1: '',
 					img_src: ''
 				},
 				rules: {
@@ -226,14 +225,21 @@
 								url: '/pages/Information/Error'
 							})
 						}
+						if(Number(res.data.info.status) === 0){
+							uni.navigateTo({
+								url: '/pages/Information/audit'
+							})
+						}
 						if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
 							let url = '';
 							if (res.data.info.businessType === '采购商') {
 								url = '/pages/Information/informationShow_procurer?radio=' + 2
 							} else if (res.data.info.businessType === '摆渡车') {
 								url = '/pages/Information/informationShow_ferry?radio=' + 3
-							} else if (res.data.info.businessType === '员工/伙计') {
-								url = '/pages/Information/informationShow_buddy?radio=' + 4
+							} else if (res.data.info.businessType === '司机/伙计') {
+								url = '/pages/Information/informationShow_supplier?radio=' + 4
+							} else if (res.data.info.businessType === '新发地办公和临时人员') {
+								url = '/pages/Information/informationShow_buddy?radio=' + 5
 							}
 							uni.navigateTo({
 								url: url
@@ -258,10 +264,14 @@
 							businessName: res.data.info.businessName,
 							businessCode: res.data.info.businessCode,
 							businessCatalog: res.data.info.businessCatalog,
-							inTime: res.data.info.inTime,
+							inTime: res.data.info.inTime ? timeFormat(res.data.info.inTime,'yyyy-MMdd',false) : '',
 							manageArea: res.data.info.manageArea,
-							PartnerList: res.data.info.PartnerList,
-							img_src: res.data.info.urlImg
+							// PartnerList: res.data.info.PartnerList,
+							img_src: res.data.info.urlImg,
+							staffName1: res.data.info.staffName1,
+							staffCardNo1: res.data.info.staffCardNo1,
+							staffMobile1: res.data.info.staffMobile1,
+							staffAddr1: res.data.info.staffAddr1
 						}
 					}
 				}
@@ -283,6 +293,7 @@
 			display: flex;
 			justify-content: center;
 			padding: 100rpx 0rpx 150rpx 0rpx;
+			background-color: #fff;
 		}
 
 		.Con {

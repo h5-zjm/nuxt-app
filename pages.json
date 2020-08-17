@@ -154,6 +154,12 @@
 				"navigationBarTitleText": "系统提示"
 			}
         }
+        ,{
+            "path" : "pages/Information/informationShow_xfd",
+            "style" : {
+				"navigationBarTitleText": "个人信息"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

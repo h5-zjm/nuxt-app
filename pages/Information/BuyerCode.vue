@@ -31,6 +31,7 @@
 			this.uniRequest({
 				url: 'accouninfo/getInfo?code=' + res,
 				success: (res) => {
+					
 					if (!res.data.account.cellphone) {
 						uni.navigateTo({
 							url: '/pages/login/index'
@@ -38,6 +39,10 @@
 					} else if (!res.data.info.name && !res.data.info.cardNo) {
 						uni.navigateTo({
 							url: '/pages/Information/Error'
+						})
+					} else if(Number(res.data.info.status) === 0){
+						uni.navigateTo({
+							url: '/pages/Information/audit'
 						})
 					} else {
 						this.getImg()
