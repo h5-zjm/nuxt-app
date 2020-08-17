@@ -553,12 +553,12 @@
 		methods: {
 			// 获取卖家用户信息
 			getUser() {
-				console.log('执行获取用户信息')
-				console.log(this.code)
+				// console.log('执行获取用户信息')
+				// console.log(this.code)
 				// let res = GetQueryValue('code');
 				uni.request({
-					// url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=' + this.code,
-					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
+					url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=' + this.code,
+					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
 					method: 'GET',
 					success: (res) => {
 						console.log('获取用户信息', res)
@@ -575,7 +575,7 @@
 							uni.navigateTo({
 								url: '/pages/Information/audit'
 							})
-						} else if(res.data.data.info.businessType != '供应商') {
+						} else if(res.data.data.info.businessType !== '供应商') {
 							uni.navigateTo({
 								url: '/pages/appointmentSuccessful/accessDenied'
 							})
@@ -589,8 +589,8 @@
 			},
 			getBuyerInfo() {
 				uni.request({
-					url: 'http://39.107.95.50:80/h5/accouninfo/getInfoById?cardNo=' + this.cardNo,
-					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
+					// url: 'http://39.107.95.50:80/h5/accouninfo/getInfoById?cardNo=' + this.cardNo,
+					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
 					method: 'GET',
 					success: (res) => {
 						console.log('获取买家信息', res)
@@ -647,16 +647,6 @@
 				this.dataList[this.valueIndex].goodsName = e
 				this.showPop = false
 				
-			},
-			getQueryVariable(variable) {
-				var query = window.location.href.split('&');
-				for (var i = 0; i < query.length; i++) {
-					let arr = query[i].split('?')[1]
-					let arr2 = arr.split('=')
-					let key = arr2[0]
-					this.pair[key] = arr2[1]
-				}
-				console.log(this.pair)
 			},
 			load() {
 				//拿到url上的id值
