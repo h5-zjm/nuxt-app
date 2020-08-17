@@ -690,8 +690,8 @@
 							checkImg: this.imgUrlTwo
 						}
 						uni.request({
-							// url: 'http://39.107.95.50/h5/carSubscribe/save',
-							url:'https://wechat.daizhangfang.net/h5/carSubscribe/save',
+							url: 'http://39.107.95.50/h5/carSubscribe/save',
+							// url:'https://wechat.daizhangfang.net/h5/carSubscribe/save',
 							header: {
 								'content-type': 'application/x-www-form-urlencoded'
 							},

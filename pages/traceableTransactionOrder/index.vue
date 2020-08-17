@@ -52,7 +52,7 @@
 					</view>
 				</view>
 				<view class="line">
-					<view class="keyLabel">
+					<view class="keyLabel" style="color: #959595;">
 						产地：
 					</view>
 					<view class="valueLabel">
@@ -62,7 +62,7 @@
 					</view>
 				</view>
 				<view class="line last">
-					<view class="keyLabel">
+					<view class="keyLabel" style="color: #959595;">
 						生产经营者：
 					</view>
 					<view class="valueLabel">
@@ -538,6 +538,7 @@
 			};
 		},
 		created() {
+			this.getInfo()
 			this.getUser()
 			this.getBuyerInfo()
 		},
@@ -545,20 +546,29 @@
 
 		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
-			this.load();
-			console.log('买家信息', option)
+			// this.load();
+			console.log('卖家信息2', option)
+			this.code = option.code
 			// console.log(option.id); //打印出上个页面传递的参数。
 			// console.log(option.name); //打印出上个页面传递的参数。
+
 		},
 		methods: {
 			// 获取卖家用户信息
+			getInfo() {
+				this.cardNo = location.href.substring(location.href.length-18);
+				// str.substring(str.length-4)；
+				let local = location.href
+				console.log('url带的参数数组',local)
+			},
 			getUser() {
 				// console.log('执行获取用户信息')
 				// console.log(this.code)
-				// let res = GetQueryValue('code');
+				let res = GetQueryValue('code');
+				console.log('卖家身份信息',res)
 				uni.request({
-					url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=' + this.code,
-					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
+					// url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=' + this.code,
+					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
 					method: 'GET',
 					success: (res) => {
 						console.log('获取用户信息', res)
@@ -588,9 +598,11 @@
 				})
 			},
 			getBuyerInfo() {
+				let res = GetQueryValue('cardNo')
+				console.log('买家身份信息',res)
 				uni.request({
-					// url: 'http://39.107.95.50:80/h5/accouninfo/getInfoById?cardNo=' + this.cardNo,
-					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
+					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfoById?cardNo=' + this.cardNo,
+					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfoById?cardNo='+this.cardNo,
 					method: 'GET',
 					success: (res) => {
 						console.log('获取买家信息', res)
@@ -661,6 +673,11 @@
 			savePersonInformation() {
 				let saveOrderList = this.dataList;
 				let flags = true;
+				if(saveOrderList.length === 0) {
+					alert("请至少填写一种商品");
+					flags = false;
+					return false
+				}
 				saveOrderList.forEach(item => {
 					if (!item.goodsName) {
 						alert("商品名称不能为空");
@@ -690,7 +707,10 @@
 					uni.request({
 						url: 'https://wechat.daizhangfang.net/h5/order/saveOrder',
 						// url: 'http://39.107.95.50:80/h5/order/saveOrder',
-						method: 'post',
+						method: 'POST',
+						header: {
+							'content-type': 'application/x-www-form-urlencoded'
+						},
 						data: {
 							sellerOpenId: this.sellerOpenId,
 							buyerOpenId: this.buyerOpenId,
