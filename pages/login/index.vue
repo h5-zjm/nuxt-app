@@ -149,6 +149,27 @@
 								uni.navigateTo({
 									url: '/pages/Information/Error'
 								})
+							} else if(res.data.account.cellphone && Number(res.data.info.status) === 0) {
+								uni.navigateTo({
+									url: '/pages/Information/audit'
+								})
+							}
+							if(res.data.account.cellphone && res.data.info.cardNo && res.data.info.name) {
+								let radio = null;
+								if(res.data.info.businessType === '供应商') {
+									radio = 1;
+								} else if(res.data.info.businessType === '采购商') {
+									radio = 2;
+								} else if(res.data.info.businessType === '摆渡车') {
+									radio = 3;
+								} else if(res.data.info.businessType === '司机/伙计') {
+									radio = 4;
+								} else if(res.data.info.businessType === '新发地办公和临时人员') {
+									radio = 5;
+								}
+								uni.navigateTo({
+									url: '/pages/Information/Success?radio=' + radio
+								})
 							}
 						}
 

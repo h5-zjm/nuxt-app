@@ -108,7 +108,7 @@
 								uni.navigateTo({
 									url: '/pages/Information/Error'
 								})
-							} else if(Number(res.data.info.status) === 0) {
+							} else if(res.data.account.cellphone !== '' && Number(res.data.info.status) === 0) {
 								uni.navigateTo({
 									url: '/pages/Information/audit'
 								})

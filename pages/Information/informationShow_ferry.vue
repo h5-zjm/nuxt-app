@@ -220,6 +220,7 @@
 			display: flex;
 			justify-content: center;
 			padding: 100rpx 0rpx 150rpx 0rpx;
+			background-color: #fff;
 		}
 
 		.Con {

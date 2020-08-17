@@ -418,7 +418,7 @@
 				// 上传附件
 				UpImg_Peoser: {
 					limitNum: 1,
-					uploadFileUrl: 'http://39.107.95.50/common/sysFile/uploadBase64',
+					uploadFileUrl: 'https://wechat.daizhangfang.net/common/sysFile/uploadBase64',
 					msg: '',
 					length: 140,
 					name: '用户', //上传的名字
@@ -429,7 +429,7 @@
 				},
 				UpImg_Run: {
 					limitNum: 1,
-					uploadFileUrl: 'http://39.107.95.50/common/sysFile/uploadBase64',
+					uploadFileUrl: 'https://wechat.daizhangfang.net/common/sysFile/uploadBase64',
 					msg: '',
 					length: 150,
 					name: '营业执照', //上传的名字
@@ -454,7 +454,7 @@
 					name: '',
 					businessType: '',
 					carNumber: '',
-					mobile: '18727087210',
+					mobile: '',
 					cardNo: '',
 					registProvince: '',
 					registCity: '',
@@ -618,6 +618,11 @@
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
+						if(this.form.gender === '1') {
+							this.form.gender = '男'
+						} else if(this.form.gender === '2') {
+							this.form.gender = '女'
+						}
 						if (this.form.radio === 1) {
 							this.form.businessType = '供应商'
 						} else if (this.form.radio === 2) {
@@ -885,7 +890,7 @@
 							name: res.data.info.name,
 							businessType: res.data.info.businessType,
 							carNumber: res.data.info.carNumber,
-							mobile: res.data.account.mobile ? res.data.account.mobile : '18727087210',
+							mobile: res.data.account.cellphone ? res.data.account.cellphone : '',
 							cardNo: res.data.info.cardNo,
 							registProvince: res.data.info.registProvince,
 							registCity: res.data.info.registCity,

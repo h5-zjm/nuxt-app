@@ -172,10 +172,10 @@
 			"style": {
 				"navigationBarTitleText": "系统提示"
 			}
-		},
-		{
-			"path": "pages/Information/informationShow_xfd",
-			"style": {
+        }
+        ,{
+            "path" : "pages/Information/informationShow_xfd",
+            "style" : {
 				"navigationBarTitleText": "个人信息"
 			}
 		},
@@ -201,15 +201,8 @@
 				"navigationBarTitleText":"拒绝访问"
 			}
         }
-    ],
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "",
-		"navigationBarBackgroundColor": "#ffffff",
-		// "backgroundColor": "#ffffff",
-		"onReachBottomDistance": 300
-		// "navigationStyle": "custom"
-	}
+    ]
+
 	// "tabBar": {
 	// 	"color": "#DCDCDC",
 	// 	"selectedColor": "#ff6a00",
