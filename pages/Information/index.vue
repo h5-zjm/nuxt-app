@@ -29,7 +29,7 @@
 							 :header="UpImg_Peoser.header" :fileKeyName="UpImg_Peoser.name" :uImgList.sync="UpImg_Peoser.uImgList" @uploadSuccess="uploadSuccess"
 							 @upload="upFile" />
 
-							</u-upload>
+							<!-- </u-upload> -->
 							<view class="Conbox">
 								<view class="photo">个人照片&nbsp;<text>*</text></view>
 								<text>（用于人脸识别，请上传正面大头照）</text>
@@ -147,11 +147,11 @@
 									<u-input v-model="form.businessCode" input-align="right" placeholder="请输入营业执照" />
 								</u-form-item>
 								<view class="uploaderBox">
-									<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Run.limitNum" :uploadFileUrl="UpImg_Run.uploadFileUrl"
+									<!-- <uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Run.limitNum" :uploadFileUrl="UpImg_Run.uploadFileUrl"
 									 :header="UpImg_Run.header" :fileKeyName="UpImg_Run.name" :uImgList.sync="UpImg_Run.uImgList" @uploadSuccess="uploadSuccess"
-									 @upload="upFile" />
+									 @upload="upFile" /> -->
 
-									</u-upload>
+									<!-- </u-upload> -->
 									<view class="Conbox">
 										(请上传营业执照附件）
 									</view>
@@ -259,11 +259,11 @@
 								<u-input v-model="form.businessCode" input-align="right" placeholder="请输入营业执照" />
 							</u-form-item>
 							<view class="uploaderBox">
-								<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Run.limitNum" :uploadFileUrl="UpImg_Run.uploadFileUrl"
+								<!-- <uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Run.limitNum" :uploadFileUrl="UpImg_Run.uploadFileUrl"
 								 :header="UpImg_Run.header" :fileKeyName="UpImg_Run.name" :uImgList.sync="UpImg_Run.uImgList" @uploadSuccess="uploadSuccess"
-								 @upload="upFile" />
+								 @upload="upFile" /> -->
 
-								</u-upload>
+								<!-- </u-upload> -->
 								<view class="Conbox">
 									(请上传营业执照附件）
 								</view>
@@ -386,7 +386,7 @@
 				// 上传附件
 				UpImg_Peoser: {
 					limitNum: 1,
-					uploadFileUrl: 'http://192.168.100.215:18088/common/sysFile/upload',
+					uploadFileUrl: 'http://39.107.95.50/common/sysFile/uploadBase64',
 					msg: '',
 					length: 140,
 					name: '用户', //上传的名字
@@ -395,17 +395,17 @@
 					uImgList: []
 
 				},
-				UpImg_Run: {
-					limitNum: 1,
-					uploadFileUrl: 'http://192.168.100.215:18088/common/sysFile/upload',
-					msg: '',
-					length: 150,
-					name: '营业执照', //上传的名字
-					header: { // 如果需要header，请上传
-					},
-					uImgList: []
+				// UpImg_Run: {
+				// 	limitNum: 1,
+				// 	uploadFileUrl: 'https://wechat.daizhangfang.net/common/sysFile/upload',
+				// 	msg: '',
+				// 	length: 150,
+				// 	name: '营业执照', //上传的名字
+				// 	header: { // 如果需要header，请上传
+				// 	},
+				// 	uImgList: []
 				
-				},
+				// },
 				placeList: [],
 				subcampList: [{
 					title: "水果区",

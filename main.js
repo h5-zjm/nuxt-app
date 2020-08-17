@@ -9,9 +9,9 @@ import uView from "uview-ui";
 Vue.use(uView);
 
 // 请求地址
-// Vue.prototype.HOST = 'https://huawin.imwork.net/minapp/app/mock/';
+Vue.prototype.HOST = 'http://39.107.95.50/h5/';
 // Vue.prototype.HOST = 'https://wechat.daizhangfang.net/h5/';//正式环境
-Vue.prototype.HOST = 'http://192.168.100.215:18088/h5/'; //测试环境
+// Vue.prototype.HOST = 'http://192.168.100.215:18088/h5/'; //测试环境
 Vue.prototype.PLATFORM = ''; //23/
 Vue.prototype.CLIENT = ''; //19/
 

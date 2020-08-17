@@ -691,7 +691,7 @@
 							checkImg:this.imgUrlTwo
 						}
 						uni.request({
-							url:'http://192.168.100.215:18088/h5/carSubscribe/save',
+							url:'https://wechat.daizhangfang.net/h5/carSubscribe/save',
 							method:'POST',
 							data:data,
 							success: (res) => {

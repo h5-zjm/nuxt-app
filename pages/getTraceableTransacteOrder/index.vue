@@ -149,7 +149,7 @@
 		methods:{
 			getData() {
 				uni.request({
-					url: 'http://192.168.100.215:18088/h5/order/selectMyOrderDetails?orderId='+this.orderID,
+					url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId='+this.orderID,
 					// url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId='this.orderID,
 					method:'GET',
 					success: (res) => {

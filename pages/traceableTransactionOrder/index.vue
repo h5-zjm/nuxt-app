@@ -546,7 +546,7 @@
 				console.log('执行获取用户信息')
 				// let res = GetQueryValue('code');
 				uni.request({
-					url: 'http://192.168.100.215:18088/h5/accouninfo/getInfo',
+					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo',
 					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
 					method: 'GET',
 					success: (res) => {
@@ -559,7 +559,7 @@
 			},
 			getBuyerInfo(){
 				uni.request({
-					url: 'http://192.168.100.215:18088/h5/accouninfo/getInfoById?cardNo=511321199001177837' ,
+					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfoById?cardNo=511321199001177837' ,
 					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
 					method: 'GET',
 					success: (res) => {
@@ -613,7 +613,7 @@
                 //请求订单数据
                 // uni.request({
                 //     method: "post",
-                //     url: "http://192.168.100.215:18088/h5/order/selectUserInfo?cardNo=" + id,
+                //     url: "https://wechat.daizhangfang.net/h5/order/selectUserInfo?cardNo=" + id,
                 //     success: (res) =>{
                 //         if (res.rows != '') {
                 //             //循环回显 菜品数据
@@ -657,7 +657,7 @@
                     console.log(json);
 					uni.request({
 						// url: 'https://wechat.daizhangfang.net/h5/order/saveOrder',
-						url: 'http://192.168.100.215:18088/h5/order/saveOrder',
+						url: 'https://wechat.daizhangfang.net/h5/order/saveOrder',
 						method: 'GET',
 						data: {
 							sellerOpenId:this.sellerOpenId,
