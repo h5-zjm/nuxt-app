@@ -48,10 +48,10 @@
 						<view @click="openSelectMore('具体产地')" :class="{'place_box':!form.itemPlace}">{{form.itemPlace ? form.itemPlace : '请选择具体产地'}}</view>
 					</view>
 				</u-form-item>
-				<u-form-item prop="name">
+				<u-form-item prop="itemNum">
 					<view class="Con_box">
 						<text>数量</text>
-						<u-input v-model="form.itemNum" style="flex: 1;" input-align="right" placeholder="请输入货品重量" />KG
+						<u-input v-model="form.itemNum" style="flex: 1;" input-align="right" @input="efficacy('数量')" placeholder="请输入货品重量" />KG
 					</view>
 				</u-form-item>
 				<u-form-item prop="CarNum">
@@ -89,7 +89,7 @@
 						<u-input v-model="form.certificateName" style="flex: 1;" input-align="right" placeholder="请输入食用农产品名称" />
 					</view>
 				</u-form-item>
-				<u-form-item prop="name">
+				<u-form-item prop="certificateNum">
 					<view class="Con_box">
 						<text>数量（重量）</text>
 						<u-input v-model="form.certificateNum" style="flex: 1;" input-align="right" placeholder="请输入请输入货品重量" />KG
@@ -180,6 +180,7 @@
 				
 				},
 				form: {
+					id: null,
 					subscribeTimeStr: '',
 					tradeSector: '',
 					enterDoorNum: '',
@@ -195,7 +196,8 @@
 					certificateNum: '',
 					certificateAddress: '',
 					itemImg: '',
-					checkImg: ''
+					checkImg: '',
+					checked: false
 				},
 				procurer: {
 					fileList: []
@@ -236,6 +238,24 @@
 						message: '请输入生产者',
 						// 可以单个或者同时写两个触发验证方式 
 						trigger: ['change', 'blur'],
+					}],
+					itemNum: [{
+						pattern: /^[0-9]*$/,
+						// 正则检验前先将值转为字符串
+						transform(value) {
+							return String(value);
+						},
+						message: '请输入数字',
+						trigger: ['change', 'blur']
+					}],
+					certificateNum: [{
+						pattern: /^[0-9]*$/,
+						// 正则检验前先将值转为字符串
+						transform(value) {
+							return String(value);
+						},
+						message: '请输入数字',
+						trigger: ['change', 'blur']
 					}]
 				},
 				// 定义select框
@@ -771,6 +791,13 @@
 
 		},
 		methods: {
+			// 效验输入数字
+			efficacy(val){
+				let regPos = /[^\d]/g;
+				if(!regPos.test(this.form.itemNum)) {
+					
+				}
+			},
 			// 车牌号大写
 			CaseInput(val){
 				console.log(val,'val')
@@ -802,6 +829,7 @@
 							})
 						}
 						let data = {
+							id: this.form.id,
 							subscribeTimeStr: this.form.subscribeTimeStr,
 							tradeSector: this.form.tradeSector,
 							enterDoorNum: this.form.enterDoorNum,
@@ -817,8 +845,7 @@
 							certificateNum: this.form.certificateNum,
 							certificateAddress: this.form.certificateAddress,
 							itemImg: this.form.itemImg,
-							checkImg: this.form.checkImg,
-							checked: false
+							checkImg: this.form.checkImg
 						}
 						if(IsImg && IsChecked) {
 							this.uniRequest({
@@ -973,17 +1000,18 @@
 						console.log(res,'res')
 						if(res.code === 0) {
 							this.form = {
-								subscribeTimeStr: res.data.subscribeTimeStr,
+								id: res.data.id,
+								subscribeTimeStr: res.data.subscribeTime,
 								tradeSector: res.data.tradeSector,
 								enterDoorNum: res.data.enterDoorNum,
 								itemVariety: res.data.itemVariety,
 								itemPlace: res.data.itemPlace,
-								CarNum: res.data.CarNum,
+								CarNum: res.data.carNum || '',
 								certificateName: res.data.certificateName,
 								certificateTime: res.data.certificateTime,
 								certificateUser: res.data.certificateUser,
 								certificatePhone: res.data.certificatePhone,
-								certificateCarNum: res.data.certificateCarNum,
+								certificateCarNum: res.data.certificateCarNum || '',
 								itemNum: res.data.itemNum,
 								certificateNum: res.data.certificateNum,
 								certificateAddress: res.data.certificateAddress,
@@ -991,8 +1019,10 @@
 								checkImg: res.data.checkImg
 							}
 							
-							this.UpImg_Peoser.uImgList = [res.data.itemImg];
-							this.UpImg_Run.uImgList = [res.data.checkImg];
+							this.UpImg_Peoser.uImgList = res.data.itemImg ? [res.data.itemImg] : [];
+							this.UpImg_Run.uImgList = res.data.checkImg ? [res.data.checkImg] : '';
+							
+							return console.log(this.form,'111')
 						}
 					}
 				})
@@ -1007,10 +1037,15 @@
 			this.jurisdiction()
 		},
 		created(){
-			this.getInfo()
+			if(this.id) {
+				this.getInfo()
+			}
 		},
 		onLoad(options){
-			this.id = options.id;
+			console.log(options,'options')
+			if(options.id) {
+				this.id = options.id;
+			}
 		}
 	}
 </script>
