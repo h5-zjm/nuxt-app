@@ -804,19 +804,17 @@
 				this.form.certificateCarNum = val.toUpperCase()
 			},
 			submit() {
+				if (this.form.id) {
+					this.submit_http()
+				} else {
+					this.update_http()
+				}
+			},
+			submit_http() {
 				console.log(this.procurer.fileList)
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						if(!this.form.id) {
-							this.submit_http()
-						} else {
-							this.update_http()
-						}
-					}
-				});
-			},
-			submit_http(){
-				let IsImg = true;
+						let IsImg = true;
 						if (!this.form.itemImg) {
 							IsImg = false;
 							uni.showToast({
