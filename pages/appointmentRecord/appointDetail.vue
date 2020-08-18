@@ -146,7 +146,7 @@
 					},
 					success: (res) => {
 						console.log('返回数据',res)
-						this.info=res.data.data
+						this.info=res.data
 						if(this.info.status==1){
 							this.info.status_cn='未进场'
 						}else if(this.info.status==2){

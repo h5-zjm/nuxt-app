@@ -733,7 +733,7 @@
 					// 	goodsJson:json
 					// }
 					console.log(json);
-					this.unirequest({
+					this.uniRequest({
 						url: 'order/saveOrder',
 						// url: 'http://39.107.95.50:80/h5/order/saveOrder',
 						method: 'POST',
