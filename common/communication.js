@@ -24,13 +24,17 @@ export const uniRequest = function(obj) {
 		success: () => {},
 		error: () => {}
 	};
+
+	let h5token = uni.getStorageSync('h5token');
+	console.log(h5token,'h5token')
 	let header = {
 		'content-type': parm.contentType,
 		'store-id': shopInfn.id || '',
 		'store-name': encodeURI(shopInfn.name) || '',
 		'Access-Control-Allow-Origin': '*',
-		"Cache-Control":"no-cache",
-		'content-type':'application/x-www-form-urlencoded'
+		"Cache-Control": "no-cache",
+		'content-type': 'application/x-www-form-urlencoded',
+		'h5token': h5token || ''
 	}
 	if (XSRFTOKEN) {
 		header['X-XSRF-TOKEN'] = XSRFTOKEN;
@@ -45,7 +49,7 @@ export const uniRequest = function(obj) {
 		data: parm.data,
 		header: header,
 		success: (result) => {
-			if(result.data.data) {
+			if (result.data.data) {
 				parm.success(result.data)
 			} else {
 				parm.success(result)
@@ -60,13 +64,14 @@ export const uniRequest = function(obj) {
 			// 	console.log(result,'result')
 			// }
 			// uni.hideLoading();
-			
+
 		},
 		fail: (error) => {
 			parm.error('注册失败')
 			// uni.hideLoading();
 		},
 		complete: (res) => {
+			console.log(res, 'res')
 			// let cookie = '';
 			// if (res.cookies) {
 			// 	res.cookies.forEach(e => {
@@ -75,9 +80,9 @@ export const uniRequest = function(obj) {
 			// 	if (this.GETCOOKIE(cookie, 'XSRF-TOKEN').length > 2) {
 			// 		uni.setStorageSync('XSRFTOKEN', this.GETCOOKIE(cookie, 'XSRF-TOKEN'));
 			// 	}
-			// 	if (this.GETCOOKIE(cookie, 'access_token').length > 2) {
-			// 		uni.setStorageSync('access_token', this.GETCOOKIE(cookie, 'access_token'));
-			// 	}
+			// if (this.GETCOOKIE(cookie, 'access_token').length > 2) {
+			// 	uni.setStorageSync('access_token', this.GETCOOKIE(cookie, 'access_token'));
+			// }
 			// 	if (this.GETCOOKIE(cookie, 'refresh_token').length > 2) {
 			// 		uni.setStorageSync('refresh_token', this.GETCOOKIE(cookie, 'refresh_token'));
 			// 	}

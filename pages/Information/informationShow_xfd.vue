@@ -128,6 +128,80 @@
 						console.log('验证失败');
 					}
 				});
+			},
+			RuterVisit(){
+				this.uniRequest({
+					url: 'accouninfo/getInfo',
+					success: (res) => {
+						if (!res.data.account.cellphone) {
+							uni.navigateTo({
+								url: '/pages/login/index'
+							})
+						}
+						if (!res.data.info.name && !res.data.info.cardNo) {
+							uni.navigateTo({
+								url: '/pages/Information/Error'
+							})
+						}
+						if(Number(res.data.info.status) === 0){
+							uni.navigateTo({
+								url: '/pages/Information/audit'
+							})
+						}
+						if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
+							let url = '';
+							if (res.data.info.businessType === '供应商') {
+								url = '/pages/Information/informationShow_supplier?radio=' + 1
+							} else if (res.data.info.businessType === '采购商') {
+								url = '/pages/Information/informationShow_procurer?radio=' + 2
+							} else if (res.data.info.businessType === '摆渡车') {
+								url = '/pages/Information/informationShow_ferry?radio=' + 3
+							} else if (res.data.info.businessType === '司机/伙计') {
+								url = '/pages/Information/informationShow_buddy?radio=' + 4
+							}
+							uni.navigateTo({
+								url: url
+							})
+						}
+						this.form = {
+							name: res.data.info.name,
+							phone: res.data.account.cellphone,
+							cardNo: res.data.info.cardNo,
+							gender: res.data.info.gender,
+							age: res.data.info.age,
+							// 原籍
+							registProvince: res.data.info.registProvince,
+							registCity: res.data.info.registCity,
+							registArea: res.data.info.registArea,
+							// 先居住地
+							curentProvince: res.data.info.curentProvince,
+							curentCity: res.data.info.curentCity,
+							curentArea: res.data.info.curentArea,
+							// 现居住地
+							currentPlace: res.data.info.currentPlace,
+							img_src: res.data.info.urlImg
+						}
+					}
+				})
+			},
+			getToken(){
+				console.log(111)
+				let res = GetQueryValue('code');
+				uni.request({
+					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
+					success:(res)=>{
+						if(res.data.data) {
+							uni.setStorageSync('h5token',res.data.data)
+							this.RuterVisit()
+						} else {
+							uni.showToast({
+								title: '授权失败,请重新进入页面',
+								icon: 'none'
+							})
+						}
+					},
+					
+				})
 			}
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
@@ -141,60 +215,11 @@
 			}
 		}, // 获取用户信息
 		onShow() {
-			let res = GetQueryValue('code');
-			this.uniRequest({
-				url: 'accouninfo/getInfo?code=' + res,
-				success: (res) => {
-					if (!res.data.account.cellphone) {
-						uni.navigateTo({
-							url: '/pages/login/index'
-						})
-					}
-					if (!res.data.info.name && !res.data.info.cardNo) {
-						uni.navigateTo({
-							url: '/pages/Information/Error'
-						})
-					}
-					if(Number(res.data.info.status) === 0){
-						uni.navigateTo({
-							url: '/pages/Information/audit'
-						})
-					}
-					if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
-						let url = '';
-						if (res.data.info.businessType === '供应商') {
-							url = '/pages/Information/informationShow_supplier?radio=' + 1
-						} else if (res.data.info.businessType === '采购商') {
-							url = '/pages/Information/informationShow_procurer?radio=' + 2
-						} else if (res.data.info.businessType === '摆渡车') {
-							url = '/pages/Information/informationShow_ferry?radio=' + 3
-						} else if (res.data.info.businessType === '司机/伙计') {
-							url = '/pages/Information/informationShow_buddy?radio=' + 4
-						}
-						uni.navigateTo({
-							url: url
-						})
-					}
-					this.form = {
-						name: res.data.info.name,
-						phone: res.data.account.cellphone,
-						cardNo: res.data.info.cardNo,
-						gender: res.data.info.gender,
-						age: res.data.info.age,
-						// 原籍
-						registProvince: res.data.info.registProvince,
-						registCity: res.data.info.registCity,
-						registArea: res.data.info.registArea,
-						// 先居住地
-						curentProvince: res.data.info.curentProvince,
-						curentCity: res.data.info.curentCity,
-						curentArea: res.data.info.curentArea,
-						// 现居住地
-						currentPlace: res.data.info.currentPlace,
-						img_src: res.data.info.urlImg
-					}
-				}
-			})
+			if(!uni.getStorageSync('h5token')) {
+				this.getToken()
+			} else {
+				this.RuterVisit()
+			}
 		}
 	}
 </script>

@@ -538,8 +538,12 @@
 			};
 		},
 		created() {
-			this.getInfo()
-			this.getUser()
+			if(!uni.getStorageSync('h5token')) {
+				this.getToken()
+			} else {
+				this.getInfo()
+				this.getUser()
+			}
 		},
 		mounted() {
 
@@ -553,6 +557,26 @@
 
 		},
 		methods: {
+			getToken(){
+				console.log(111)
+				let res = GetQueryValue('code');
+				uni.request({
+					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
+					success:(res)=>{
+						if(res.data.data) {
+							uni.setStorageSync('h5token',res.data.data)
+							this.getInfo()
+							this.getUser()
+						} else {
+							uni.showToast({
+								title: '授权失败,请重新进入页面',
+								icon: 'none'
+							})
+						}
+					},
+					
+				})
+			},
 			// 获取卖家用户信息
 			getInfo() {
 				this.cardNo = location.href.substring(location.href.length-18);

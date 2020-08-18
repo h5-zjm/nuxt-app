@@ -1053,9 +1053,8 @@
 				}
 			},
 			jurisdiction() {
-				let res = GetQueryValue('code');
 				this.uniRequest({
-					url: 'accouninfo/getInfo?code=' + res,
+					url: 'accouninfo/getInfo',
 					success: (res) => {
 						if (!res.data.account.cellphone) {
 							uni.navigateTo({
@@ -1108,6 +1107,26 @@
 						}
 					}
 				})
+			},
+			getToken(){
+				console.log(111)
+				let res = GetQueryValue('code');
+				uni.request({
+					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
+					success:(res)=>{
+						if(res.data.data) {
+							uni.setStorageSync('h5token',res.data.data)
+							this.getDistrict()
+							this.jurisdiction()
+						} else {
+							uni.showToast({
+								title: '授权失败,请重新进入页面',
+								icon: 'none'
+							})
+						}
+					},
+					
+				})
 			}
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
@@ -1115,8 +1134,12 @@
 			this.$refs.uForm.setRules(this.rules);
 		},
 		onShow() {
-			this.getDistrict()
-			this.jurisdiction()
+			if(!uni.getStorageSync('h5token')) {
+				this.getToken()
+			} else {
+				this.getDistrict()
+				this.jurisdiction()
+			}
 		},
 		created() {
 			if (this.id) {

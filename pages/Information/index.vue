@@ -916,11 +916,15 @@
 							staffCardNo1: res.data.info.staffCardNo1,
 							staffMobile1: res.data.info.staffMobile1,
 							staffAddr1: res.data.info.staffAddr1,
-							inTime: res.data.info.inTime ? timeFormat(res.data.info.inTime,'yyyy-MM-dd',false) : '',
+							inTime: '',
 							urlImg: res.data.info.urlImg,
 							// 自定义
 							radio: null,
 							checked: false
+						}
+						if(res.data.info.inTime) {
+							let res = res.data.info.inTime.split(' ');
+							this.form.inTime = res[0];
 						}
 						// 身份
 						if (res.data.info.businessType === '供应商') {

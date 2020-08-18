@@ -140,13 +140,12 @@
 			},
 			// 授权
 			Func_Con() {
-				let res = GetQueryValue('code');
 				this.uniRequest({
-					url: 'accouninfo/getInfo?code=' + res,
+					url: 'accouninfo/getInfo',
 					success: (res) => {
 						console.log('获取的token')
 						if (res.code === 0) {
-							if (!res.data.info.name && !res.data.info.cardNo) {
+							if (res.data.account.cellphone && !res.data.info.name && !res.data.info.cardNo) {
 								uni.navigateTo({
 									url: '/pages/Information/Error'
 								})

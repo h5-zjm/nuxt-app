@@ -1,23 +1,34 @@
 <template>
-	<view>
-		<view class="zhtx-imgs">
-			<view class="zhtx-single" v-for="(item, index) in list" :key="index">
-				<image :src="item" :data-src="item" mode="heightFix" @tap="previewImg" />
-				<view class="zhtx-del" @tap="deleteItem(index)">x</view>
-			</view>
-			<view v-if="limit>list.length" class="zhtx-single zhtx-addNew" @tap="chooseFile">
-				<text class="zhtx-add">+</text>
-			</view>
+	<view class="compress"">
+		<view class=" zhtx-imgs">
+		<view class="zhtx-single" v-for="(item, index) in list" :key="index">
+			<image :src="item" :data-src="item" mode="scaleToFill" @tap="previewImg" />
+			<view class="zhtx-del" @tap="deleteItem(index)">x</view>
 		</view>
-		<!-- <view class="num">
+		<view v-if="limit>list.length" class="zhtx-single zhtx-addNew" @tap="chooseFile">
+			<text class="zhtx-add">+</text>
+		</view>
+	</view>
+	<!-- <view class="num">
 			<text style="color: #007AFF;font-size: 14px;">{{list.length}}</text>
 
 			/{{limit}}
 		</view> -->
+
+	<!-- <button type="default" @click="onSinngle">单张压缩</button>
+	<image class="image" :src="single" mode="aspectFill"></image>
+
+	<button type="default" @click="onMulti">多张压缩</button>
+	<block v-for="(item, idx) in multi" :key="idx">
+		<image class="image" :src="item" mode="aspectFill"></image>
+	</block> -->
+	
+	<w-compress ref='wCompress' />
 	</view>
 </template>
 
 <script>
+	import WCompress from '@/components/w-compress/w-compress.vue'
 	let toast = msg => {
 		uni.showToast({
 			title: msg,
@@ -26,6 +37,9 @@
 	}
 
 	export default {
+		components: {
+			WCompress
+		},
 		props: {
 			uImgList: {
 				type: Array, //附件列表
@@ -66,13 +80,15 @@
 		data() {
 			return {
 				imageList: [],
-				image: ''
+				image: '',
+				multi: [],
+				single: ''
 			};
 		},
 		methods: {
 			//预览
 			previewImg(e) {
-				console.log(this.list,'list')
+				console.log(this.list, 'list')
 				console.log(...this.list);
 				uni.previewImage({
 					current: e.target.dataset.src,
@@ -89,8 +105,8 @@
 					},
 					urls: this.list //this.imageList,保持删除了的不在
 				});
-				console.log(this.list,'111')
-				console.log(this.imageList,'222')
+				console.log(this.list, '111')
+				console.log(this.imageList, '222')
 			},
 			//删除
 			deleteItem(index) {
@@ -117,7 +133,7 @@
 				// console.log(this.list);
 				if (this.list.length >= this.limit) {
 					// toast('已达到最大上传数量')
-					return; 
+					return;
 				}
 
 				let canUploadFile = this.canUploadFile;
@@ -130,21 +146,37 @@
 						sizeType: ['original', 'compressed'],
 						sourceType: ['album', '	'],
 						success: (res) => {
-							console.log(res,'res');
+							console.log(res, 'res');
 							tempFiles = res.tempFilePaths;
 
 							this.imageList = this.imageList.concat(tempFiles)
-							
-							if(res.tempFiles) {
-								if(res.tempFiles[0].size > 1000000) {
-									uni.showModal({
-										content: '图片太大,请重新选择图片上传',
-										showCancel: false,
-									});
-									return false;
-								}
-							}
-							this.urlTobase64(res.tempFilePaths[0]);
+
+							// if (res.tempFiles) {
+							// 	if (res.tempFiles[0].size > 1000000) {
+							// 		uni.showModal({
+							// 			content: '图片太大,请重新选择图片上传',
+							// 			showCancel: false,
+							// 		});
+							// 		return false;
+							// 	}
+							// }
+							// this.urlTobase64(res.tempFilePaths[0]);
+							this.$refs.wCompress.start(res.tempFilePaths[0], {
+									pixels: 4000000, // 最大分辨率，默认二百万
+									quality: 0.8, // 压缩质量，默认0.8
+									type: 'jpg', // 图片类型，默认jpg
+									base64: true, // 是否返回base64，默认false，非H5有效
+								})
+								.then(res => {
+									console.log(res,'333')
+									this.single = res
+									uni.hideLoading()
+									this.uploadImg(res)
+								})
+								.catch(e => {
+									console.log(e)
+									uni.hideLoading()
+								})
 							// this.upload();
 							this.list.push(...tempFiles) //如果图片一次性就超过这个值怎么使他赋的值回退
 
@@ -156,10 +188,10 @@
 							// }
 							// this.image = res.tempFilePaths[0];
 							// this.image = this.compress()
-							
-							
+
+
 							// #endif
-							
+
 
 							this.$emit('update:uImgList', this.list); //类似双向数据绑定,更新数据, 使用.sync修饰
 							this.$forceUpdate();
@@ -171,9 +203,6 @@
 					});
 
 				}
-			},
-			compress(){
-				
 			},
 			urlTobase64(url) {
 				uni.request({
@@ -187,10 +216,11 @@
 					}
 				});
 			},
-			uploadImg(base64){
+			uploadImg(base64) {
+				console.log(base64, '我进来了')
 				var formData = new FormData();
-				formData.append("base64",base64);
-				console.log(formData,'formData')
+				formData.append("base64", base64);
+				console.log(formData, 'formData')
 				uni.request({
 					url: this.uploadFileUrl,
 					method: 'POST',
@@ -198,13 +228,61 @@
 						base64: base64
 					},
 					header: {
-						'content-type':'application/x-www-form-urlencoded'
+						'content-type': 'application/x-www-form-urlencoded'
 					},
-					success:(res)=>{
+					success: (res) => {
 						this.$emit('uploadSuccess', {
 							res: res,
 							name: this.fileKeyName
 						});
+					}
+				})
+			},
+			onSinngle() {
+				uni.chooseImage({
+					count: 1,
+					success: res => {
+						uni.showLoading({
+							title: '图片压缩中...',
+							mask: true
+						})
+						this.$refs.wCompress.start(res.tempFilePaths[0], {
+								pixels: 4000000, // 最大分辨率，默认二百万
+								quality: 0.9, // 压缩质量，默认0.8
+								type: 'png', // 图片类型，默认jpg
+								base64: true, // 是否返回base64，默认false，非H5有效
+							})
+							.then(res => {
+								console.log(res,'333')
+								this.single = res
+								uni.hideLoading()
+							})
+							.catch(e => {
+								console.log(e)
+								uni.hideLoading()
+							})
+					}
+				})
+			},
+
+			onMulti() {
+				uni.chooseImage({
+					count: 9,
+					success: res => {
+						uni.showLoading({
+							title: '图片压缩中...',
+							mask: true
+						})
+						this.$refs.wCompress.start(res.tempFilePaths)
+							.then(res => {
+								console.log(res)
+								this.multi = res
+								uni.hideLoading()
+							})
+							.catch(e => {
+								console.log(e)
+								uni.hideLoading()
+							})
 					}
 				})
 			},
@@ -268,8 +346,8 @@
 			},
 
 		},
-		onShow(){
-			console.log(this.refreshAsync,'this.refreshAsync')
+		onShow() {
+			console.log(this.refreshAsync, 'this.refreshAsync')
 		}
 	};
 </script>

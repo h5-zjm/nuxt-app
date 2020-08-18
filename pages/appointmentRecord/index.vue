@@ -79,7 +79,12 @@
 			}
 		},
 		created() {
-			this.getUser()
+			// this.getUser()
+			if(!uni.getStorageSync('h5token')) {
+				this.getToken()
+			} else {
+				this.getUser()
+			}
 			// this.getData()
 		},
 		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
@@ -92,6 +97,25 @@
 			// 获取code
 			getcode() {
 				
+			},
+			getToken(){
+				console.log(111)
+				let res = GetQueryValue('code');
+				uni.request({
+					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
+					success:(res)=>{
+						if(res.data.data) {
+							uni.setStorageSync('h5token',res.data.data)
+							this.getUser()
+						} else {
+							uni.showToast({
+								title: '授权失败,请重新进入页面',
+								icon: 'none'
+							})
+						}
+					},
+					
+				})
 			},
 			// 获取用户信息
 			getUser() {
@@ -127,7 +151,7 @@
 				
 				// 获取页面数据
 				this.uniRequest({
-					url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getList',
+					url: 'carSubscribe/getList',
 					// url: 'http://39.107.95.50:80/h5/carSubscribe/getList',
 					method: 'GET',
 					data: {

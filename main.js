@@ -11,7 +11,7 @@ Vue.use(uView);
 // 请求地址
 // Vue.prototype.HOST = 'http://39.107.95.50/h5/';
 // Vue.prototype.HOST = 'https://wechat.daizhangfang.net/h5/';//正式环境
-Vue.prototype.HOST = 'testxfdm.daizhangfang.net/h5/'; //测试环境
+Vue.prototype.HOST = 'https://testxfdm.daizhangfang.net/h5/'; //测试环境
 Vue.prototype.PLATFORM = ''; //23/
 Vue.prototype.CLIENT = ''; //19/
 

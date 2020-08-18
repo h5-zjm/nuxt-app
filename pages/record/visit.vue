@@ -57,9 +57,8 @@
 				})
 			},
 			SellGoods(){
-				let res = GetQueryValue('code');
 				this.uniRequest({
-					url: 'accouninfo/getInfo?code=' + res,
+					url: 'accouninfo/getInfo',
 					success:(res)=>{
 						if (!res.data.account.cellphone) {
 							uni.navigateTo({
@@ -81,10 +80,33 @@
 						}
 					}
 				})
+			},
+			getToken(){
+				console.log(111)
+				let res = GetQueryValue('code');
+				uni.request({
+					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
+					success:(res)=>{
+						if(res.data.data) {
+							uni.setStorageSync('h5token',res.data.data)
+							this.SellGoods()
+						} else {
+							uni.showToast({
+								title: '授权失败,请重新进入页面',
+								icon: 'none'
+							})
+						}
+					},
+					
+				})
 			}
 		},
 		onShow(){
-			this.SellGoods()
+			if(!uni.getStorageSync('h5token')) {
+				this.getToken()
+			} else {
+				this.SellGoods()
+			}
 		}
 	}
 </script>
