@@ -638,7 +638,7 @@
 						// this.getData()
 						this.buyerName = res.data.info.name.substr(0, 1) + "**"
 
-						let phone = res.data.data.account.cellphone;
+						let phone = res.data.account.cellphone;
 						this.buyerPhoneNumber = phone.substr(0, 3) + "****" + phone.substr((phone.length - 3));
 						this.buyerOpenId = res.data.account.openid;
 

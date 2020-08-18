@@ -32,7 +32,7 @@
 				<u-select v-model="show" mode="mutil-column-auto" :list="List_Con" @confirm="confirm"></u-select>
 				<!-- <u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select> -->
 				<!-- 日期框-(设置不了默认时间) -->
-				<u-picker mode="time" v-model="showTime" default-time="2020-08-03" :params="params" @confirm="sureTime"></u-picker>
+				<u-picker mode="time" v-model="showTime" :default-time="today" :params="params" @confirm="sureTime"></u-picker>
 			</view>
 
 			<view class="Con_goods">
@@ -47,8 +47,8 @@
 						<text class="star">产地</text>
 						<view :class="{'place_box':!form.itemPlace}">
 							<u-radio-group v-model="form.origin">
-								<u-radio shape="circle" name="国产">国产</u-radio>
-								<u-radio shape="circle" name="进口">进口</u-radio>
+								<u-radio shape="circle" name=1>国产</u-radio>
+								<u-radio shape="circle" name=2>进口</u-radio>
 							</u-radio-group>
 						</view>
 					</view>
@@ -177,6 +177,7 @@
 		},
 		data() {
 			return {
+				today: '',
 				id: null,
 				UpImg_Peoser: {
 					limitNum: 1,
@@ -809,6 +810,9 @@
 			}
 
 		},
+		created() {
+			this.getToday()
+		},
 		methods: {
 			// 效验输入数字
 			efficacy(val) {
@@ -1012,8 +1016,8 @@
 			},
 			// 获取交易区-进场区数据
 			getDistrict() {
-				this.uniRequest({
-					url: 'statistics/getLane',
+				uni.request({
+					url: 'https://testxfdm.daizhangfang.net/statistics/getLane',
 					success: (res) => {
 						if (res.data.code === 0) {
 							console.log(res.data.data, 'data')
@@ -1143,6 +1147,13 @@
 						}
 					}
 				})
+			},
+			getToday() {
+				let date = new Date();
+				let year = date.getFullYear();
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+				this.today = year+'-'+month+'-'+'day'
 			},
 			getToken(){
 				console.log(111)

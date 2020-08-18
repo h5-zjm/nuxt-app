@@ -20,7 +20,7 @@
 		<view class="shipment">
 			<view class="sellGoods" v-for="(item,index) in list" :key='item.id' @click="goDetail(item)">
 				<view class="time">
-					{{item.subscribeTime.substring(0,10)}}
+					{{item.subscribeTime}}
 				</view>
 				<view class="tradingArea">
 					{{item.tradeSector}}
@@ -156,6 +156,9 @@
 					},
 					success: (res) => {
 						console.log('列表返回', res)
+						for(let i = 0;i<res.data.length;i++) {
+							res.data[i].subscribeTime = res.data[i].subscribeTime.substring(0,10)
+						}
 						this.list = res.data
 						this.isLoadMore = false
 					}
