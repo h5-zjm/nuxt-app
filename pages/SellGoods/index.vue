@@ -1121,6 +1121,7 @@
 						console.log(res, 'res')
 						if (res.code === 0) {
 							this.form = {
+								origin:res.data.itemSource,
 								id: res.data.id,
 								subscribeTimeStr: res.data.subscribeTime,
 								tradeSector: res.data.tradeSector,
