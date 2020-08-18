@@ -16,8 +16,8 @@
 					<view class="valueLabel">
 						<view class="valueWorth">
 							<!-- <u-input v-model="value" :type="type" style="height: 90rpx;line-height: 90rpx;" placeholder="请选择品类" :border="border" @click="show = true" /> -->
-							<u-input v-model="item.goodsName" onFocus="showSelect(index)" :type="type" style="height: 90rpx;line-height: 90rpx;" placeholder="请选择品类"
-							 :border="border" @click="editType(index)" />
+							<u-input v-model="item.goodsName" onFocus="showSelect(index)" :type="type" style="height: 90rpx;line-height: 90rpx;"
+							 placeholder="请选择品类" :border="border" @click="editType(index)" />
 							<!-- <u-action-sheet :list="actionSheetList" v-model="show" @click="actionSheetCallback"></u-action-sheet> -->
 						</view>
 						<view class="unit" @click="deleteItem(index)">
@@ -98,8 +98,8 @@
 
 <script>
 	import {
-	  GetQueryValue
-	 } from '../../common/common.js'
+		GetQueryValue
+	} from '../../common/common.js'
 	export default {
 		data() {
 			return {
@@ -538,7 +538,7 @@
 			};
 		},
 		created() {
-			if(!uni.getStorageSync('h5token')) {
+			if (!uni.getStorageSync('h5token')) {
 				this.getToken()
 			} else {
 				this.getInfo()
@@ -557,39 +557,38 @@
 
 		},
 		methods: {
-			getToken(){
+			getToken() {
 				console.log(111)
 				let res = GetQueryValue('code');
 				uni.request({
 					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
-					success:(res)=>{
-						if(res.data.data) {
-							uni.setStorageSync('h5token',res.data.data)
+					success: (res) => {
+						if (res.data.data) {
+							uni.setStorageSync('h5token', res.data.data)
 							this.getInfo()
 							this.getUser()
 						} else {
-							uni.showToast({
-								title: '授权失败,请重新进入页面',
-								icon: 'none'
+							uni.navigateTo({
+								url: '/pages/Information/abnormal'
 							})
 						}
 					},
-					
+
 				})
 			},
 			// 获取卖家用户信息
 			getInfo() {
-				this.cardNo = location.href.substring(location.href.length-18);
+				this.cardNo = location.href.substring(location.href.length - 18);
 				// str.substring(str.length-4)；
 				let local = location.href
-				console.log('url带的参数数组',local)
+				console.log('url带的参数数组', local)
 			},
 
 			getUser() {
 				// console.log('执行获取用户信息')
 				// console.log(this.code)
 				let res = GetQueryValue('code');
-				console.log('卖家身份信息',res)
+				console.log('卖家身份信息', res)
 				this.uniRequest({
 					// url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=' + this.code,
 					url: 'accouninfo/getInfo',
@@ -608,7 +607,7 @@
 							uni.navigateTo({
 								url: '/pages/Information/audit'
 							})
-						} else if(res.data.info.businessType !== '供应商') {
+						} else if (res.data.info.businessType !== '供应商') {
 							uni.navigateTo({
 								url: '/pages/appointmentSuccessful/accessDenied'
 							})
@@ -628,10 +627,10 @@
 			// },
 			getBuyerInfo() {
 				let res = GetQueryValue('cardNo')
-				console.log('买家身份信息',res)
+				console.log('买家身份信息', res)
 				this.uniRequest({
 					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfoById?cardNo=' + this.cardNo,
-					url: 'accouninfo/getInfoById?cardNo='+this.cardNo,
+					url: 'accouninfo/getInfoById?cardNo=' + this.cardNo,
 					method: 'get',
 					success: (res) => {
 						console.log('获取买家信息', res)
@@ -665,19 +664,19 @@
 				this.newList = this.list
 			},
 			serchFor(value) {
-				console.log('搜索框输入的值',value)
-				if(value) {
+				console.log('搜索框输入的值', value)
+				if (value) {
 					console.log('有值')
-				let data = [];
-					for(let i = 0;i<this.list.length;i++) {
-						if(this.list[i].name.indexOf(value) != -1) {
+					let data = [];
+					for (let i = 0; i < this.list.length; i++) {
+						if (this.list[i].name.indexOf(value) != -1) {
 							data.push(this.list[i])
 						}
-						
+
 					}
-					
+
 					this.newList = data
-					console.log('帅选的表',newList)
+					console.log('帅选的表', newList)
 				} else {
 					console.log('物质')
 					this.newList = this.list
@@ -687,7 +686,7 @@
 			add(e) {
 				this.dataList[this.valueIndex].goodsName = e
 				this.showPop = false
-				
+
 			},
 			load() {
 				//拿到url上的id值
@@ -697,12 +696,12 @@
 			},
 			showSelect(index) {
 				this.show = true
-				
+
 			},
 			savePersonInformation() {
 				let saveOrderList = this.dataList;
 				let flags = true;
-				if(saveOrderList.length === 0) {
+				if (saveOrderList.length === 0) {
 					alert("请至少填写一种商品");
 					flags = false;
 					return false

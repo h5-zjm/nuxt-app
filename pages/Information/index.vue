@@ -923,9 +923,10 @@
 							checked: false
 						}
 						if(res.data.info.inTime) {
-							let res = res.data.info.inTime.split(' ');
-							this.form.inTime = res[0];
+							let txt = res.data.info.inTime.split(' ');
+							this.form.inTime = txt[0];
 						}
+						console.log(res.data.info.inTime.split(' '),'字符串切割')
 						// 身份
 						if (res.data.info.businessType === '供应商') {
 							this.form.radio = 1;

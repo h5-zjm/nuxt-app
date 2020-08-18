@@ -202,7 +202,7 @@
 
 				},
 				form: {
-					origin:'',
+					origin: '',
 					id: null,
 					subscribeTimeStr: '',
 					tradeSector: '',
@@ -391,7 +391,7 @@
 				// 多级联动
 				showRegion: false,
 				activeRegion: '',
-				newList:[],
+				newList: [],
 				list: [],
 				action: 'https://wechat.daizhangfang.net/common/sysFile/upload',
 				supplier: {
@@ -875,7 +875,7 @@
 							certificateAddress: this.form.certificateAddress,
 							itemImg: this.form.itemImg,
 							checkImg: this.form.checkImg,
-							type:1,
+							type: 1,
 						}
 						if (IsImg && IsChecked) {
 							this.uniRequest({
@@ -942,7 +942,7 @@
 							certificateAddress: this.form.certificateAddress,
 							itemImg: this.form.itemImg,
 							checkImg: this.form.checkImg,
-							type:1,
+							type: 1,
 						}
 						if (IsImg && IsChecked) {
 							this.uniRequest({
@@ -985,19 +985,19 @@
 				this.newList = this.listCategory
 			},
 			serchFor(value) {
-				console.log('搜索框输入的值',value)
-				if(value) {
+				console.log('搜索框输入的值', value)
+				if (value) {
 					console.log('有值')
-				let data = [];
-					for(let i = 0;i<this.listCategory.length;i++) {
-						if(this.listCategory[i].name.indexOf(value) != -1) {
+					let data = [];
+					for (let i = 0; i < this.listCategory.length; i++) {
+						if (this.listCategory[i].name.indexOf(value) != -1) {
 							data.push(this.listCategory[i])
 						}
-						
+
 					}
-					
+
 					this.newList = data
-					console.log('帅选的表',newList)
+					console.log('帅选的表', newList)
 				} else {
 					console.log('物质')
 					this.newList = this.list
@@ -1007,7 +1007,7 @@
 			add(e) {
 				this.form.itemVariety = e
 				this.showPop = false
-				
+
 			},
 			// 弹窗框
 			openSelect(v) {
@@ -1121,7 +1121,7 @@
 						console.log(res, 'res')
 						if (res.code === 0) {
 							this.form = {
-								origin:res.data.itemSource,
+								origin: res.data.itemSource,
 								id: res.data.id,
 								subscribeTimeStr: res.data.subscribeTime,
 								tradeSector: res.data.tradeSector,
@@ -1154,26 +1154,25 @@
 				let year = date.getFullYear();
 				let month = date.getMonth() + 1;
 				let day = date.getDate();
-				this.today = year+'-'+month+'-'+'day'
+				this.today = year + '-' + month + '-' + 'day'
 			},
-			getToken(){
+			getToken() {
 				console.log(111)
 				let res = GetQueryValue('code');
 				uni.request({
 					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
-					success:(res)=>{
-						if(res.data.data) {
-							uni.setStorageSync('h5token',res.data.data)
+					success: (res) => {
+						if (res.data.data) {
+							uni.setStorageSync('h5token', res.data.data)
 							this.getDistrict()
 							this.jurisdiction()
 						} else {
-							uni.showToast({
-								title: '授权失败,请重新进入页面',
-								icon: 'none'
+							uni.navigateTo({
+								url: '/pages/Information/abnormal'
 							})
 						}
 					},
-					
+
 				})
 			}
 		},
@@ -1182,7 +1181,7 @@
 			this.$refs.uForm.setRules(this.rules);
 		},
 		onShow() {
-			if(!uni.getStorageSync('h5token')) {
+			if (!uni.getStorageSync('h5token')) {
 				this.getToken()
 			} else {
 				this.getDistrict()
@@ -1334,6 +1333,7 @@
 				line-height: 80rpx;
 			}
 		}
+
 		.popAll {
 			box-sizing: border-box;
 			padding: 32rpx;

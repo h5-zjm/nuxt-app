@@ -42,7 +42,9 @@
 </template>
 
 <script>
-	import {GetQueryValue} from '../../common/common.js'
+	import {
+		GetQueryValue
+	} from '../../common/common.js'
 	export default {
 		data() {
 			return {
@@ -100,8 +102,8 @@
 					url: 'accouninfo/getInfo',
 					success: (res) => {
 						if (res.code === 0) {
-							console.log(res,'测试环境')
-							console.log(Number(res.data.info.status,'Number'))
+							console.log(res, '测试环境')
+							console.log(Number(res.data.info.status, 'Number'))
 							if (!res.data.account.cellphone) {
 								uni.navigateTo({
 									url: '/pages/login/index'
@@ -110,7 +112,7 @@
 								uni.navigateTo({
 									url: '/pages/Information/Error'
 								})
-							} else if(res.data.account.cellphone && Number(res.data.info.status) === 0) {
+							} else if (res.data.account.cellphone && Number(res.data.info.status) === 0) {
 								uni.navigateTo({
 									url: '/pages/Information/audit'
 								})
@@ -118,34 +120,33 @@
 								this.submit()
 								this.getCode(res.data.info.businessType)
 							}
-							
+
 						}
 					}
 				})
 			},
-			getToken(){
+			getToken() {
 				console.log(111)
 				let res = GetQueryValue('code');
 				uni.request({
 					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
-					success:(res)=>{
-						if(res.data.data) {
-							uni.setStorageSync('h5token',res.data.data)
+					success: (res) => {
+						if (res.data.data) {
+							uni.setStorageSync('h5token', res.data.data)
 							this.login()
 						} else {
-							uni.showToast({
-								title: '授权失败,请重新进入页面',
-								icon: 'none'
+							uni.navigateTo({
+								url: '/pages/Information/abnormal'
 							})
 						}
 					},
-					
+
 				})
 			}
 		},
 		onShow() {
-			console.log(uni.getStorageSync('h5token'),'测试token')
-			if(!uni.getStorageSync('h5token')) {
+			console.log(uni.getStorageSync('h5token'), '测试token')
+			if (!uni.getStorageSync('h5token')) {
 				this.getToken()
 			} else {
 				this.login()

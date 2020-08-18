@@ -197,7 +197,13 @@
 				"navigationBarTitleText": "拒绝访问"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/Information/abnormal",
+            "style" : {
+				"navigationBarTitleText": "系统提示"
+			}
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",

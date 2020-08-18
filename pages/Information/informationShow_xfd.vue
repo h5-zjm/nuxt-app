@@ -129,7 +129,7 @@
 					}
 				});
 			},
-			RuterVisit(){
+			RuterVisit() {
 				this.uniRequest({
 					url: 'accouninfo/getInfo',
 					success: (res) => {
@@ -137,15 +137,15 @@
 							uni.navigateTo({
 								url: '/pages/login/index'
 							})
-						}else if (!res.data.info.name && !res.data.info.cardNo) {
+						} else if (!res.data.info.name && !res.data.info.cardNo) {
 							uni.navigateTo({
 								url: '/pages/Information/Error'
 							})
-						}else if(res.data.info.status && Number(res.data.info.status) === 0){
+						} else if (res.data.info.status && Number(res.data.info.status) === 0) {
 							uni.navigateTo({
 								url: '/pages/Information/audit'
 							})
-						}else if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
+						} else if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
 							let url = '';
 							if (res.data.info.businessType === '供应商') {
 								url = '/pages/Information/informationShow_supplier?radio=' + 1
@@ -181,23 +181,22 @@
 					}
 				})
 			},
-			getToken(){
+			getToken() {
 				console.log(111)
 				let res = GetQueryValue('code');
 				uni.request({
 					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
-					success:(res)=>{
-						if(res.data.data) {
-							uni.setStorageSync('h5token',res.data.data)
+					success: (res) => {
+						if (res.data.data) {
+							uni.setStorageSync('h5token', res.data.data)
 							this.RuterVisit()
 						} else {
-							uni.showToast({
-								title: '授权失败,请重新进入页面',
-								icon: 'none'
+							uni.navigateTo({
+								url: '/pages/Information/abnormal'
 							})
 						}
 					},
-					
+
 				})
 			}
 		},
@@ -212,7 +211,7 @@
 			}
 		}, // 获取用户信息
 		onShow() {
-			if(!uni.getStorageSync('h5token')) {
+			if (!uni.getStorageSync('h5token')) {
 				this.getToken()
 			} else {
 				this.RuterVisit()

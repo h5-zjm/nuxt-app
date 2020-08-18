@@ -108,9 +108,12 @@
 							uni.setStorageSync('h5token',res.data.data)
 							this.getUser()
 						} else {
-							uni.showToast({
-								title: '授权失败,请重新进入页面',
-								icon: 'none'
+							// uni.showToast({
+							// 	title: '授权失败,请重新进入页面',
+							// 	icon: 'none'
+							// })
+							uni.navigateTo({
+								url: '/pages/Information/abnormal'
 							})
 						}
 					},

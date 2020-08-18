@@ -9,8 +9,8 @@
 						<u-th :ShowBorder="true">总重量(Kg)</u-th>
 						<u-th :ShowBorder="true">总金额(元)</u-th>
 					</u-tr>
-				</view>				
-				
+				</view>
+
 				<view class="thbody" v-for="(item,index) in List" :key="index" @click="Clickbox(item,index)">
 					<u-tr>
 						<u-td :ShowBorder="true">{{item.tradingTime}}</u-td>
@@ -38,28 +38,28 @@
 			};
 		},
 		methods: {
-			Clickbox(item,index){
+			Clickbox(item, index) {
 				uni.navigateTo({
 					url: '/pages/getTraceableTransacteOrder/index?id=' + item.id
 				})
 			},
-			getBuyGoods(){
+			getBuyGoods() {
 				this.uniRequest({
 					url: 'order/selectMyOrderList',
 					data: {
 						offset: this.offset,
 						identity: this.identity
 					},
-					success:(res)=>{
+					success: (res) => {
 						this.List = res.data.rows || [];
 					}
 				})
 			},
 			// 买货记录
-			BuyGoods(){
+			BuyGoods() {
 				this.uniRequest({
 					url: 'accouninfo/getInfo',
-					success:(res)=>{
+					success: (res) => {
 						if (!res.data.account.cellphone) {
 							uni.navigateTo({
 								url: '/pages/login/index'
@@ -70,7 +70,7 @@
 								url: '/pages/Information/Error'
 							})
 						}
-						if(res.data.account.cellphone && Number(res.data.info.status) === 0){
+						if (res.data.account.cellphone && Number(res.data.info.status) === 0) {
 							uni.navigateTo({
 								url: '/pages/Information/audit'
 							})
@@ -81,28 +81,27 @@
 					}
 				})
 			},
-			getToken(){
+			getToken() {
 				console.log(111)
 				let res = GetQueryValue('code');
 				uni.request({
 					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
-					success:(res)=>{
-						if(res.data.data) {
-							uni.setStorageSync('h5token',res.data.data)
+					success: (res) => {
+						if (res.data.data) {
+							uni.setStorageSync('h5token', res.data.data)
 							this.BuyGoods()
 						} else {
-							uni.showToast({
-								title: '授权失败,请重新进入页面',
-								icon: 'none'
+							uni.navigateTo({
+								url: '/pages/Information/abnormal'
 							})
 						}
 					},
-					
+
 				})
 			}
 		},
-		onShow(){
-			if(!uni.getStorageSync('h5token')) {
+		onShow() {
+			if (!uni.getStorageSync('h5token')) {
 				this.getToken()
 			} else {
 				this.BuyGoods()
@@ -137,40 +136,46 @@
 				}
 			}
 		}
-		
+
 		.table_box {
 			background-color: #fff;
-			height: 700rpx;
-			overflow: hidden;
-			overflow-y: scroll;
+
+			// height: 700rpx;
+			// overflow: hidden;
+			// overflow-y: scroll;
 			.u-table {
 				border: none;
+
 				.theader {
 					.u-tr {
 						background-color: #F7F7F7;
 						padding: 20rpx 30rpx 20rpx 0rpx;
 					}
+
 					.u-th {
 						background-color: #F7F7F7;
-						font-size:28rpx;
-						font-weight:500;
-						color:rgba(49,49,49,1);
+						font-size: 28rpx;
+						font-weight: 500;
+						color: rgba(49, 49, 49, 1);
 					}
 				}
-				
+
 				.thbody {
 					border-bottom: 1px solid #F4F4F4;
+
 					.u-tr {
 						padding: 20rpx;
-						font-size:24rpx;
-						font-weight:400;
-						color:rgba(49,49,49,1);
+						font-size: 24rpx;
+						font-weight: 400;
+						color: rgba(49, 49, 49, 1);
 						// border-bottom: 1px solid #ccc;
 					}
+
 					.border {
 						// padding: 20rpx 20rpx 20rpx 0rpx;
 					}
 				}
+
 				view.thbody:last-child {
 					border: none;
 				}
