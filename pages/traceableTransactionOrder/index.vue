@@ -614,7 +614,7 @@
 							})
 						} else {
 							this.getBuyerInfo()
-							let data = res.data.data
+							let data = res.data
 							this.sellerOpenId = data.account.openid
 						}
 
@@ -636,11 +636,11 @@
 					success: (res) => {
 						console.log('获取买家信息', res)
 						// this.getData()
-						this.buyerName = res.data.data.info.name.substr(0, 1) + "**"
+						this.buyerName = res.data.info.name.substr(0, 1) + "**"
 
 						let phone = res.data.data.account.cellphone;
 						this.buyerPhoneNumber = phone.substr(0, 3) + "****" + phone.substr((phone.length - 3));
-						this.buyerOpenId = res.data.data.account.openid;
+						this.buyerOpenId = res.data.account.openid;
 
 					}
 				})
