@@ -151,13 +151,11 @@
 							uni.navigateTo({
 								url: '/pages/login/index'
 							})
-						}
-						if (!res.data.info.name && !res.data.info.cardNo) {
+						} else if (!res.data.info.name && !res.data.info.cardNo) {
 							uni.navigateTo({
 								url: '/pages/Information/Error'
 							})
-						}
-						if(Number(res.data.info.status) === 0){
+						}else if(res.data.info.status && Number(res.data.info.status) === 0){
 							uni.navigateTo({
 								url: '/pages/Information/audit'
 							})

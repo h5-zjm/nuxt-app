@@ -206,18 +206,15 @@
 								uni.navigateTo({
 									url: '/pages/login/index'
 								})
-							}
-							if (!res.data.info.name && !res.data.info.cardNo) {
+							}else if (!res.data.info.name && !res.data.info.cardNo) {
 								uni.navigateTo({
 									url: '/pages/Information/Error'
 								})
-							}
-							if(Number(res.data.info.status) === 0){
+							}else if(res.data.info.status && Number(res.data.info.status) === 0){
 								uni.navigateTo({
 									url: '/pages/Information/audit'
 								})
-							}
-							if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
+							}else if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
 								let url = '';
 								if (res.data.info.businessType === '采购商') {
 									url = '/pages/Information/informationShow_procurer?radio=' + 2
@@ -260,10 +257,10 @@
 								staffMobile1: res.data.info.staffMobile1,
 								staffAddr1: res.data.info.staffAddr1
 							}
-							if(res.data.info.inTime) {
-								let res = res.data.info.inTime.split(' ')
-								this.form.inTime = res[0];
-							}
+							// if(res.data.info.inTime) {
+							// 	let res = res.data.info.inTime.split(' ')
+							// 	this.form.inTime = res[0];
+							// }
 						}
 					}
 				})

@@ -137,18 +137,15 @@
 							uni.navigateTo({
 								url: '/pages/login/index'
 							})
-						}
-						if (!res.data.info.name && !res.data.info.cardNo) {
+						}else if (!res.data.info.name && !res.data.info.cardNo) {
 							uni.navigateTo({
 								url: '/pages/Information/Error'
 							})
-						}
-						if(Number(res.data.info.status) === 0){
+						}else if(res.data.info.status && Number(res.data.info.status) === 0){
 							uni.navigateTo({
 								url: '/pages/Information/audit'
 							})
-						}
-						if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
+						}else if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
 							let url = '';
 							if (res.data.info.businessType === '供应商') {
 								url = '/pages/Information/informationShow_supplier?radio=' + 1
