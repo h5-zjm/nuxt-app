@@ -697,9 +697,9 @@
 		},
 		methods: {
 			getList() {
-				uni.request({
+				this.uniRequest({
 					// url: 'http://39.107.95.50/statistics/getLane',
-					url:'https://wechat.daizhangfang.net/h5/statistics/getLane',
+					url:'statistics/getLane',
 					method:'GET',
 					success: (res) => {
 						console.log('园区列表',res)
@@ -715,8 +715,8 @@
 			},
 			getData() {
 				if (this.id != '') {
-					uni.request({
-						url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getById/' + this.id,
+					this.uniRequest({
+						url: 'carSubscribe/getById/' + this.id,
 						// url: 'http://39.107.95.50:80/h5/carSubscribe/getById/' + this.id,
 						method: 'GET',
 						success: (res) => {

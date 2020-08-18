@@ -161,8 +161,8 @@
                 return(false);
             },
 			getData() {
-				uni.request({
-					url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId=' +this.orderID,
+				this.uniRequest({
+					url: 'order/selectMyOrderDetails?orderId=' +this.orderID,
 					// url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId=' +this.orderID,
 					method:'GET',
 					success: (res) => {

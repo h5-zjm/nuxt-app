@@ -92,9 +92,9 @@
 		},
 		methods:{
 			cancelAction(){
-				uni.request({
+				this.uniRequest({
 					// url: 'http://39.107.95.50/h5/carSubscribe/update',
-					url: 'https://wechat.daizhangfang.net/h5/carSubscribe/update',
+					url: 'carSubscribe/update',
 					method: 'post',
 					header: {
 						'content-type': 'application/x-www-form-urlencoded'
@@ -137,9 +137,9 @@
 				console.log('id是多少',this.id)
 				let id = this.id
 				// 获取页面数据
-				uni.request({
+				this.uniRequest({
 					// url: 'http://39.107.95.50/h5/carSubscribe/getById/'+this.id,
-					url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getById'+'/' + id,
+					url: 'carSubscribe/getById'+'/' + id,
 					method: 'GET',
 					data: {
 						

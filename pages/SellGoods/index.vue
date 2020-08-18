@@ -44,6 +44,17 @@
 				</u-form-item>
 				<u-form-item prop="itemPlace">
 					<view class="Con_box">
+						<text class="star">产地</text>
+						<view :class="{'place_box':!form.itemPlace}">
+							<u-radio-group v-model="form.origin">
+								<u-radio shape="circle">国产</u-radio>
+								<u-radio shape="circle">进口</u-radio>
+							</u-radio-group>
+						</view>
+					</view>
+				</u-form-item>
+				<u-form-item prop="itemPlace">
+					<view class="Con_box">
 						<text class="star">具体产地</text>
 						<view @click="openSelectMore('具体产地')" :class="{'place_box':!form.itemPlace}">{{form.itemPlace ? form.itemPlace : '请选择具体产地'}}</view>
 					</view>
@@ -180,6 +191,7 @@
 
 				},
 				form: {
+					origin:'',
 					id: null,
 					subscribeTimeStr: '',
 					tradeSector: '',
@@ -831,6 +843,7 @@
 							})
 						}
 						let data = {
+							itemPlace: this.form.origin,
 							subscribeTimeStr: this.form.subscribeTimeStr,
 							tradeSector: this.form.tradeSector,
 							enterDoorNum: this.form.enterDoorNum,
@@ -896,6 +909,7 @@
 							})
 						}
 						let data = {
+							itemPlace: this.form.origin,
 							id: this.form.id,
 							subscribeTimeStr: this.form.subscribeTimeStr,
 							tradeSector: this.form.tradeSector,
@@ -962,7 +976,7 @@
 			},
 			// 获取交易区-进场区数据
 			getDistrict() {
-				uni.request({
+				this.uniRequest({
 					url: 'https://wechat.daizhangfang.net/statistics/getLane',
 					success: (res) => {
 						if (res.data.code === 0) {

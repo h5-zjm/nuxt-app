@@ -20,7 +20,7 @@
 		<view class="shipment">
 			<view class="sellGoods" v-for="(item,index) in list" :key='item.id' @click="goDetail(item)">
 				<view class="time">
-					{{item.subscribeTime.substring(0,9)}}
+					{{item.subscribeTime.substring(0,10)}}
 				</view>
 				<view class="tradingArea">
 					{{item.tradeSector}}
@@ -97,9 +97,9 @@
 			getUser() {
 				console.log('执行获取用户信息')
 				let res = GetQueryValue('code');
-				uni.request({
+				this.uniRequest({
 					// url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=081AnO000jHa7K19RI200kXKlt2AnO0H',
-					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
+					url: 'accouninfo/getInfo?code='+res,
 					method: 'GET',
 					success: (res) => {
 						console.log('获取用户信息',res)
@@ -126,7 +126,7 @@
 			getData() {
 				
 				// 获取页面数据
-				uni.request({
+				this.uniRequest({
 					url: 'https://wechat.daizhangfang.net/h5/carSubscribe/getList',
 					// url: 'http://39.107.95.50:80/h5/carSubscribe/getList',
 					method: 'GET',

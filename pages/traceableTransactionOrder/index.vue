@@ -560,14 +560,15 @@
 				let local = location.href
 				console.log('url带的参数数组',local)
 			},
+
 			getUser() {
 				// console.log('执行获取用户信息')
 				// console.log(this.code)
 				let res = GetQueryValue('code');
 				console.log('卖家身份信息',res)
-				uni.request({
+				this.unirequest({
 					// url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=' + this.code,
-					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfo?code='+res,
+					url: 'accouninfo/getInfo?code='+res,
 					method: 'GET',
 					success: (res) => {
 						console.log('获取用户信息', res)
@@ -597,13 +598,18 @@
 					}
 				})
 			},
+			// getToken(code) {
+			// 	uni.request({
+			// 		url: '',
+			// 	})
+			// },
 			getBuyerInfo() {
 				let res = GetQueryValue('cardNo')
 				console.log('买家身份信息',res)
-				uni.request({
+				this.uniRequest({
 					// url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfoById?cardNo=' + this.cardNo,
-					url: 'https://wechat.daizhangfang.net/h5/accouninfo/getInfoById?cardNo='+this.cardNo,
-					method: 'GET',
+					url: 'accouninfo/getInfoById?cardNo='+this.cardNo,
+					method: 'get',
 					success: (res) => {
 						console.log('获取买家信息', res)
 						// this.getData()
@@ -704,8 +710,8 @@
 					// 	goodsJson:json
 					// }
 					console.log(json);
-					uni.request({
-						url: 'https://wechat.daizhangfang.net/h5/order/saveOrder',
+					this.unirequest({
+						url: 'order/saveOrder',
 						// url: 'http://39.107.95.50:80/h5/order/saveOrder',
 						method: 'POST',
 						header: {

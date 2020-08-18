@@ -53,10 +53,10 @@
 				总计:
 			</view>
 			<view class="valueLabel">
-				{{totalWeight}}
+				{{totalWeight}}千克
 			</view>
 			<view class="unit">
-				1600元
+				{{orderTotalPrice}}元
 			</view>
 		</view>
 		<view class="customerInformation">
@@ -149,8 +149,8 @@
 		},
 		methods:{
 			getData() {
-				uni.request({
-					url: 'https://wechat.daizhangfang.net/h5/order/selectMyOrderDetails?orderId='+this.orderID,
+				this.uniRequest({
+					url: 'order/selectMyOrderDetails?orderId='+this.orderID,
 					// url: 'http://39.107.95.50/h5/order/selectMyOrderDetails?orderId=' + this.orderID,
 					success: (res) => {
 						this.listData = res.data.orderListVos

@@ -144,6 +144,7 @@
 				this.uniRequest({
 					url: 'accouninfo/getInfo?code=' + res,
 					success: (res) => {
+						console.log('获取的token')
 						if (res.code === 0) {
 							if (!res.data.info.name && !res.data.info.cardNo) {
 								uni.navigateTo({
