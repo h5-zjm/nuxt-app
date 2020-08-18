@@ -18,7 +18,7 @@
 				<u-form-item prop="enterDoorNum">
 					<view class="Con_box">
 						<text class="star">进场门</text>
-						<view @click="openSelect('进场门')" :class="{'place_box':!form.enterDoorNum}">{{form.enterDoorNum ? form.enterDoorNum : '请选择进场门'}}</view>
+						<view :class="{'place_box':!form.enterDoorNum}">{{form.enterDoorNum ? form.enterDoorNum : '请选择进场门'}}</view>
 					</view>
 				</u-form-item>
 				<u-form-item>
@@ -47,8 +47,8 @@
 						<text class="star">产地</text>
 						<view :class="{'place_box':!form.itemPlace}">
 							<u-radio-group v-model="form.origin">
-								<u-radio shape="circle">国产</u-radio>
-								<u-radio shape="circle">进口</u-radio>
+								<u-radio shape="circle" name="国产">国产</u-radio>
+								<u-radio shape="circle" name="进口">进口</u-radio>
 							</u-radio-group>
 						</view>
 					</view>
@@ -152,6 +152,16 @@
 		<view class="btn" @click="submit">
 			<view class="btn_box">提交</view>
 		</view>
+		<u-popup v-model="showPop" mode="center" border-radius="10" style="max-height: 60%;margin-top: 20%;">
+			<view class="popAll">
+				<view class="search">
+					<u-search placeholder="请输入种类" v-model="keyword" @change="serchFor"></u-search>
+				</view>
+				<view class="popList" v-for="item in newList || list" @click="add(item.name)">
+					{{item.name}}
+				</view>
+			</view>
+		</u-popup>
 	</view>
 </template>
 
@@ -380,6 +390,7 @@
 				// 多级联动
 				showRegion: false,
 				activeRegion: '',
+				newList:[],
 				list: [],
 				action: 'https://wechat.daizhangfang.net/common/sysFile/upload',
 				supplier: {
@@ -843,7 +854,7 @@
 							})
 						}
 						let data = {
-							itemPlace: this.form.origin,
+							itemSource: this.form.origin,
 							subscribeTimeStr: this.form.subscribeTimeStr,
 							tradeSector: this.form.tradeSector,
 							enterDoorNum: this.form.enterDoorNum,
@@ -909,7 +920,7 @@
 							})
 						}
 						let data = {
-							itemPlace: this.form.origin,
+							itemSource: this.form.origin,
 							id: this.form.id,
 							subscribeTimeStr: this.form.subscribeTimeStr,
 							tradeSector: this.form.tradeSector,
@@ -961,13 +972,38 @@
 				console.log(e, 'ee')
 				if (this.SelectCon === '交易区') {
 					this.form.tradeSector = e[0].label
-				} else if (this.SelectCon === '进场门') {
 					this.form.enterDoorNum = e[1].label;
 				}
 			},
 			categorySelect(v) {
 				console.log(v, 'v')
-				this.showCategory = true;
+				this.showPop = true;
+				this.newList = this.listCategory
+			},
+			serchFor(value) {
+				console.log('搜索框输入的值',value)
+				if(value) {
+					console.log('有值')
+				let data = [];
+					for(let i = 0;i<this.listCategory.length;i++) {
+						if(this.listCategory[i].name.indexOf(value) != -1) {
+							data.push(this.listCategory[i])
+						}
+						
+					}
+					
+					this.newList = data
+					console.log('帅选的表',newList)
+				} else {
+					console.log('物质')
+					this.newList = this.list
+				}
+
+			},
+			add(e) {
+				this.form.itemVariety = e
+				this.showPop = false
+				
 			},
 			// 弹窗框
 			openSelect(v) {
@@ -977,7 +1013,7 @@
 			// 获取交易区-进场区数据
 			getDistrict() {
 				this.uniRequest({
-					url: 'https://wechat.daizhangfang.net/statistics/getLane',
+					url: 'statistics/getLane',
 					success: (res) => {
 						if (res.data.code === 0) {
 							console.log(res.data.data, 'data')
@@ -1284,6 +1320,22 @@
 				color: rgba(255, 255, 255, 1);
 				text-align: center;
 				line-height: 80rpx;
+			}
+		}
+		.popAll {
+			box-sizing: border-box;
+			padding: 32rpx;
+			max-height: 100%;
+
+			.search {
+				height: 60rpx;
+				line-height: 60rpx;
+			}
+
+			.popList {
+				height: 80rpx;
+				line-height: 80rpx;
+				border-bottom: 1rpx solid #EDEDED;
 			}
 		}
 	}
