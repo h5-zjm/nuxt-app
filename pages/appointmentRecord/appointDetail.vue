@@ -29,7 +29,7 @@
 				具体产地：{{info.itemPlace}}
 			</view>
 			<view>
-				数量：{{info.itemNum}}吨
+				数量：{{info.itemNum}}千克
 			</view>
 			<view>
 				车型：{{info.carType}}
