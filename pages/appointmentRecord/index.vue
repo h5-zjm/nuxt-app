@@ -119,12 +119,9 @@
 			},
 			// 获取用户信息
 			getUser() {
-				console.log('执行获取用户信息')
-				let res = GetQueryValue('code');
 				this.uniRequest({
 					// url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=081AnO000jHa7K19RI200kXKlt2AnO0H',
-					url: 'accouninfo/getInfo?code='+res,
-					method: 'GET',
+					url: 'accouninfo/getInfo',
 					success: (res) => {
 						console.log('获取用户信息',res)
 						if (!res.data.data.account.cellphone) {

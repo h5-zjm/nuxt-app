@@ -590,10 +590,9 @@
 				// console.log(this.code)
 				let res = GetQueryValue('code');
 				console.log('卖家身份信息',res)
-				this.unirequest({
+				this.uniRequest({
 					// url: 'http://39.107.95.50:80/h5/accouninfo/getInfo?code=' + this.code,
-					url: 'accouninfo/getInfo?code='+res,
-					method: 'GET',
+					url: 'accouninfo/getInfo',
 					success: (res) => {
 						console.log('获取用户信息', res)
 						// this.getData()
