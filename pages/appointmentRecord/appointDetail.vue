@@ -93,7 +93,6 @@
 		methods:{
 			cancelAction(){
 				this.uniRequest({
-					// url: 'http://39.107.95.50/h5/carSubscribe/update',
 					url: 'carSubscribe/update',
 					method: 'post',
 					header: {
@@ -138,7 +137,6 @@
 				let id = this.id
 				// 获取页面数据
 				this.uniRequest({
-					// url: 'http://39.107.95.50/h5/carSubscribe/getById/'+this.id,
 					url: 'carSubscribe/getById'+'/' + id,
 					method: 'GET',
 					data: {
