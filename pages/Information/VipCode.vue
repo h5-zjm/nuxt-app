@@ -102,8 +102,6 @@
 					url: 'accouninfo/getInfo',
 					success: (res) => {
 						if (res.code === 0) {
-							console.log(res, '测试环境')
-							console.log(Number(res.data.info.status, 'Number'))
 							if (!res.data.account.cellphone) {
 								uni.navigateTo({
 									url: '/pages/login/index'
@@ -121,12 +119,18 @@
 								this.getCode(res.data.info.businessType)
 							}
 
+						} else if(res.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
+						}
+						if(res.data.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
 						}
 					}
 				})
 			},
 			getToken() {
-				console.log(111)
 				let res = GetQueryValue('code');
 				uni.request({
 					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
@@ -145,12 +149,14 @@
 			}
 		},
 		onShow() {
-			console.log(uni.getStorageSync('h5token'), '测试token')
-			if (!uni.getStorageSync('h5token')) {
+			if (uni.getStorageSync('h5token') === undefined || uni.getStorageSync('h5token') === null || uni.getStorageSync('h5token') === '') {
 				this.getToken()
 			} else {
 				this.login()
 			}
+			// this.getToken()
+			
+			// this.login();
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
 		onReady() {

@@ -200,62 +200,71 @@
 				this.uniRequest({
 					url: 'accouninfo/getInfo',
 					success: (res) => {
-						if (!res.data.account.cellphone) {
-							uni.navigateTo({
-								url: '/pages/login/index'
-							})
-						} else if (!res.data.info.name && !res.data.info.cardNo) {
-							uni.navigateTo({
-								url: '/pages/Information/Error'
-							})
-						}
-						if (res.data.info.status && Number(res.data.info.status) === 0) {
-							uni.navigateTo({
-								url: '/pages/Information/audit'
-							})
-						}
-						if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
-							let url = '';
-							if (res.data.info.businessType === '供应商') {
-								url = '/pages/Information/informationShow_procurer?radio=' + 1
-							} else if (res.data.info.businessType === '摆渡车') {
-								url = '/pages/Information/informationShow_ferry?radio=' + 3
-							} else if (res.data.info.businessType === '司机/伙计') {
-								url = '/pages/Information/informationShow_buddy?radio=' + 4
-							} else if (res.data.info.businessType === '新发地办公和临时人员') {
-								url = '/pages/Information/informationShow_xfd?radio=' + 5
+						if(res.code === 0) {
+							if (!res.data.account.cellphone) {
+								uni.navigateTo({
+									url: '/pages/login/index'
+								})
+							} else if (!res.data.info.name && !res.data.info.cardNo) {
+								uni.navigateTo({
+									url: '/pages/Information/Error'
+								})
 							}
-							uni.navigateTo({
-								url: url
-							})
+							if (res.data.info.status && Number(res.data.info.status) === 0) {
+								uni.navigateTo({
+									url: '/pages/Information/audit'
+								})
+							}
+							if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
+								let url = '';
+								if (res.data.info.businessType === '供应商') {
+									url = '/pages/Information/informationShow_procurer?radio=' + 1
+								} else if (res.data.info.businessType === '摆渡车') {
+									url = '/pages/Information/informationShow_ferry?radio=' + 3
+								} else if (res.data.info.businessType === '司机/伙计') {
+									url = '/pages/Information/informationShow_buddy?radio=' + 4
+								} else if (res.data.info.businessType === '新发地办公和临时人员') {
+									url = '/pages/Information/informationShow_xfd?radio=' + 5
+								}
+								uni.navigateTo({
+									url: url
+								})
+							}
+							this.form = {
+								name: res.data.info.name,
+								phone: res.data.account.cellphone,
+								cardNo: res.data.info.cardNo,
+								gender: res.data.info.gender,
+								age: res.data.info.age,
+								// 原籍
+								registProvince: res.data.info.registProvince,
+								registCity: res.data.info.registCity,
+								registArea: res.data.info.registArea,
+								// 先居住地
+								curentProvince: res.data.info.curentProvince,
+								curentCity: res.data.info.curentCity,
+								curentArea: res.data.info.curentArea,
+								// 现居住地
+								currentPlace: res.data.info.currentPlace,
+								businessName: res.data.info.businessName,
+								businessCode: res.data.info.businessCode,
+								businessAddr: res.data.info.businessAddr,
+								purchaseArea: res.data.info.purchaseArea,
+								businessCatalog: res.data.info.businessCatalog,
+								// PartnerList: res.data.info.PartnerList
+								img_src: res.data.info.urlImg,
+								staffName1: res.data.info.staffName1,
+								staffCardNo1: res.data.info.staffCardNo1,
+								staffMobile1: res.data.info.staffMobile1,
+								staffAddr1: res.data.info.staffAddr1
+							}
+						}else if(res.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
 						}
-						this.form = {
-							name: res.data.info.name,
-							phone: res.data.account.cellphone,
-							cardNo: res.data.info.cardNo,
-							gender: res.data.info.gender,
-							age: res.data.info.age,
-							// 原籍
-							registProvince: res.data.info.registProvince,
-							registCity: res.data.info.registCity,
-							registArea: res.data.info.registArea,
-							// 先居住地
-							curentProvince: res.data.info.curentProvince,
-							curentCity: res.data.info.curentCity,
-							curentArea: res.data.info.curentArea,
-							// 现居住地
-							currentPlace: res.data.info.currentPlace,
-							businessName: res.data.info.businessName,
-							businessCode: res.data.info.businessCode,
-							businessAddr: res.data.info.businessAddr,
-							purchaseArea: res.data.info.purchaseArea,
-							businessCatalog: res.data.info.businessCatalog,
-							// PartnerList: res.data.info.PartnerList
-							img_src: res.data.info.urlImg,
-							staffName1: res.data.info.staffName1,
-							staffCardNo1: res.data.info.staffCardNo1,
-							staffMobile1: res.data.info.staffMobile1,
-							staffAddr1: res.data.info.staffAddr1
+						if(res.data.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
 						}
 					}
 				})
@@ -290,11 +299,12 @@
 			}
 		},
 		onShow() {
-			if (!uni.getStorageSync('h5token')) {
+			if (uni.getStorageSync('h5token') === undefined || uni.getStorageSync('h5token') === null || uni.getStorageSync('h5token') === '') {
 				this.getToken()
 			} else {
 				this.RuterVisit()
 			}
+			// this.getToken()
 		}
 	}
 </script>

@@ -595,28 +595,36 @@
 					success: (res) => {
 						console.log('获取用户信息', res)
 						// this.getData()
-						if (!res.data.account.cellphone) {
-							uni.navigateTo({
-								url: '/pages/login/index'
-							})
-						} else if (!res.data.info.name && !res.data.info.cardNo) {
-							uni.navigateTo({
-								url: '/pages/Information/Error'
-							})
-						} else if (res.data.account.cellphone !== '' && Number(res.data.info.status) === 0) {
-							uni.navigateTo({
-								url: '/pages/Information/audit'
-							})
-						} else if (res.data.info.businessType !== '供应商') {
-							uni.navigateTo({
-								url: '/pages/appointmentSuccessful/accessDenied'
-							})
-						} else {
-							this.getBuyerInfo()
-							let data = res.data
-							this.sellerOpenId = data.account.openid
+						if (res.code === 0) {
+							if (!res.data.account.cellphone) {
+								uni.navigateTo({
+									url: '/pages/login/index'
+								})
+							} else if (!res.data.info.name && !res.data.info.cardNo) {
+								uni.navigateTo({
+									url: '/pages/Information/Error'
+								})
+							} else if (res.data.account.cellphone !== '' && Number(res.data.info.status) === 0) {
+								uni.navigateTo({
+									url: '/pages/Information/audit'
+								})
+							} else if (res.data.info.businessType !== '供应商') {
+								uni.navigateTo({
+									url: '/pages/appointmentSuccessful/accessDenied'
+								})
+							} else {
+								this.getBuyerInfo()
+								let data = res.data
+								this.sellerOpenId = data.account.openid
+							}
+						} else if (res.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
 						}
-
+						if (res.data.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
+						}
 					}
 				})
 			},

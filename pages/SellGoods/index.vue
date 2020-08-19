@@ -1145,6 +1145,13 @@
 							this.UpImg_Run.uImgList = res.data.checkImg ? [res.data.checkImg] : '';
 
 							return console.log(this.form, '111')
+						}else if(res.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
+						}
+						if(res.data.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
 						}
 					}
 				})

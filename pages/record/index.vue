@@ -60,23 +60,32 @@
 				this.uniRequest({
 					url: 'accouninfo/getInfo',
 					success: (res) => {
-						if (!res.data.account.cellphone) {
-							uni.navigateTo({
-								url: '/pages/login/index'
-							})
+						if(res.code === 0) {
+							if (!res.data.account.cellphone) {
+								uni.navigateTo({
+									url: '/pages/login/index'
+								})
+							}
+							if (!res.data.info.name && !res.data.info.cardNo) {
+								uni.navigateTo({
+									url: '/pages/Information/Error'
+								})
+							}
+							if (res.data.account.cellphone && Number(res.data.info.status) === 0) {
+								uni.navigateTo({
+									url: '/pages/Information/audit'
+								})
+							}
+							if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
+								this.getBuyGoods()
+							}
+						}else if(res.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
 						}
-						if (!res.data.info.name && !res.data.info.cardNo) {
-							uni.navigateTo({
-								url: '/pages/Information/Error'
-							})
-						}
-						if (res.data.account.cellphone && Number(res.data.info.status) === 0) {
-							uni.navigateTo({
-								url: '/pages/Information/audit'
-							})
-						}
-						if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {
-							this.getBuyGoods()
+						if(res.data.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
 						}
 					}
 				})

@@ -62,7 +62,7 @@
 						<view class="Con_tit">
 							<view></view>
 						</view>
-						<view>供应商（前来卖货））</view>
+						<view>供应商（前来卖货）</view>
 					</view>
 				</u-form-item>
 				<u-form-item prop="time">
@@ -257,10 +257,17 @@
 								staffMobile1: res.data.info.staffMobile1,
 								staffAddr1: res.data.info.staffAddr1
 							}
-							if (res.data.info.inTime) {
+							if(res.data.info.inTime !== null && res.data.info.inTime !== '') {
 								let txt = res.data.info.inTime.split(' ');
 								this.form.inTime = txt[0];
 							}
+						}else if(res.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
+						}
+						if(res.data.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
 						}
 					}
 				})
@@ -296,11 +303,12 @@
 		},
 		// 获取数据
 		onShow() {
-			if (!uni.getStorageSync('h5token')) {
+			if (uni.getStorageSync('h5token') === undefined || uni.getStorageSync('h5token') === null || uni.getStorageSync('h5token') === '') {
 				this.getToken()
 			} else {
 				this.RuterVisit()
 			}
+			// this.getToken()
 		}
 	}
 </script>

@@ -6,10 +6,7 @@
 				提示
 			</view>
 			<view class="description">
-				您的信息尚未完善，请先完善个人信息
-			</view>
-			<view class="button">
-				<u-button type="primary" @click="LocationInfo">完善个人健康信息</u-button>
+				系统异常，请退出页面稍后在进！
 			</view>
 		</view>
 	</view>

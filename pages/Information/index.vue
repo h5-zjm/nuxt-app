@@ -418,7 +418,7 @@
 				// 上传附件
 				UpImg_Peoser: {
 					limitNum: 1,
-					uploadFileUrl: 'https://wechat.daizhangfang.net/common/sysFile/uploadBase64',
+					uploadFileUrl: 'https://testxfdm.daizhangfang.net/common/sysFile/uploadBase64',
 					msg: '',
 					length: 140,
 					name: '用户', //上传的名字
@@ -429,7 +429,7 @@
 				},
 				UpImg_Run: {
 					limitNum: 1,
-					uploadFileUrl: 'https://wechat.daizhangfang.net/common/sysFile/uploadBase64',
+					uploadFileUrl: 'https://testxfdm.daizhangfang.net/common/sysFile/uploadBase64',
 					msg: '',
 					length: 150,
 					name: '营业执照', //上传的名字
@@ -525,11 +525,6 @@
 						trigger: ['change', 'blur']
 					}],
 					carNumber: [{
-						//  required: true,
-						message: '请输入车牌号',
-						// 可以单个或者同时写两个触发验证方式 
-						trigger: ['change', 'blur'],
-					},{
 						pattern: /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$)/,
 						// 正则检验前先将值转为字符串
 						transform(value) {
@@ -550,12 +545,7 @@
 						// 可以单个或者同时写两个触发验证方式 
 						trigger: ['change', 'blur'],
 					}],
-					staffCardNo1: [{
-						required: false,
-						message: '请输入伙计1身份证',
-						// 可以单个或者同时写两个触发验证方式 
-						trigger: ['change', 'blur'],
-					},
+					staffCardNo1: [
 					{
 						pattern: CONFIG.ID_CODE,
 						// 正则检验前先将值转为字符串
@@ -565,12 +555,7 @@
 						message: '请输入18位身份证号',
 						trigger: ['change', 'blur']
 					}],
-					staffMobile1: [{
-						required: false,
-						message: '请输入伙计1手机号',
-						// 可以单个或者同时写两个触发验证方式 
-						trigger: ['change', 'blur'],
-					},
+					staffMobile1: [
 					{
 						pattern: CONFIG.MOBILE_REGEXP,
 						// 正则检验前先将值转为字符串
@@ -922,11 +907,11 @@
 							radio: null,
 							checked: false
 						}
-						if(res.data.info.inTime) {
+						if(res.data.info.inTime !== null && res.data.info.inTime !== '') {
 							let txt = res.data.info.inTime.split(' ');
 							this.form.inTime = txt[0];
 						}
-						console.log(res.data.info.inTime.split(' '),'字符串切割')
+						// console.log(res.data.info.inTime.split(' '),'字符串切割')
 						// 身份
 						if (res.data.info.businessType === '供应商') {
 							this.form.radio = 1;

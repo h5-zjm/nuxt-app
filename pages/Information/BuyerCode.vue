@@ -29,21 +29,29 @@
 				this.uniRequest({
 					url: 'accouninfo/getInfo',
 					success: (res) => {
-						
-						if (!res.data.account.cellphone) {
-							uni.navigateTo({
-								url: '/pages/login/index'
-							})
-						} else if (!res.data.info.name && !res.data.info.cardNo) {
-							uni.navigateTo({
-								url: '/pages/Information/Error'
-							})
-						} else if(Number(res.data.info.status) === 0){
-							uni.navigateTo({
-								url: '/pages/Information/audit'
-							})
-						} else {
-							this.getImg()
+						if(res.code === 0) {
+							if (!res.data.account.cellphone) {
+								uni.navigateTo({
+									url: '/pages/login/index'
+								})
+							} else if (!res.data.info.name && !res.data.info.cardNo) {
+								uni.navigateTo({
+									url: '/pages/Information/Error'
+								})
+							} else if(Number(res.data.info.status) === 0){
+								uni.navigateTo({
+									url: '/pages/Information/audit'
+								})
+							} else {
+								this.getImg()
+							}
+						}else if(res.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
+						}
+						if(res.data.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
 						}
 					}
 				})
@@ -68,11 +76,12 @@
 			}
 		},
 		onShow() {
-			if(!uni.getStorageSync('h5token')) {
+			if (uni.getStorageSync('h5token') === undefined || uni.getStorageSync('h5token') === null || uni.getStorageSync('h5token') === '') {
 				this.getToken()
 			} else {
 				this.RouterVisity()
 			}
+			// this.getToken()
 		}
 	}
 </script>
