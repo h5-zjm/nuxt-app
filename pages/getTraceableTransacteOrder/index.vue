@@ -165,10 +165,10 @@
 						this.totalWeight = res.data.totalWeight
 						this.orderTotalPrice = res.data.orderTotalPrice
 						if(res.data.isGoOut === 0) {
-							this.status = '出厂'
+							this.status = '出场'
 						}
 						if(res.data.isGoOut === 1) {
-							this.status = '未出厂'
+							this.status = '未出场'
 						}
 					}
 				})
