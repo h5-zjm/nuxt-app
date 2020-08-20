@@ -11,6 +11,9 @@
 			<view class="button">
 				<u-button type="primary" @click="goToTransacteOrder">查看交易订单</u-button>
 			</view> -->
+			<view class="description">
+				您不是新发地注册供应商，没有销售权限。
+			</view>
 		</view>
 	</view>
 </template>
@@ -64,9 +67,10 @@
 			color: #000;
 		}
 		.description {
-			margin-top: 34rpx;
-			font-size: 28rpx;
-			color: #959595;
+			margin-top: 40rpx;
+			font-size:36rpx;
+			font-weight:400;
+			color:rgba(149,149,149,1);
 		}
 		.button {
 			width: 90%;

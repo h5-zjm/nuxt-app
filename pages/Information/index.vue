@@ -29,8 +29,8 @@
 						<view class="uploaderBox" v-if="form.radio">
 							<!-- <u-upload :action="action" :max-count="1" :file-list="supplier.fileList" :show-progress="false" @on-success="Supplier_Upload"> -->
 							<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Peoser.limitNum" :uploadFileUrl="UpImg_Peoser.uploadFileUrl"
-							 :header="UpImg_Peoser.header" :fileKeyName="UpImg_Peoser.name" :uImgList.sync="UpImg_Peoser.uImgList" @uploadSuccess="uploadSuccess"
-							 @upload="upFile" />
+							 :header="UpImg_Peoser.header" :fileKeyName="UpImg_Peoser.name" :uImgList.sync="UpImg_Peoser.uImgList"
+							 @uploadSuccess="uploadSuccess" @upload="upFile" />
 
 							<!-- </u-upload> -->
 							<view class="Conbox">
@@ -60,7 +60,7 @@
 							<u-form-item prop="cardNo">
 								<view class="Con_box">
 									<text class="star">身份证号</text>
-									<u-input v-model="form.cardNo" input-align="right" style="flex: 1;" placeholder="请输入身份证号" />
+									<u-input v-model="form.cardNo" input-align="right" style="flex: 1;" @blur="CardBlur" placeholder="请输入身份证号" />
 								</view>
 							</u-form-item>
 						</view>
@@ -272,15 +272,15 @@
 									(请上传营业执照附件）
 								</view>
 							</view>
-							<u-form-item prop="businessCatalog">
+							<u-form-item>
 								<view class="Con_box">
-									<text class="star">主营业务</text>
+									<text>主营业务</text>
 									<u-input v-model="form.businessCatalog" input-align="right" style="flex: 1;" placeholder="请输入主营业务" />
 								</view>
 							</u-form-item>
-							<u-form-item prop="inTime">
+							<u-form-item>
 								<view class="Con_box">
-									<text class="star">入驻时间</text>
+									<text>入驻时间</text>
 									<view @click="openLipicker('入驻时间')" :class="{'place_box':!form.inTime}">{{form.inTime ? form.inTime : '请选择开始在新法地市场经营的时间'}}</view>
 								</view>
 							</u-form-item>
@@ -355,7 +355,7 @@
 							<u-select v-model="showRegion" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
 						</view>
 					</view>
-					
+
 					<!-- 新发地办公和临时人员 -->
 					<view class="Active_box" v-if="active_copy === 5">
 						<view class="tit">个人信息</view>
@@ -368,7 +368,7 @@
 							</u-form-item>
 							<u-form-item label="籍贯" prop="place" class="place">
 								<view @click="openSelect('籍贯')" :class="{'place_box':!form.place}">{{form.place ? form.place : '请选择籍贯'}}</view>
-						
+
 							</u-form-item>
 							<u-form-item label="居住地" prop="residence" class="place">
 								<view @click="openSelect('居住地')" :class="{'place_box':!form.residence}">{{form.residence ? form.residence : '请选择居住地'}}</view>
@@ -376,13 +376,13 @@
 							<u-form-item label="详细地址">
 								<u-input v-model="form.currentPlace" input-align="right" placeholder="请输入居住地详细地址" />
 							</u-form-item>
-						
+
 							<!-- select框 -->
 							<u-select v-model="showRegion" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select>
 						</view>
 					</view>
-					
-					
+
+
 					<view class="state" v-if="form.radio">
 						<u-checkbox v-model="form.checked"></u-checkbox>
 						<text>我已阅读并知晓本申报所列事项，并保证以上申报内容正确属实，如因错误填报产生的法律责任后果自负。</text>
@@ -436,7 +436,7 @@
 					header: { // 如果需要header，请上传
 					},
 					uImgList: []
-				
+
 				},
 				placeList: [],
 				subcampList: [{
@@ -533,20 +533,19 @@
 						message: '请输入正确的车牌号',
 						trigger: ['change', 'blur']
 					}],
-					inTime: [{
-						required: true,
-						message: '请选择开始在新法地市场经营的时间',
-						// 可以单个或者同时写两个触发验证方式 
-						trigger: ['change', 'blur'],
-					}],
-					businessCatalog: [{
-						required: true,
-						message: '请输入主营业务',
-						// 可以单个或者同时写两个触发验证方式 
-						trigger: ['change', 'blur'],
-					}],
-					staffCardNo1: [
-					{
+					// inTime: [{
+					// 	required: true,
+					// 	message: '请选择开始在新法地市场经营的时间',
+					// 	// 可以单个或者同时写两个触发验证方式 
+					// 	trigger: ['change', 'blur'],
+					// }],
+					// businessCatalog: [{
+					// 	required: true,
+					// 	message: '请输入主营业务',
+					// 	// 可以单个或者同时写两个触发验证方式 
+					// 	trigger: ['change', 'blur'],
+					// }],
+					staffCardNo1: [{
 						pattern: CONFIG.ID_CODE,
 						// 正则检验前先将值转为字符串
 						transform(value) {
@@ -555,8 +554,7 @@
 						message: '请输入18位身份证号',
 						trigger: ['change', 'blur']
 					}],
-					staffMobile1: [
-					{
+					staffMobile1: [{
 						pattern: CONFIG.MOBILE_REGEXP,
 						// 正则检验前先将值转为字符串
 						transform(value) {
@@ -596,16 +594,16 @@
 		},
 		methods: {
 			// 车牌号大写
-			CaseInput(val){
+			CaseInput(val) {
 				this.form.carNumber = val.toUpperCase()
 			},
 			// 提交
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						if(this.form.gender === '1') {
+						if (this.form.gender === '1') {
 							this.form.gender = '男'
-						} else if(this.form.gender === '2') {
+						} else if (this.form.gender === '2') {
 							this.form.gender = '女'
 						}
 						if (this.form.radio === 1) {
@@ -676,8 +674,8 @@
 								method: 'get',
 								data: params,
 								success: (res) => {
-									console.log(res,'000')
-									if(res.data.code === 0) {
+									console.log(res, '000')
+									if (res.data.code === 0) {
 										uni.navigateTo({
 											url: '/pages/Information/Success?radio=' + this.form.radio
 										})
@@ -715,7 +713,7 @@
 						this.form.curentProvince = e[0] ? e[0].label : '';
 						this.form.curentCity = e[1] ? e[1].label : '';
 						this.form.curentArea = e[2] ? e[2].label : '';
-					} else if (this.form.active === '性别'){
+					} else if (this.form.active === '性别') {
 						this.form.gender = e[0] ? e[0].label : ''
 					}
 				}
@@ -730,9 +728,8 @@
 			openSelect(val) {
 				this.showRegion = true;
 				this.form.active = val;
-				if(val === '性别') {
-					this.list = [
-						{
+				if (val === '性别') {
+					this.list = [{
 							value: '1',
 							label: '男'
 						},
@@ -750,7 +747,7 @@
 				this.showUpopup = true;
 			},
 			// 关闭u-popup
-			submitUpopup(val,res) {
+			submitUpopup(val, res) {
 				this.showUpopup = false;
 				if (val === '确定') {
 					let txt = '';
@@ -761,9 +758,9 @@
 							}
 						})
 					}
-					if(res === '采购区域') {
+					if (res === '采购区域') {
 						this.form.purchaseArea = txt.substr(1);
-					} else if(res === '营运区域'){
+					} else if (res === '营运区域') {
 						this.form.manageArea = txt.substr(1);
 					}
 				}
@@ -821,30 +818,65 @@
 			},
 			// 图片上传
 			uploadSuccess(result) {
-				console.log(result,'result')
-				if(result.res.confirm) {
-					if(result.name === '用户'){
+				console.log(result, 'result')
+				if (result.res.confirm) {
+					if (result.name === '用户') {
 						this.form.urlImg = '';
 						this.UpImg_Peoser.uImgList = []
-					} else if(result.name === '营业执照') {
+					} else if (result.name === '营业执照') {
 						this.form.businessUrl = '';
 						this.UpImg_Run.uImgList = []
 					}
-				} else if(result.res.data) {
+				} else if (result.res.data) {
 					let res = result.res.data;
-					if(result.name === '用户') {
+					if (result.name === '用户') {
 						this.form.urlImg = res.url;
 						this.UpImg_Peoser.uImgList = [res.url]
-					} else if(result.name === '营业执照') {
+					} else if (result.name === '营业执照') {
 						this.form.businessUrl = res.url;
 						this.UpImg_Run.uImgList = [res.url]
 					}
 				}
-				console.log(this.form.urlImg,'urlImg')
+				console.log(this.form.urlImg, 'urlImg')
 			},
 			//上传方法的调用
 			upFile() {
 				this.$refs.upimg.upload()
+			},
+			// 根据身份证计算年龄-性别
+			CardBlur(IDCard) {
+				var sexAndAge = {};
+				//获取用户身份证号码
+				var userCard = IDCard;
+				//如果身份证号码为undefind则返回空
+				if (!userCard) {
+					return sexAndAge;
+				}
+				//获取性别
+				if (parseInt(userCard.substr(16, 1)) % 2 == 1) {
+					sexAndAge.sex = '男'
+				} else {
+					sexAndAge.sex = '女'
+				}
+				//获取出生年月日
+				//userCard.substring(6,10) + "-" + userCard.substring(10,12) + "-" + userCard.substring(12,14);
+				var yearBirth = userCard.substring(6, 10);
+				var monthBirth = userCard.substring(10, 12);
+				var dayBirth = userCard.substring(12, 14);
+				//获取当前年月日并计算年龄
+				var myDate = new Date();
+				var monthNow = myDate.getMonth() + 1;
+				var dayNow = myDate.getDay();
+				var age = myDate.getFullYear() - yearBirth;
+				if (monthNow < monthBirth || (monthNow == monthBirth && dayNow < dayBirth)) {
+					age--;
+				}
+				//得到年龄
+				sexAndAge.age = age;
+				//返回性别和年龄
+				console.log(sexAndAge, 'sexAndAge');
+				this.form.age = sexAndAge.age;
+				this.form.gender = sexAndAge.sex;
 			}
 		},
 		computed: {
@@ -874,7 +906,7 @@
 							id: res.data.info.id,
 							name: res.data.info.name,
 							businessType: res.data.info.businessType,
-							carNumber: res.data.info.carNumber,
+							carNumber: res.data.info.carNumber || '',
 							mobile: res.data.account.cellphone ? res.data.account.cellphone : '',
 							cardNo: res.data.info.cardNo,
 							registProvince: res.data.info.registProvince,
@@ -907,7 +939,7 @@
 							radio: null,
 							checked: false
 						}
-						if(res.data.info.inTime !== null && res.data.info.inTime !== '') {
+						if (res.data.info.inTime !== null && res.data.info.inTime !== '') {
 							let txt = res.data.info.inTime.split(' ');
 							this.form.inTime = txt[0];
 						}
@@ -926,10 +958,12 @@
 						}
 						// 户籍
 						let userInfo = res.data.info;
-						
-						this.form.place = userInfo.registProvince ? userInfo.registProvince : '' + '-' + userInfo.registCity ? userInfo.registCity : '' + '-' + userInfo.registArea ? userInfo.registArea : '';
+
+						this.form.place = userInfo.registProvince ? userInfo.registProvince : '' + '-' + userInfo.registCity ?
+							userInfo.registCity : '' + '-' + userInfo.registArea ? userInfo.registArea : '';
 						// 居住地
-						this.form.residence = userInfo.curentProvince ? userInfo.curentProvince : '' + '-' + userInfo.curentCity ? userInfo.curentCity : '' + '-' + userInfo.curentArea ? userInfo.curentArea : '';
+						this.form.residence = userInfo.curentProvince ? userInfo.curentProvince : '' + '-' + userInfo.curentCity ?
+							userInfo.curentCity : '' + '-' + userInfo.curentArea ? userInfo.curentArea : '';
 						// 图片
 						this.UpImg_Peoser.uImgList = res.data.info.urlImg ? [res.data.info.urlImg] : [];
 						this.UpImg_Run.uImgList = res.data.info.businessUrl ? [res.data.info.businessUrl] : [];
@@ -1011,7 +1045,7 @@
 						font-weight: 400;
 						color: #C0C4CC;
 					}
-					
+
 					.place_box {
 						font-size: 28rpx;
 						color: #C0C4CC;

@@ -188,7 +188,7 @@
 				font-size: 48rpx;
 				font-weight: 600;
 				color: rgba(49, 49, 49, 1);
-				padding-top: 106rpx;
+				padding-top: 40rpx;
 				margin-bottom: 36rpx;
 			}
 

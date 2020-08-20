@@ -7,6 +7,7 @@
 					<view class="Con_box">
 						<text class="star">预约时间</text>
 						<view @click="openLipicker('预约时间')" :class="{'place_box':!form.subscribeTimeStr}">{{form.subscribeTimeStr ? form.subscribeTimeStr : '请选择预约时间'}}</view>
+
 					</view>
 				</u-form-item>
 				<u-form-item prop="tradeSector">
@@ -15,12 +16,12 @@
 						<view @click="openSelect('交易区')" :class="{'place_box':!form.tradeSector}">{{form.tradeSector ? form.tradeSector : '请选择进场交易区'}}</view>
 					</view>
 				</u-form-item>
-				<u-form-item prop="enterDoorNum">
+				<!-- <u-form-item prop="enterDoorNum">
 					<view class="Con_box">
 						<text class="star">进场门</text>
-						<view :class="{'place_box':!form.enterDoorNum}">{{form.enterDoorNum ? form.enterDoorNum : '请选择进场门'}}</view>
+						<view @click="openSelect('交易区')" :class="{'place_box':!form.enterDoorNum}">{{form.enterDoorNum ? form.enterDoorNum : '请选择进场门'}}</view>
 					</view>
-				</u-form-item>
+				</u-form-item> -->
 				<u-form-item>
 					<view class="Con_box">
 						<text>货品品类</text>
@@ -29,22 +30,22 @@
 				</u-form-item>
 				<u-select v-model="showCategory" value-name="name" label-name="name" :list="listCategory" @confirm="comfirmCategory"></u-select>
 				<!-- select框 -->
-				<u-select v-model="show" mode="mutil-column-auto" :list="List_Con" @confirm="confirm"></u-select>
+				<u-select v-model="show" :list="List_Con" @confirm="confirm"></u-select>
 				<!-- <u-select v-model="show" mode="mutil-column-auto" :list="list" @confirm="confirm"></u-select> -->
 				<!-- 日期框-(设置不了默认时间) -->
 				<u-picker mode="time" v-model="showTime" :default-time="today" :params="params" @confirm="sureTime"></u-picker>
 			</view>
 
 			<view class="Con_goods">
-				<u-form-item prop="name">
+				<!-- <u-form-item prop="name">
 					<view class="Con_box">
 						<text>产品</text>
-						<!-- <u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入产品" /> -->
+						<u-input v-model="form.name" style="flex: 1;text-align: right;" placeholder="请输入产品" />
 					</view>
-				</u-form-item>
-				<u-form-item prop="itemPlace">
+				</u-form-item> -->
+				<u-form-item>
 					<view class="Con_box">
-						<text class="star">产地</text>
+						<text>产地</text>
 						<view :class="{'place_box':!form.itemPlace}">
 							<u-radio-group v-model="form.origin">
 								<u-radio shape="circle" name=1>国产</u-radio>
@@ -61,8 +62,14 @@
 				</u-form-item>
 				<u-form-item prop="itemNum">
 					<view class="Con_box">
-						<text>数量</text>
-						<u-input v-model="form.itemNum" style="flex: 1;" input-align="right" @input="efficacy('数量')" placeholder="请输入货品重量" />KG
+						<text class="star">数量(请填写数字)</text>
+						<u-input v-model="form.itemNum" style="flex: 1;" input-align="right" @input="efficacy('数量')" placeholder="请输入货品数量" />KG
+					</view>
+				</u-form-item>
+				<u-form-item>
+					<view class="Con_box">
+						<text>车型</text>
+						<u-input v-model="form.feeCarType" style="flex: 1;" input-align="right" placeholder="请输入车型" />
 					</view>
 				</u-form-item>
 				<u-form-item prop="CarNum">
@@ -78,20 +85,20 @@
 
 			<view class="Uploader_box">
 				<view class="Uploader_box_left">
-					<view class="star">货物照片</view>
+					<view class="star">食用农产品合格证照片(请提前拍好照片，从相册选择；如需修改点击×号删除)</view>
 					<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Peoser.limitNum" :uploadFileUrl="UpImg_Peoser.uploadFileUrl"
 					 :header="UpImg_Peoser.header" :fileKeyName="UpImg_Peoser.name" :uImgList.sync="UpImg_Peoser.uImgList"
 					 @uploadSuccess="uploadSuccess" @upload="upFile" />
 				</view>
 				<view class="Uploader_box_right">
-					<view>检测证明</view>
+					<view>检测证明(请提前拍好照片，从相册选择；如需修改点击×号删除)</view>
 					<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_Run.limitNum" :uploadFileUrl="UpImg_Run.uploadFileUrl"
 					 :header="UpImg_Run.header" :fileKeyName="UpImg_Run.name" :uImgList.sync="UpImg_Run.uImgList" @uploadSuccess="uploadSuccess"
 					 @upload="upFile" />
 				</view>
 			</view>
 
-			<view class="tit">《食品农产品合格证》</view>
+			<!-- <view class="tit">《食品农产品合格证》</view> -->
 
 			<view class="Good_box">
 				<u-form-item prop="name">
@@ -100,7 +107,13 @@
 						<u-input v-model="form.certificateName" style="flex: 1;" input-align="right" placeholder="请输入食用农产品名称" />
 					</view>
 				</u-form-item>
-				<u-form-item prop="certificateNum">
+				<u-form-item>
+					<view class="Con_box">
+						<text>生产者</text>
+						<u-input v-model="form.certificateUser" style="flex: 1;" input-align="right" placeholder="请输入生产者" />
+					</view>
+				</u-form-item>
+				<!-- <u-form-item prop="certificateNum">
 					<view class="Con_box">
 						<text>数量（重量）</text>
 						<u-input v-model="form.certificateNum" style="flex: 1;" input-align="right" placeholder="请输入请输入货品重量" />KG
@@ -135,7 +148,7 @@
 						<text>运输车辆车牌</text>
 						<u-input v-model="form.certificateCarNum" style="flex: 1;" input-align="right" @input="CaseInputCopy" placeholder="请输入车牌号" />
 					</view>
-				</u-form-item>
+				</u-form-item> -->
 			</view>
 
 			<view class="Checkbox">
@@ -152,16 +165,20 @@
 		<view class="btn" @click="submit">
 			<view class="btn_box">提交</view>
 		</view>
-		<u-popup v-model="showPop" mode="center" border-radius="10" style="max-height: 60%;margin-top: 20%;">
-			<view class="popAll">
-				<view class="search">
-					<u-search placeholder="请输入种类" v-model="keyword" @change="serchFor"></u-search>
+
+		<!-- 货品品类 -->
+		<view class="GoodsDialog" ref="GoodsDialog">
+			<u-popup v-model="showPop" mode="center" border-radius="10" style="max-height: 60%;margin-top: 20%;">
+				<view class="popAll">
+					<view class="search">
+						<u-search placeholder="请输入种类" v-model="keyword" @change="serchFor"></u-search>
+					</view>
+					<view class="popList" v-for="(item,index) in newList" :key="index" @click="add(item.name)">
+						{{item.name}}
+					</view>
 				</view>
-				<view class="popList" v-for="item in newList || list" @click="add(item.name)">
-					{{item.name}}
-				</view>
-			</view>
-		</u-popup>
+			</u-popup>
+		</view>
 	</view>
 </template>
 
@@ -177,6 +194,7 @@
 		},
 		data() {
 			return {
+				showPop: false,
 				today: '',
 				id: null,
 				UpImg_Peoser: {
@@ -201,10 +219,13 @@
 					uImgList: []
 
 				},
+				keyword: '',
 				form: {
+
 					origin: '',
 					id: null,
 					subscribeTimeStr: '',
+					feeCarType: '',
 					tradeSector: '',
 					enterDoorNum: '',
 					itemVariety: '',
@@ -226,25 +247,19 @@
 					fileList: []
 				},
 				rules: {
-					time: [{
+					subscribeTimeStr: [{
 						required: true,
 						message: '请选择预约时间',
 						// 可以单个或者同时写两个触发验证方式 
-						trigger: ['change', 'blur'],
+						trigger: ['blur', 'change']
 					}],
-					deal: [{
+					tradeSector: [{
 						required: true,
 						message: '请选择进场交易区',
 						// 可以单个或者同时写两个触发验证方式 
 						trigger: ['change', 'blur'],
 					}],
-					enter: [{
-						required: true,
-						message: '请选择进场门',
-						// 可以单个或者同时写两个触发验证方式 
-						trigger: ['change', 'blur'],
-					}],
-					region: [{
+					itemPlace: [{
 						required: true,
 						message: '请选择具体产地',
 						// 可以单个或者同时写两个触发验证方式 
@@ -256,13 +271,18 @@
 						// 可以单个或者同时写两个触发验证方式 
 						trigger: ['change', 'blur'],
 					}],
-					producer: [{
+					// producer: [{
+					// 	required: true,
+					// 	message: '请输入生产者',
+					// 	// 可以单个或者同时写两个触发验证方式 
+					// 	trigger: ['change', 'blur'],
+					// }],
+					itemNum: [{
 						required: true,
-						message: '请输入生产者',
+						message: '请输入货品数量',
 						// 可以单个或者同时写两个触发验证方式 
 						trigger: ['change', 'blur'],
-					}],
-					itemNum: [{
+					}, {
 						pattern: /^[0-9]*$/,
 						// 正则检验前先将值转为字符串
 						transform(value) {
@@ -806,7 +826,8 @@
 				}, {
 					name: '金瓜'
 				}],
-				showCategory: false
+				showCategory: false,
+				IsVerify: false
 			}
 
 		},
@@ -814,6 +835,18 @@
 			this.getToday()
 		},
 		methods: {
+			// 验证通过
+			VerifySuccess() {
+				if (this.IsVerify) {
+					this.$refs.uForm.validate(valid => {
+						if (valid) {
+							console.log('验证通过');
+						} else {
+							console.log('验证失败');
+						}
+					});
+				}
+			},
 			// 效验输入数字
 			efficacy(val) {
 				let regPos = /[^\d]/g;
@@ -831,6 +864,7 @@
 				this.form.certificateCarNum = val.toUpperCase()
 			},
 			submit() {
+				this.IsVerify = true;
 				if (this.form.id) {
 					this.update_http()
 				} else {
@@ -875,6 +909,7 @@
 							certificateAddress: this.form.certificateAddress,
 							itemImg: this.form.itemImg,
 							checkImg: this.form.checkImg,
+							feeCarType: this.form.feeCarType,
 							type: 1,
 						}
 						if (IsImg && IsChecked) {
@@ -942,6 +977,7 @@
 							certificateAddress: this.form.certificateAddress,
 							itemImg: this.form.itemImg,
 							checkImg: this.form.checkImg,
+							feeCarType: this.form.feeCarType,
 							type: 1,
 						}
 						if (IsImg && IsChecked) {
@@ -976,12 +1012,15 @@
 				console.log(e, 'ee')
 				if (this.SelectCon === '交易区') {
 					this.form.tradeSector = e[0].label
-					this.form.enterDoorNum = e[1].label;
+					// this.form.enterDoorNum = e[1].label;
 				}
+				this.VerifySuccess()
 			},
 			categorySelect(v) {
+				console.log(this.$refs.GoodsDialog, 'GoodsDialog')
 				console.log(v, 'v')
 				this.showPop = true;
+				console.log(this.showPop, 'showPop')
 				this.newList = this.listCategory
 			},
 			serchFor(value) {
@@ -1005,8 +1044,9 @@
 
 			},
 			add(e) {
-				this.form.itemVariety = e
-				this.showPop = false
+				console.log('我进入了')
+				this.form.itemVariety = e;
+				this.showPop = false;
 
 			},
 			// 弹窗框
@@ -1024,9 +1064,10 @@
 							if (res.data.data.length > 0) {
 								res.data.data.forEach((item, index) => {
 									item.label = item.name;
-									item.children.forEach((i, j) => {
-										i.label = i.name;
-									})
+									// delete item.children;
+									// item.children.forEach((i, j) => {
+									// 	i.label = i.name;
+									// })
 								})
 							}
 							this.List_Con = res.data.data;
@@ -1049,6 +1090,7 @@
 				if (this.activeRegion === '具体产地') {
 					this.form.itemPlace = val;
 				}
+				this.VerifySuccess()
 			},
 			openSelectMore(v) {
 				this.activeRegion = v;
@@ -1062,10 +1104,13 @@
 			sureTime(date) {
 				console.log('选中日期', date)
 				if (this.openTime == '预约时间') {
-					this.form.subscribeTimeStr = date.year + '-' + date.month + '-' + date.day
+					// this.form.subscribeTimeStr = date.year + '-' + date.month + '-' + date.day
+					let time = date.year + '-' + date.month + '-' + date.day
+					this.$set(this.form, 'subscribeTimeStr', time)
 				} else if (this.openTime == '开具时间') {
 					this.form.certificateTime = date.year + '-' + date.month + '-' + date.day
 				}
+				this.VerifySuccess()
 			},
 			comfirmCategory(e) {
 				this.form.itemVariety = e[0].label
@@ -1123,33 +1168,34 @@
 							this.form = {
 								origin: res.data.itemSource,
 								id: res.data.id,
-								subscribeTimeStr: res.data.subscribeTime,
-								tradeSector: res.data.tradeSector,
+								subscribeTimeStr: res.data.subscribeTime || '',
+								tradeSector: res.data.tradeSector || '',
 								enterDoorNum: res.data.enterDoorNum,
 								itemVariety: res.data.itemVariety,
-								itemPlace: res.data.itemPlace,
+								itemPlace: res.data.itemPlace || '',
 								CarNum: res.data.carNum || '',
+								feeCarType: res.data.feeCarType,
 								certificateName: res.data.certificateName,
 								certificateTime: res.data.certificateTime,
 								certificateUser: res.data.certificateUser,
 								certificatePhone: res.data.certificatePhone,
 								certificateCarNum: res.data.certificateCarNum || '',
-								itemNum: res.data.itemNum,
+								itemNum: res.data.itemNum || '',
 								certificateNum: res.data.certificateNum,
 								certificateAddress: res.data.certificateAddress,
-								itemImg: res.data.itemImg,
-								checkImg: res.data.checkImg
+								itemImg: res.data.itemImg || '',
+								checkImg: res.data.checkImg || ''
 							}
 
 							this.UpImg_Peoser.uImgList = res.data.itemImg ? [res.data.itemImg] : [];
 							this.UpImg_Run.uImgList = res.data.checkImg ? [res.data.checkImg] : '';
 
 							return console.log(this.form, '111')
-						}else if(res.code === 500) {
+						} else if (res.code === 500) {
 							uni.clearStorageSync()
 							this.getToken()
 						}
-						if(res.data.code === 500) {
+						if (res.data.code === 500) {
 							uni.clearStorageSync()
 							this.getToken()
 						}
@@ -1205,6 +1251,7 @@
 			if (options.id) {
 				this.id = options.id;
 			}
+			// this.getInfo()
 		}
 	}
 </script>
@@ -1277,15 +1324,16 @@
 		}
 
 		.Con_goods {
-			margin-top: 20rpx;
+			// margin-top: 20rpx;
 		}
 
 		.Uploader_box {
 			background-color: #fff;
-			margin-top: 20rpx;
-			display: flex;
+			// margin-top: 20rpx;
+			// display: flex;
 			padding: 0rpx 30rpx;
 
+			// border-bottom: 1px solid #F6F7F9;
 			>view {
 				padding: 20rpx 0rpx;
 
@@ -1298,7 +1346,7 @@
 			}
 
 			.Uploader_box_left {
-				margin-right: 186rpx;
+				// margin-right: 186rpx;
 
 				>view.star:after {
 					content: '*';
@@ -1306,6 +1354,10 @@
 					font-weight: 600;
 					padding-left: 5rpx;
 				}
+			}
+
+			.Uploader_box_right {
+				border-bottom: 1px solid #F6F7F9;
 			}
 		}
 
