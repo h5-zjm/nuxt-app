@@ -63,6 +63,20 @@
 									<u-input v-model="form.cardNo" input-align="right" style="flex: 1;" @blur="CardBlur" placeholder="请输入身份证号" />
 								</view>
 							</u-form-item>
+							
+							<!-- 身份证信息上传 -->
+							<view class="uploaderBox" style="padding-left: 0rpx;">
+								<!-- <u-upload :action="action" :max-count="1" :file-list="supplier.fileList" :show-progress="false" @on-success="Supplier_Upload"> -->
+								<uImg ref="upimg" :canUploadFile="true" :limit="UpImg_cardNo.limitNum" :uploadFileUrl="UpImg_cardNo.uploadFileUrl"
+								 :header="UpImg_cardNo.header" :fileKeyName="UpImg_cardNo.name" :uImgList.sync="UpImg_cardNo.uImgList"
+								 @uploadSuccess="uploadSuccess" @upload="upFile" />
+							
+								<!-- </u-upload> -->
+								<view class="Conbox">
+									<view class="photo">请上传身份证证件&nbsp;<text>*</text></view>
+									<!-- <text>（用于人脸识别，请上传正面大头照）</text> -->
+								</view>
+							</view>
 						</view>
 					</view>
 
@@ -418,7 +432,7 @@
 				// 上传附件
 				UpImg_Peoser: {
 					limitNum: 1,
-					uploadFileUrl: 'https://testxfdm.daizhangfang.net/common/sysFile/uploadBase64',
+					uploadFileUrl: 'https://wechat.daizhangfang.net/common/sysFile/uploadBase64',
 					msg: '',
 					length: 140,
 					name: '用户', //上传的名字
@@ -429,7 +443,7 @@
 				},
 				UpImg_Run: {
 					limitNum: 1,
-					uploadFileUrl: 'https://testxfdm.daizhangfang.net/common/sysFile/uploadBase64',
+					uploadFileUrl: 'https://wechat.daizhangfang.net/common/sysFile/uploadBase64',
 					msg: '',
 					length: 150,
 					name: '营业执照', //上传的名字
@@ -437,6 +451,17 @@
 					},
 					uImgList: []
 
+				},
+				UpImg_cardNo: {
+					limitNum: 1,
+					uploadFileUrl: 'https://wechat.daizhangfang.net/common/sysFile/uploadBase64',
+					msg: '',
+					length: 150,
+					name: '身份证', //上传的名字
+					header: { // 如果需要header，请上传
+					},
+					uImgList: []
+				
 				},
 				placeList: [],
 				subcampList: [{
@@ -480,6 +505,7 @@
 					staffCardNo1: '',
 					staffMobile1: '',
 					staffAddr1: '',
+					cardImg: '',
 
 					// 自定义
 					NowTime: timeFormat(new Date()),
@@ -649,7 +675,8 @@
 							staffName1: this.form.staffName1,
 							staffCardNo1: this.form.staffCardNo1,
 							staffMobile1: this.form.staffMobile1,
-							staffAddr1: this.form.staffAddr1
+							staffAddr1: this.form.staffAddr1,
+							cardImg: this.form.cardImg
 						}
 						let ImgIstrue = true;
 						if (!this.form.urlImg) {
@@ -668,7 +695,16 @@
 								icon: 'none'
 							})
 						}
-						if (ImgIstrue && IsRead) {
+						// 上传身份证证件
+						let IsCardNo = true;
+						if(!this.form.cardImg) {
+							IsCardNo = false;
+							uni.showToast({
+								title: '请上传身份证证件',
+								icon: 'none'
+							})
+						}
+						if (ImgIstrue && IsRead && IsCardNo) {
 							this.uniRequest({
 								url: 'accouninfo/save1',
 								method: 'get',
@@ -826,6 +862,9 @@
 					} else if (result.name === '营业执照') {
 						this.form.businessUrl = '';
 						this.UpImg_Run.uImgList = []
+					} else if (result.name === '身份证') {
+						this.form.cardImg = '';
+						this.UpImg_cardNo.uImgList = []
 					}
 				} else if (result.res.data) {
 					let res = result.res.data;
@@ -835,6 +874,9 @@
 					} else if (result.name === '营业执照') {
 						this.form.businessUrl = res.url;
 						this.UpImg_Run.uImgList = [res.url]
+					} else if (result.name === '身份证') {
+						this.form.cardImg = res.url;
+						this.UpImg_cardNo.uImgList = [res.url]
 					}
 				}
 				console.log(this.form.urlImg, 'urlImg')
@@ -966,7 +1008,10 @@
 							userInfo.curentCity : '' + '-' + userInfo.curentArea ? userInfo.curentArea : '';
 						// 图片
 						this.UpImg_Peoser.uImgList = res.data.info.urlImg ? [res.data.info.urlImg] : [];
+						
 						this.UpImg_Run.uImgList = res.data.info.businessUrl ? [res.data.info.businessUrl] : [];
+						
+						this.UpImg_cardNo.uImgList = res.data.info.cardImg ? [res.data.info.cardImg] : [];
 
 					}
 				}

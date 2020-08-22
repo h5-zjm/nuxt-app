@@ -62,6 +62,18 @@
 					url: '/pages/Information/BuyerCode'
 				})
 			}
+		},
+		onShow(){
+			this.uniRequest({
+				url: 'accouninfo/getInfo',
+				success: (res) => {
+					if (res.data.account.cellphone && Number(res.data.info.status) === 0) {
+						uni.navigateTo({
+							url: '/pages/Information/audit'
+						})
+					}
+				}
+			})
 		}
 	}
 </script>

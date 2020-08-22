@@ -102,7 +102,7 @@
 				console.log(111)
 				let res = GetQueryValue('code');
 				uni.request({
-					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
+					url: 'https://wechat.daizhangfang.net/wechat/getToken?code=' + res,
 					success:(res)=>{
 						if(res.data.data) {
 							uni.setStorageSync('h5token',res.data.data)
@@ -157,10 +157,15 @@
 					},
 					success: (res) => {
 						console.log('列表返回', res)
-						for(let i = 0;i<res.data.length;i++) {
-							res.data[i].subscribeTime = res.data[i].subscribeTime.substring(0,10)
+						// for(let i = 0;i<res.data.length;i++) {
+						// 	res.data[i].subscribeTime = res.data[i].subscribeTime.substring(0,10)
+						// }
+						if(res.data.length > 0) {
+							res.data.forEach((item,index)=>{
+								this.list.push(item)
+							})
 						}
-						this.list = res.data
+						// this.list = res.data
 						this.isLoadMore = false
 					}
 				})
@@ -168,7 +173,7 @@
 			onReachBottom(){  //上拉触底函数
 				  if(!this.isLoadMore){  //此处判断，上锁，防止重复请求
 						this.isLoadMore=true
-						this.offset+=10
+						this.offset+=20
 						this.getData()
 				  }
 			},

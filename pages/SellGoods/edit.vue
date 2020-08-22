@@ -664,7 +664,7 @@
 				showCategory: false,
 				UpImg_Peoser: {
 					limitNum: 1,
-					uploadFileUrl: 'http://39.107.95.50/common/sysFile/uploadBase64',
+					uploadFileUrl: 'https://wechat.daizhangfang.net/common/sysFile/uploadBase64',
 					msg: '',
 					length: 140,
 					name: '用户', //上传的名字
@@ -675,7 +675,7 @@
 				},
 				UpImg_Peoser2: {
 					limitNum: 1,
-					uploadFileUrl: 'http://39.107.95.50/common/sysFile/uploadBase64',
+					uploadFileUrl: 'https://wechat.daizhangfang.net/common/sysFile/uploadBase64',
 					msg: '',
 					length: 140,
 					name: '用户', //上传的名字

@@ -60,7 +60,7 @@
 				console.log(111)
 				let res = GetQueryValue('code');
 				uni.request({
-					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
+					url: 'https://wechat.daizhangfang.net/wechat/getToken?code=' + res,
 					success:(res)=>{
 						if(res.data.data) {
 							uni.setStorageSync('h5token',res.data.data)

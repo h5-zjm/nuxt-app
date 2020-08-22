@@ -60,10 +60,10 @@
 						<view @click="openSelectMore('具体产地')" :class="{'place_box':!form.itemPlace}">{{form.itemPlace ? form.itemPlace : '请选择具体产地'}}</view>
 					</view>
 				</u-form-item>
-				<u-form-item prop="itemNum">
+				<u-form-item prop="CeSNum">
 					<view class="Con_box">
 						<text class="star">数量(请填写数字)</text>
-						<u-input v-model="form.itemNum" style="flex: 1;" input-align="right" @input="efficacy('数量')" placeholder="请输入货品数量" />KG
+						<u-input v-model="form.CeSNum" style="flex: 1;" input-align="right" placeholder="请输入货品重量" />KG
 					</view>
 				</u-form-item>
 				<u-form-item>
@@ -151,7 +151,7 @@
 				</u-form-item> -->
 			</view>
 
-			<view class="Checkbox">
+			<!-- <view class="Checkbox">
 				<u-checkbox v-model="form.checked"></u-checkbox>
 				<view>
 					我承诺对产品质量安排以及合作证真实性负责；<br>
@@ -160,7 +160,7 @@
 					遵守农药安全间隔期、兽药休药期规定；<br>
 					销售的食用农产品符合农药兽药残留食品安全国家标准；
 				</view>
-			</view>
+			</view> -->
 		</u-form>
 		<view class="btn" @click="submit">
 			<view class="btn_box">提交</view>
@@ -232,16 +232,13 @@
 					itemPlace: '',
 					CarNum: '',
 					certificateName: '',
-					certificateTime: '',
 					certificateUser: '',
-					certificatePhone: '',
-					certificateCarNum: '',
 					itemNum: '',
-					certificateNum: '',
-					certificateAddress: '',
+
 					itemImg: '',
 					checkImg: '',
-					checked: false
+					// checked: false,
+					CeSNum: ''
 				},
 				procurer: {
 					fileList: []
@@ -291,7 +288,7 @@
 						message: '请输入数字',
 						trigger: ['change', 'blur']
 					}],
-					certificateNum: [{
+					CeSNum: [{
 						pattern: /^[0-9]*$/,
 						// 正则检验前先将值转为字符串
 						transform(value) {
@@ -827,7 +824,7 @@
 					name: '金瓜'
 				}],
 				showCategory: false,
-				IsVerify: false
+				IsEfficacy: false
 			}
 
 		},
@@ -835,9 +832,9 @@
 			this.getToday()
 		},
 		methods: {
-			// 验证通过
-			VerifySuccess() {
-				if (this.IsVerify) {
+			// 验证
+			EfficacyNum() {
+				if (this.IsEfficacy) {
 					this.$refs.uForm.validate(valid => {
 						if (valid) {
 							console.log('验证通过');
@@ -847,28 +844,27 @@
 					});
 				}
 			},
-			// 效验输入数字
-			efficacy(val) {
-				let regPos = /[^\d]/g;
-				if (!regPos.test(this.form.itemNum)) {
-
-				}
-			},
 			// 车牌号大写
 			CaseInput(val) {
 				console.log(val, 'val')
 				this.form.CarNum = val.toUpperCase()
 			},
-			CaseInputCopy(val) {
-				console.log(val, 'val')
-				this.form.certificateCarNum = val.toUpperCase()
-			},
 			submit() {
-				this.IsVerify = true;
-				if (this.form.id) {
-					this.update_http()
-				} else {
-					this.submit_http()
+				this.IsEfficacy = true;
+				let IsCeSNum = true;
+				if(!this.form.CeSNum) {
+					IsCeSNum = false;
+					uni.showToast({
+						title: '请输入货品重量',
+						icon: 'none'
+					})
+				}
+				if(IsCeSNum) {
+					if (this.form.id) {
+						this.update_http()
+					} else {
+						this.submit_http()
+					}
 				}
 			},
 			submit_http() {
@@ -883,14 +879,14 @@
 								icon: 'none'
 							})
 						}
-						let IsChecked = true;
-						if (!this.form.checked) {
-							IsChecked = false;
-							uni.showToast({
-								title: '请勾选我已阅读',
-								icon: 'none'
-							})
-						}
+						// let IsChecked = true;
+						// if (!this.form.checked) {
+						// 	IsChecked = false;
+						// 	uni.showToast({
+						// 		title: '请勾选我已阅读',
+						// 		icon: 'none'
+						// 	})
+						// }
 						let data = {
 							itemSource: this.form.origin,
 							subscribeTimeStr: this.form.subscribeTimeStr,
@@ -900,19 +896,17 @@
 							itemPlace: this.form.itemPlace,
 							CarNum: this.form.CarNum,
 							certificateName: this.form.certificateName,
-							certificateTime: this.form.certificateTime,
 							certificateUser: this.form.certificateUser,
-							certificatePhone: this.form.certificatePhone,
-							certificateCarNum: this.form.certificateCarNum,
-							itemNum: this.form.itemNum,
-							certificateNum: this.form.certificateNum,
-							certificateAddress: this.form.certificateAddress,
+							// itemNum: this.form.itemNum,
+							itemNum: this.form.CeSNum,
+							CeSNum: this.form.CeSNum,
+
 							itemImg: this.form.itemImg,
 							checkImg: this.form.checkImg,
 							feeCarType: this.form.feeCarType,
 							type: 1,
 						}
-						if (IsImg && IsChecked) {
+						if (IsImg) {
 							this.uniRequest({
 								url: 'carSubscribe/save',
 								method: 'post',
@@ -950,14 +944,14 @@
 								icon: 'none'
 							})
 						}
-						let IsChecked = true;
-						if (!this.form.checked) {
-							IsChecked = false;
-							uni.showToast({
-								title: '请勾选我已阅读',
-								icon: 'none'
-							})
-						}
+						// let IsChecked = true;
+						// if (!this.form.checked) {
+						// 	IsChecked = false;
+						// 	uni.showToast({
+						// 		title: '请勾选我已阅读',
+						// 		icon: 'none'
+						// 	})
+						// }
 						let data = {
 							itemSource: this.form.origin,
 							id: this.form.id,
@@ -968,19 +962,16 @@
 							itemPlace: this.form.itemPlace,
 							CarNum: this.form.CarNum,
 							certificateName: this.form.certificateName,
-							certificateTime: this.form.certificateTime,
 							certificateUser: this.form.certificateUser,
-							certificatePhone: this.form.certificatePhone,
-							certificateCarNum: this.form.certificateCarNum,
-							itemNum: this.form.itemNum,
-							certificateNum: this.form.certificateNum,
-							certificateAddress: this.form.certificateAddress,
+							// itemNum: this.form.itemNum,
+							itemNum: this.form.CeSNum,
+							CeSNum: this.form.CeSNum,
 							itemImg: this.form.itemImg,
 							checkImg: this.form.checkImg,
 							feeCarType: this.form.feeCarType,
 							type: 1,
 						}
-						if (IsImg && IsChecked) {
+						if (IsImg) {
 							this.uniRequest({
 								url: 'carSubscribe/update',
 								method: 'post',
@@ -1013,8 +1004,9 @@
 				if (this.SelectCon === '交易区') {
 					this.form.tradeSector = e[0].label
 					// this.form.enterDoorNum = e[1].label;
+
+					this.EfficacyNum()
 				}
-				this.VerifySuccess()
 			},
 			categorySelect(v) {
 				console.log(this.$refs.GoodsDialog, 'GoodsDialog')
@@ -1057,7 +1049,7 @@
 			// 获取交易区-进场区数据
 			getDistrict() {
 				uni.request({
-					url: 'https://testxfdm.daizhangfang.net/statistics/getLane',
+					url: 'https://wechat.daizhangfang.net/statistics/getLane',
 					success: (res) => {
 						if (res.data.code === 0) {
 							console.log(res.data.data, 'data')
@@ -1085,12 +1077,13 @@
 			confirmRegion(e) {
 				let val = '';
 				for (let i = 0; i < e.length; i++) {
-					val += e[i].label
+					val += (i > 0 ? ' ' : '') + e[i].label
 				}
 				if (this.activeRegion === '具体产地') {
 					this.form.itemPlace = val;
+
+					this.EfficacyNum()
 				}
-				this.VerifySuccess()
 			},
 			openSelectMore(v) {
 				this.activeRegion = v;
@@ -1107,13 +1100,15 @@
 					// this.form.subscribeTimeStr = date.year + '-' + date.month + '-' + date.day
 					let time = date.year + '-' + date.month + '-' + date.day
 					this.$set(this.form, 'subscribeTimeStr', time)
-				} else if (this.openTime == '开具时间') {
-					this.form.certificateTime = date.year + '-' + date.month + '-' + date.day
+
+
+					this.EfficacyNum()
 				}
-				this.VerifySuccess()
 			},
 			comfirmCategory(e) {
 				this.form.itemVariety = e[0].label
+
+				this.comfirmCategory()
 			},
 			// 图片上传
 			uploadSuccess(result) {
@@ -1141,20 +1136,29 @@
 				this.uniRequest({
 					url: 'accouninfo/getInfo',
 					success: (res) => {
-						if (!res.data.account.cellphone) {
-							uni.navigateTo({
-								url: '/pages/login/index'
-							})
+						if(res.code === 0) {
+							if (!res.data.account.cellphone) {
+								uni.navigateTo({
+									url: '/pages/login/index'
+								})
+							}
+							if (!res.data.info.name && !res.data.info.cardNo) {
+								uni.navigateTo({
+									url: '/pages/Information/Error'
+								})
+							}
+							if (res.data.account.cellphone && Number(res.data.info.status) === 0) {
+								uni.navigateTo({
+									url: '/pages/Information/audit'
+								})
+							}
+						} else if (res.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
 						}
-						if (!res.data.info.name && !res.data.info.cardNo) {
-							uni.navigateTo({
-								url: '/pages/Information/Error'
-							})
-						}
-						if (res.data.account.cellphone && Number(res.data.info.status) === 0) {
-							uni.navigateTo({
-								url: '/pages/Information/audit'
-							})
+						if (res.data.code === 500) {
+							uni.clearStorageSync()
+							this.getToken()
 						}
 					}
 				})
@@ -1166,7 +1170,7 @@
 						console.log(res, 'res')
 						if (res.code === 0) {
 							this.form = {
-								origin: res.data.itemSource,
+								origin: res.data.itemSource || '',
 								id: res.data.id,
 								subscribeTimeStr: res.data.subscribeTime || '',
 								tradeSector: res.data.tradeSector || '',
@@ -1176,13 +1180,9 @@
 								CarNum: res.data.carNum || '',
 								feeCarType: res.data.feeCarType,
 								certificateName: res.data.certificateName,
-								certificateTime: res.data.certificateTime,
 								certificateUser: res.data.certificateUser,
-								certificatePhone: res.data.certificatePhone,
-								certificateCarNum: res.data.certificateCarNum || '',
 								itemNum: res.data.itemNum || '',
-								certificateNum: res.data.certificateNum,
-								certificateAddress: res.data.certificateAddress,
+								CeSNum: res.data.itemNum || '',
 								itemImg: res.data.itemImg || '',
 								checkImg: res.data.checkImg || ''
 							}
@@ -1190,14 +1190,7 @@
 							this.UpImg_Peoser.uImgList = res.data.itemImg ? [res.data.itemImg] : [];
 							this.UpImg_Run.uImgList = res.data.checkImg ? [res.data.checkImg] : '';
 
-							return console.log(this.form, '111')
-						} else if (res.code === 500) {
-							uni.clearStorageSync()
-							this.getToken()
-						}
-						if (res.data.code === 500) {
-							uni.clearStorageSync()
-							this.getToken()
+							// return console.log(this.form, '111')
 						}
 					}
 				})
@@ -1213,7 +1206,7 @@
 				console.log(111)
 				let res = GetQueryValue('code');
 				uni.request({
-					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
+					url: 'https://wechat.daizhangfang.net/wechat/getToken?code=' + res,
 					success: (res) => {
 						if (res.data.data) {
 							uni.setStorageSync('h5token', res.data.data)

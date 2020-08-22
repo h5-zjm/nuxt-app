@@ -144,13 +144,17 @@
 					},
 					success: (res) => {
 						console.log('返回数据',res)
-						this.info=res.data
+						this.info=res.data;
+						this.info.itemImg = res.data.itemImg ? res.data.itemImg: '';
+						this.info.checkImg = res.data.checkImg ? res.data.checkImg : '';
 						if(this.info.status==1){
 							this.info.status_cn='未进场'
 						}else if(this.info.status==2){
 							this.info.status_cn='已进场'
 						}else if(this.info.status==3){
 							this.info.status_cn='已作废'
+						}else if(this.info.status==4){
+							this.info.status_cn='已离场'
 						}
 						
 						this.ActiveStutas = Number(this.info.status);

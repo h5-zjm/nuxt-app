@@ -2,7 +2,9 @@
 	<view id="BuyerCode">
 		<view class="VipCode_Con">
 			<view class="code">{{form.radio}}</view>
-			<image :src="form.img_src" mode="aspectFit"></image>
+			<view class="ImgCon">
+				<image :src="form.img_src" mode="scaleToFill"></image>
+			</view>
 			<view class="scan">
 				<u-form :model="form" ref="uForm" label-width="auto">
 					<u-form-item prop="time">
@@ -119,11 +121,11 @@
 								this.getCode(res.data.info.businessType)
 							}
 
-						} else if(res.code === 500) {
+						} else if (res.code === 500) {
 							uni.clearStorageSync()
 							this.getToken()
 						}
-						if(res.data.code === 500) {
+						if (res.data.code === 500) {
 							uni.clearStorageSync()
 							this.getToken()
 						}
@@ -133,7 +135,7 @@
 			getToken() {
 				let res = GetQueryValue('code');
 				uni.request({
-					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
+					url: 'https://wechat.daizhangfang.net/wechat/getToken?code=' + res,
 					success: (res) => {
 						if (res.data.data) {
 							uni.setStorageSync('h5token', res.data.data)
@@ -149,13 +151,14 @@
 			}
 		},
 		onShow() {
-			if (uni.getStorageSync('h5token') === undefined || uni.getStorageSync('h5token') === null || uni.getStorageSync('h5token') === '') {
+			if (uni.getStorageSync('h5token') === undefined || uni.getStorageSync('h5token') === null || uni.getStorageSync(
+					'h5token') === '') {
 				this.getToken()
 			} else {
 				this.login()
 			}
 			// this.getToken()
-			
+
 			// this.login();
 		},
 		// 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
@@ -188,14 +191,26 @@
 				font-size: 48rpx;
 				font-weight: 600;
 				color: rgba(49, 49, 49, 1);
-				padding-top: 40rpx;
-				margin-bottom: 36rpx;
+				padding-top: 30rpx;
+				margin-bottom: 10rpx;
+			}
+			
+			.ImgCon {
+				position: relative;
+				width: 400rpx;
+				height: 400rpx;
+				>image {
+					width: 100%;
+					height: 100%;
+					position: absolute;
+					top: 0;
+					left: 0;
+					>div {
+						background-position: 0% 0%;
+					}
+				}
 			}
 
-			>image {
-				width: 400rpx;
-				height: 400px;
-			}
 
 			.scan {
 				width: 100%;

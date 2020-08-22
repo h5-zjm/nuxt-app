@@ -34,7 +34,8 @@
 			return {
 				List: [],
 				offset: 0,
-				identity: 1
+				identity: 1,
+				isLoadMore: false
 			};
 		},
 		methods: {
@@ -52,9 +53,23 @@
 						identity: this.identity
 					},
 					success: (res) => {
-						this.List = res.data.rows || [];
+						console.log(res,'测试res')
+						if(res.data.rows.length > 0) {
+							res.data.rows.forEach((item,index)=>{
+								this.List.push(item)
+							})
+						}
+						
+						this.isLoadMore=false
 					}
 				})
+			},
+			onReachBottom(){  //上拉触底函数
+				  if(!this.isLoadMore){  //此处判断，上锁，防止重复请求
+						this.isLoadMore=true
+						this.offset+=20
+						this.getBuyGoods()
+				  }
 			},
 			SellGoods() {
 				this.uniRequest({
@@ -94,7 +109,7 @@
 				console.log(111)
 				let res = GetQueryValue('code');
 				uni.request({
-					url: 'https://testxfdm.daizhangfang.net/wechat/getToken?code=' + res,
+					url: 'https://wechat.daizhangfang.net/wechat/getToken?code=' + res,
 					success: (res) => {
 						if (res.data.data) {
 							uni.setStorageSync('h5token', res.data.data)
