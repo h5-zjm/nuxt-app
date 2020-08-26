@@ -210,9 +210,13 @@
 									url: '/pages/Information/Error'
 								})
 							}
-							if (res.data.info.status && Number(res.data.info.status) === 0) {
+							if (res.data.info.status && Number(res.data.info.status) === 0 && res.data.info.businessType !== '新发地办公和临时人员') {
 								uni.navigateTo({
 									url: '/pages/Information/audit'
+								})
+							} else if (res.data.account.cellphone && Number(res.data.info.status) === 0 && res.data.info.businessType === '新发地办公和临时人员') {
+								uni.navigateTo({
+									url: '/pages/Information/xfdAudit'
 								})
 							}
 							if (res.data.info.name && res.data.info.cardNo && res.data.account.cellphone) {

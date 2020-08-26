@@ -236,15 +236,40 @@
 				"navigationBarTitleText": "拒绝访问",
 				"navigationStyle": "custom"
 			}
-		}
-	    ,{
-            "path" : "pages/Information/abnormal",
-            "style" : {
+		}, {
+			"path": "pages/Information/abnormal",
+			"style": {
 				"navigationBarTitleText": "系统提示",
 				"navigationStyle": "custom"
 			}
-        }
-    ],
+		}, {
+			"path": "pages/Information/xfdAudit",
+			"style": {
+				"navigationBarTitleText": "系统提示",
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/SellGoods/foodSafety",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/SellGoods/integrity",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/SellGoods/foodquality",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/SellGoods/driver",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",

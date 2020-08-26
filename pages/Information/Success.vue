@@ -67,9 +67,13 @@
 			this.uniRequest({
 				url: 'accouninfo/getInfo',
 				success: (res) => {
-					if (res.data.account.cellphone && Number(res.data.info.status) === 0) {
+					if (res.data.account.cellphone && Number(res.data.info.status) === 0 && this.radio !== 5) {
 						uni.navigateTo({
 							url: '/pages/Information/audit'
+						})
+					} else {
+						uni.navigateTo({
+							url: '/pages/Information/xfdAudit'
 						})
 					}
 				}

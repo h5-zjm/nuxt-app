@@ -151,16 +151,16 @@
 				</u-form-item> -->
 			</view>
 
-			<!-- <view class="Checkbox">
+			<view class="Checkbox">
 				<u-checkbox v-model="form.checked"></u-checkbox>
-				<view>
-					我承诺对产品质量安排以及合作证真实性负责；<br>
-					不使用禁限农药兽药；<br>
-					不使用非法添加物；<br>
-					遵守农药安全间隔期、兽药休药期规定；<br>
-					销售的食用农产品符合农药兽药残留食品安全国家标准；
+				<view class="CheckboxCon">
+					<view class="CheckboxConSun">本人已明确知晓并同意以下协议。</view>
+					<view class="" @click="LocationSafety">《食品安全责任书》</view>
+					<view class="" @click="LocationIntegrity">《诚信经营协议书》</view>
+					<view class="" @click="LocationQuality">《农产品质量安全协议》</view>
+					<view class="" @click="LocationDriver">《大货车司机承诺书》</view>
 				</view>
-			</view> -->
+			</view>
 		</u-form>
 		<view class="btn" @click="submit">
 			<view class="btn_box">提交</view>
@@ -237,7 +237,7 @@
 
 					itemImg: '',
 					checkImg: '',
-					// checked: false,
+					checked: false,
 					CeSNum: ''
 				},
 				procurer: {
@@ -832,6 +832,26 @@
 			this.getToday()
 		},
 		methods: {
+			LocationSafety(){
+				uni.navigateTo({
+					url: '/pages/SellGoods/foodSafety'
+				})
+			},
+			LocationIntegrity(){
+				uni.navigateTo({
+					url: '/pages/SellGoods/integrity'
+				})
+			},
+			LocationQuality(){
+				uni.navigateTo({
+					url: '/pages/SellGoods/foodquality'
+				})
+			},
+			LocationDriver(){
+				uni.navigateTo({
+					url: '/pages/SellGoods/driver'
+				})
+			},
 			// 验证
 			EfficacyNum() {
 				if (this.IsEfficacy) {
@@ -879,14 +899,14 @@
 								icon: 'none'
 							})
 						}
-						// let IsChecked = true;
-						// if (!this.form.checked) {
-						// 	IsChecked = false;
-						// 	uni.showToast({
-						// 		title: '请勾选我已阅读',
-						// 		icon: 'none'
-						// 	})
-						// }
+						let IsChecked = true;
+						if (!this.form.checked) {
+							IsChecked = false;
+							uni.showToast({
+								title: '请勾选我已阅读',
+								icon: 'none'
+							})
+						}
 						let data = {
 							itemSource: this.form.origin,
 							subscribeTimeStr: this.form.subscribeTimeStr,
@@ -906,7 +926,7 @@
 							feeCarType: this.form.feeCarType,
 							type: 1,
 						}
-						if (IsImg) {
+						if (IsImg && IsChecked) {
 							this.uniRequest({
 								url: 'carSubscribe/save',
 								method: 'post',
@@ -944,14 +964,14 @@
 								icon: 'none'
 							})
 						}
-						// let IsChecked = true;
-						// if (!this.form.checked) {
-						// 	IsChecked = false;
-						// 	uni.showToast({
-						// 		title: '请勾选我已阅读',
-						// 		icon: 'none'
-						// 	})
-						// }
+						let IsChecked = true;
+						if (!this.form.checked) {
+							IsChecked = false;
+							uni.showToast({
+								title: '请勾选我已阅读',
+								icon: 'none'
+							})
+						}
 						let data = {
 							itemSource: this.form.origin,
 							id: this.form.id,
@@ -971,7 +991,7 @@
 							feeCarType: this.form.feeCarType,
 							type: 1,
 						}
-						if (IsImg) {
+						if (IsImg && IsChecked) {
 							this.uniRequest({
 								url: 'carSubscribe/update',
 								method: 'post',
@@ -1147,9 +1167,14 @@
 									url: '/pages/Information/Error'
 								})
 							}
-							if (res.data.account.cellphone && Number(res.data.info.status) === 0) {
+							if (res.data.account.cellphone && Number(res.data.info.status) === 0 && res.data.info.businessType !== '新发地办公和临时人员') {
 								uni.navigateTo({
 									url: '/pages/Information/audit'
+								})
+							}
+							if (res.data.account.cellphone && Number(res.data.info.status) === 0 && res.data.info.businessType === '新发地办公和临时人员') {
+								uni.navigateTo({
+									url: '/pages/Information/xfdAudit'
 								})
 							}
 						} else if (res.code === 500) {
@@ -1364,6 +1389,11 @@
 				font-size: 24rpx;
 				font-weight: 400;
 				color: rgba(228, 39, 39, 1);
+			}
+			.CheckboxCon {
+				.CheckboxConSun {
+					color: #313131;
+				}
 			}
 		}
 

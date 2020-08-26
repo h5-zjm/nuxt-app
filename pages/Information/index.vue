@@ -977,6 +977,7 @@
 							staffAddr1: res.data.info.staffAddr1,
 							inTime: '',
 							urlImg: res.data.info.urlImg,
+							cardImg: res.data.info.cardImg,
 							// 自定义
 							radio: null,
 							checked: false

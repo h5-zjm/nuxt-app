@@ -604,9 +604,13 @@
 							uni.navigateTo({
 								url: '/pages/Information/Error'
 							})
-						} else if (res.data.account.cellphone !== '' && Number(res.data.info.status) === 0) {
+						} else if (res.data.account.cellphone !== '' && Number(res.data.info.status) === 0 && res.data.info.businessType !== '新发地办公和临时人员') {
 							uni.navigateTo({
 								url: '/pages/Information/audit'
+							})
+						} else if (res.data.account.cellphone && Number(res.data.info.status) === 0 && res.data.info.businessType === '新发地办公和临时人员') {
+							uni.navigateTo({
+								url: '/pages/Information/xfdAudit'
 							})
 						} else if(res.data.info.businessType !== '供应商') {
 							uni.navigateTo({
