@@ -33,7 +33,7 @@
 				</u-form-item>
 			</u-form>
 		</view>
-		<view class="btn" @click="submit">登录</view>
+		<view class="btn" @click="submit">立即登录</view>
 	</view>
 </template>
 
@@ -52,7 +52,7 @@
 					phone: [{
 							required: true,
 							message: '请输入手机号码',
-							// 可以单个或者同时写两个触发验证方式 
+							// 可以单个或者同时写两个触发验证方式
 							trigger: ['change', 'blur'],
 						},
 						{
